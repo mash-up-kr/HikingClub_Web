@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Spot from 'components/atoms/Spot'
 import StreetInfo from 'components/modules/StreetInfo'
 import ImageList from 'components/modules/ImageList'
+import TextArea from 'components/atoms/TextArea'
 
 function BottomSheet() {
 
@@ -13,6 +14,8 @@ function BottomSheet() {
     '/images/image 3.png',
   ]
 
+
+  
 
   return (
     <Container>
@@ -37,6 +40,11 @@ function BottomSheet() {
       <ImageListWrapper>
         <ImageList imgUrls={imgUrls}/>  
       </ImageListWrapper>
+
+
+      <TextAreaWrapper>
+      <TextArea/>
+      </TextAreaWrapper>
     </Container>
   )
 }
@@ -86,5 +94,9 @@ const ImageListWrapper = styled.div`
 
   margin: 20px;
   /* padding-left: 20px; */
+`
+
+const TextAreaWrapper = styled.div`
+  margin: 20px;
 `
 export default BottomSheet

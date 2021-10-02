@@ -2,7 +2,7 @@ import { isFunction } from 'lodash';
 
 interface KakaoMapServiceProps {
   map: any;
-  mapContainer: any;
+  mapWrapper: any;
   latitude: number;
   longitude: number;
 }
@@ -27,18 +27,14 @@ class KakaoMapService implements KakaoMapServiceProps {
 
   linePath: any[] = [];
 
-  readonly mapContainer: HTMLDivElement;
+  readonly mapWrapper: HTMLDivElement;
 
   readonly latitude: number;
 
   readonly longitude: number;
 
-  constructor(
-    mapContainer: HTMLDivElement,
-    latitude: number,
-    longitude: number
-  ) {
-    this.mapContainer = mapContainer;
+  constructor(mapWrapper: HTMLDivElement, latitude: number, longitude: number) {
+    this.mapWrapper = mapWrapper;
     this.latitude = latitude;
     this.longitude = longitude;
   }
@@ -56,7 +52,7 @@ class KakaoMapService implements KakaoMapServiceProps {
           center: new window.kakao.maps.LatLng(this.latitude, this.longitude),
           level: 7,
         };
-        this.map = new window.kakao.maps.Map(this.mapContainer, options);
+        this.map = new window.kakao.maps.Map(this.mapWrapper, options);
       });
     };
   }

@@ -1,9 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
-import StreetInfo from 'components/modules/StreetInfo'
 import Spot from 'components/atoms/Spot'
+import StreetInfo from 'components/modules/StreetInfo'
+import ImageList from 'components/modules/ImageList'
 
 function BottomSheet() {
+
+  const imgUrls = [
+    '/images/image 3.png',
+    '/images/image 3.png',
+    '/images/image 3.png',
+    '/images/image 3.png',
+  ]
+
+
   return (
     <Container>
       
@@ -17,11 +27,16 @@ function BottomSheet() {
 
       <SpotWrapper>
         
-      <Spot/>
-      <Spot/>
-      <Spot isFocus={false}/>
+        <Spot/>
+        <Spot/>
+        <Spot isFocus={false}/>
         
-        </SpotWrapper>
+      </SpotWrapper>
+
+
+      <ImageListWrapper>
+        <ImageList imgUrls={imgUrls}/>  
+      </ImageListWrapper>
     </Container>
   )
 }
@@ -66,4 +81,10 @@ const SpotWrapper = styled.div`
   margin-top: 20px;
 `
 
+
+const ImageListWrapper = styled.div`
+
+  margin: 20px;
+  /* padding-left: 20px; */
+`
 export default BottomSheet

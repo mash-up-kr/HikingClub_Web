@@ -1,23 +1,20 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next'
+import { useSelector } from 'react-redux'
 
-import styles from "../styles/Home.module.css";
-import { useSelector } from "react-redux";
-import { State } from "@src/stores/reducer";
-import { wrapper } from "@src/stores";
-import styled from "styled-components";
+import { wrapper } from '@src/stores'
+import { State } from '@src/stores/reducer'
+
+import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-  const { test } = useSelector<State, State>((state) => state);
+  const { test } = useSelector<State, State>((state) => state)
 
-  return <div className={styles.container}>{test}</div>;
-};
+  return <div className={styles.container}>{test}</div>
+}
 
 // SSR
-Home.getInitialProps = wrapper.getInitialPageProps(
-  (store) =>
-    ({ pathname, req, res }) => {
-      store.dispatch({ type: "TEST", payload: "리덕스 테스트" });
-    }
-);
+Home.getInitialProps = wrapper.getInitialPageProps((store) => () => {
+  store.dispatch({ type: 'TEST', payload: '리덕스 테스트' })
+})
 
-export default Home;
+export default Home

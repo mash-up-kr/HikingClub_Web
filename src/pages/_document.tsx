@@ -5,8 +5,8 @@ import Document, {
   Main,
   NextScript,
   DocumentContext,
-} from "next/document";
-import { ServerStyleSheet, createGlobalStyle } from "styled-components";
+} from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
 
 /*
 *

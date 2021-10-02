@@ -28,7 +28,6 @@ interface LocationTextProps extends StyleProps {
 const StyleView = styled.div<StyleProps>`
   display: flex;
   align-items: center;
-  justify-content: center;
 `;
 
 const StyleText = styled.div<StyleProps>`

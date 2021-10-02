@@ -1,25 +1,23 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+
+import styled from 'styled-components';
 
 interface ImageDetailProps {
-  imageUrl: string
+  imageUrl: string;
 }
 
-function ImageDetail({imageUrl} : ImageDetailProps) {
+function ImageDetail({ imageUrl }: ImageDetailProps) {
   return (
     <Container>
-
       <ImageWrapper>
-        <StyledImage src={imageUrl}/>
+        <StyledImage src={imageUrl} />
       </ImageWrapper>
 
       <CloseIconWrapper>
-        <CloseIcon src="/images/close-icon.png"/>
+        <CloseIcon src="/images/close-icon.png" />
       </CloseIconWrapper>
-
-
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -30,24 +28,24 @@ const Container = styled.div`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.85);
   position: relative;
-  backdrop-filter: blur(40px);  // bg 컬러가 있는 컴포넌트만 먹힘.
-`
+  backdrop-filter: blur(40px); // bg 컬러가 있는 컴포넌트만 먹힘.
+`;
 
-const ImageWrapper = styled.div``
+const ImageWrapper = styled.div``;
 
 const StyledImage = styled.img`
   width: 100%;
-`
+`;
 
 const CloseIconWrapper = styled.div`
   position: absolute;
   top: 16px;
   right: 16px;
-`
+`;
 
 const CloseIcon = styled.img`
   width: 16px;
   height: 16px;
-`
+`;
 
-export default ImageDetail
+export default ImageDetail;

@@ -1,26 +1,26 @@
 import { HYDRATE } from "next-redux-wrapper";
 import { combineReducers, AnyAction } from "redux";
+import { ActionTypes } from "../actions";
 
-export interface State {}
+export interface State {
+  test: string;
+}
 
-const initialState: State = {
-  repos: [],
-  user: {
-    username: "",
-    repoCount: 0,
-    totalStars: 0,
-  },
+export const initialState: State = {
+  test: "init",
 };
 
-const reducer = (state: State = initialState, action: AnyAction) => {
+export const reducer = (state: State = initialState, action: AnyAction) => {
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload };
+    case "TEST2":
+      return { ...state, test: action.payload };
     default:
       return state;
   }
 };
 
-export const rootReducer = combineReducers({ appState: reducer });
+// export const rootReducer = combineReducers({ reducer });
 
-export type RootState = ReturnType<typeof rootReducer>;
+// export type RootState = ReturnType<typeof rootReducer>;

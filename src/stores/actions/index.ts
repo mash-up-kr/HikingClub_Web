@@ -4,4 +4,5 @@ export enum ActionTypes {
 
 export const testAction = () => ({
   type: ActionTypes.TEST,
+  payload: "test",
 });

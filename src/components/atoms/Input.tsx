@@ -29,6 +29,8 @@ const InputWrapper = styled.div`
 `;
 
 const PreContent = styled.p`
+  display: flex;
+  align-items: center;
   font-size: 18px;
 `;
 

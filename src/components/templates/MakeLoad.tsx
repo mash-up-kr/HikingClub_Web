@@ -3,14 +3,31 @@ import styled from 'styled-components';
 
 import Header from 'components/modules/Header';
 import LoadTitle from 'components/modules/LoadTitle';
+import LoadMap from 'components/modules/LoadMap';
+import LoadTag from 'components/modules/LoadTag';
 
 function MakeLoad() {
   const [loadTitle, setLoadTitle] = useState('');
+  const [loadTag, setLoadTag] = useState('');
+  const [loadTagList, setLoadTagList] = useState<string[]>([]);
 
   const handleChangeLoadTitle = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
       setLoadTitle(value);
+    },
+    []
+  );
+
+  const handleChangeLoadTag = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      if (value.charAt(value.length - 1) === ' ') {
+        setLoadTagList((prev) => [...prev, value]);
+        setLoadTag('');
+      } else {
+        setLoadTag(value);
+      }
     },
     []
   );
@@ -21,6 +38,12 @@ function MakeLoad() {
       <LoadTitle
         loadTitle={loadTitle}
         onChangeLoadTitle={handleChangeLoadTitle}
+      />
+      <LoadMap />
+      <LoadTag
+        loadTag={loadTag}
+        loadTagList={loadTagList}
+        onChangeLoadTag={handleChangeLoadTag}
       />
     </Wrapper>
   );

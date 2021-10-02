@@ -58,7 +58,9 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="ko">
-        <Head />
+        <Head>
+          <meta name="theme-color" content="#4D9E72" />
+        </Head>
         <body>
           <Main />
           <NextScript />

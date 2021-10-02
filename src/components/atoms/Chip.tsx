@@ -46,7 +46,7 @@ const Chip: FC<ChipProps> = (props) => {
       borderRadius={borderRadius}
     >
       <StyledText color={color} fontSize={fontSize}>
-        #{text}
+        {text}
       </StyledText>
     </StyledContainer>
   );

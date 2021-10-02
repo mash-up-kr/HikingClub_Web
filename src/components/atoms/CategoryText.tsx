@@ -12,7 +12,6 @@ interface StyleProps {
 }
 
 interface CategoryTextProps extends StyleProps {
-  text?: string;
   icon?: string;
 }
 
@@ -30,18 +29,18 @@ const StyleText = styled.div<StyleProps>`
 
 const CategoryText: FC<CategoryTextProps> = (props) => {
   const {
-    text = '예시 텍스트',
     icon = Leaf,
     fontSize = '14px',
     color = '#038F5D',
     fontWeight = 600,
+    children,
   } = props;
 
   return (
     <StyleView>
       <Image src={icon} alt="카테고리" />
       <StyleText fontSize={fontSize} color={color} fontWeight={fontWeight}>
-        {text}
+        {children}
       </StyleText>
     </StyleView>
   );

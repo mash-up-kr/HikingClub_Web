@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
 import { useSelector } from 'react-redux'
 
-import { wrapper } from '@src/stores'
-import { State } from '@src/stores/reducer'
-
-import styles from '../styles/Home.module.css'
+import { wrapper } from 'stores'
+import { State } from 'stores/reducer'
+import styles from 'styles/Home.module.css'
 
 const Home: NextPage = () => {
   const { test } = useSelector<State, State>((state) => state)

@@ -36,7 +36,7 @@
         "@next/next/no-img-element": "off", // We currently not using next/image because it isn't supported with SSG mode
         "@next/next/no-document-import-in-page": "off",
         "import/order": [
-          "error",
+          "off",
           {
             "groups": ["builtin", "external", "internal"],
             "pathGroups": [

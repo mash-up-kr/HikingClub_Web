@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 
+import Leaf from 'assets/images/Leaf.svg';
 import Image from 'next/image';
 import styled from 'styled-components';
-
-import Leaf from 'assets/images/Leaf.svg';
 
 interface StyleProps {
   fontSize?: string;

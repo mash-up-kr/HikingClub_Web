@@ -11,7 +11,7 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <div className={styles.container}>{test}</div>
+      {test}
     </Layout>
   );
 };

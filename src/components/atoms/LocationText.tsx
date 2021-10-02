@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import styled, { css } from 'styled-components';
 
-import LocationIcon from 'assets/images/location.png';
+import LocationIcon from 'assets/images/location.svg';
 
 const LocationStyle = css`
   font-size: 14px;

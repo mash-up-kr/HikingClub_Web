@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
+import BottomSheet from 'components/templates/BottomSheet';
 
 function Detail() {
   return (
@@ -10,7 +11,11 @@ function Detail() {
         <MapWrapper>
           <Map />
         </MapWrapper>
-        <BottomSheetWrapper>바텀시트</BottomSheetWrapper>
+
+        <BottomSheetWrapper>
+          <BottomSheet />
+
+        </BottomSheetWrapper>
       </Wrapper>
     </Layout>
   );
@@ -31,6 +36,7 @@ export const MapWrapper = styled.div`
 export const BottomSheetWrapper = styled.div`
   width: 100%;
   height: 200px;
+  z-index: 100000;
 `;
 
 export default Detail;

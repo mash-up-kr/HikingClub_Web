@@ -1,16 +1,23 @@
 import type { NextPage } from "next";
 
-import { useEffect } from "react";
-import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useDispatch } from "react-redux";
-import { testAction } from "@src/stores/actions";
+import { useSelector } from "react-redux";
+import { State } from "@src/stores/reducer";
+import { wrapper } from "@src/stores";
+import styled from "styled-components";
 
 const Home: NextPage = () => {
-  const dispatch = useDispatch();
+  const { test } = useSelector<State, State>((state) => state);
 
-  return <div className={styles.container}>hello</div>;
+  return <div className={styles.container}>{test}</div>;
 };
+
+// SSR
+Home.getInitialProps = wrapper.getInitialPageProps(
+  (store) =>
+    ({ pathname, req, res }) => {
+      store.dispatch({ type: "TEST", payload: "리덕스 테스트" });
+    }
+);
 
 export default Home;

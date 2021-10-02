@@ -23,7 +23,7 @@ jobs:
         run: yarn install
 
       - name: Build
-        run: yarn build
+        run: yarn build && yarn export
 
       - name: Deploy
         env:
@@ -33,7 +33,7 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ${{ secrets.S3_BUCKET_REGION }} \
-            build s3://${{ secrets.S3_BUCKET_NAME }}
+            out s3://${{ secrets.S3_BUCKET_NAME }}
       
       - name: Invalidation
         env:

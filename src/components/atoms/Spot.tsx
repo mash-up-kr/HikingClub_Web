@@ -16,9 +16,10 @@ const SpotWrapper = styled.div<SpotProps>`
   display: flex;
   align-items: flex-start;
   padding: 15px;
+  box-sizing: border-box;
   background-color: ${(props) => (props.isFocus ? '#F7F7FB' : '#ffffff')};
 
-  border-top: 1px solid #E4E4E4;
+  border-top: 1px solid #e4e4e4;
 `;
 
 const SpotText = styled.div`

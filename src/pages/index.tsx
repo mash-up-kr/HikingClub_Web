@@ -4,16 +4,11 @@ import { useSelector } from 'react-redux';
 import Layout from 'components/Layout';
 import { wrapper } from 'stores';
 import { State } from 'stores/reducer';
-import styles from 'styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { test } = useSelector<State, State>((state) => state);
 
-  return (
-    <Layout>
-      {test}
-    </Layout>
-  );
+  return <Layout>{test}</Layout>;
 };
 
 // SSR

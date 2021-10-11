@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.175",
     "@types/react": "17.0.24",
+    "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
     "babel-plugin-module-resolver": "^4.1.0",

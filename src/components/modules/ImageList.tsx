@@ -28,6 +28,7 @@ function ImageList({ imgUrls }: ImageListProps) {
 const Container = styled.div`
   display: flex;
   gap: 20px;
+  overflow-x: auto;
 `;
 
 const ImageItem = styled.img`

@@ -1,19 +1,23 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { closeImageDetail } from 'stores/actions';
 
 interface ImageDetailProps {
   imageUrl: string;
 }
 
 function ImageDetail({ imageUrl }: ImageDetailProps) {
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <ImageWrapper>
         <StyledImage src={imageUrl} />
       </ImageWrapper>
 
-      <CloseIconWrapper>
+      <CloseIconWrapper onClick={() => dispatch(closeImageDetail())}>
         <CloseIcon src="/images/close-icon.png" />
       </CloseIconWrapper>
     </Container>
@@ -41,6 +45,7 @@ const CloseIconWrapper = styled.div`
   position: absolute;
   top: 16px;
   right: 16px;
+  cursor: pointer;
 `;
 
 const CloseIcon = styled.img`

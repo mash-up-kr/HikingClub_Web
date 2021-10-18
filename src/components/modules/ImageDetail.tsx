@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,9 @@ interface ImageDetailProps {
 
 function ImageDetail({ imageUrl }: ImageDetailProps) {
   const dispatch = useDispatch();
+  const handleClick = useCallback(() => {
+    dispatch(closeImageDetail());
+  }, [dispatch]);
 
   return (
     <Container>
@@ -17,7 +20,7 @@ function ImageDetail({ imageUrl }: ImageDetailProps) {
         <StyledImage src={imageUrl} />
       </ImageWrapper>
 
-      <CloseIconWrapper onClick={() => dispatch(closeImageDetail())}>
+      <CloseIconWrapper onClick={handleClick}>
         <CloseIcon src="/images/close-icon.png" />
       </CloseIconWrapper>
     </Container>

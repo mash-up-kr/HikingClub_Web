@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { openImageDetail } from 'stores/actions';
@@ -8,18 +8,25 @@ interface ImageListProps {
 }
 
 function ImageList({ imgUrls }: ImageListProps) {
-  // TODO 스와이프로 넘기는 애니메이션 추가
-
   const dispatch = useDispatch();
 
-  const handleClick = (url: string) => {
-    dispatch(openImageDetail(url));
-  };
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLImageElement>) => {
+      const { url } = event.currentTarget.dataset;
+      dispatch(openImageDetail(url || ''));
+    },
+    [dispatch]
+  );
 
   return (
     <Container>
       {imgUrls.map((url, idx) => (
-        <ImageItem onClick={() => handleClick(url)} key={url + idx} src={url} />
+        <ImageItem
+          data-url={url}
+          onClick={handleClick}
+          key={url + idx}
+          src={url}
+        />
       ))}
     </Container>
   );

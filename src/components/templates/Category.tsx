@@ -56,12 +56,8 @@ function Category() {
       </CategoryWrapper>
 
       <ButtonWrapper>
-        <BasicButton bgColor="#F9F9F9" color="">
-          취소
-        </BasicButton>
-        <BasicButton bgColor="#2C7A50" color="#fff">
-          완료
-        </BasicButton>
+        <BasicButton variant="cancel">취소</BasicButton>
+        <BasicButton variant="submit">완료</BasicButton>
       </ButtonWrapper>
     </Wrapper>
   );

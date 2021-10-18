@@ -1,13 +1,22 @@
 import styled from 'styled-components';
 
-type ButtonType = {
-  bgColor: string;
-  color: string;
-};
+interface BasicButtonProps {
+  variant: 'cancel' | 'submit';
+  children: string;
+}
 
-const BasicButton = styled.button<ButtonType>`
-  background-color: ${(props) => props.bgColor};
-  color: ${(props) => props.color};
+function BasicButton({ variant, children }: BasicButtonProps) {
+  return (
+    <StyledButton variant={variant} type="button">
+      {children}
+    </StyledButton>
+  );
+}
+
+const StyledButton = styled.button<BasicButtonProps>`
+  background-color: ${(props) =>
+    props.variant === 'submit' ? '#2C7A50' : '#F9F9F9'};
+  color: ${(props) => (props.variant === 'submit' ? '#F9F9F9' : '')};
   height: 54px;
   width: 100%;
   border: none;

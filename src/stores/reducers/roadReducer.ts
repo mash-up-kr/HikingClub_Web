@@ -30,7 +30,10 @@ export default function contentReducer(
       return { ...state, ...action.payload };
 
     case ActionTypes.OPEN_IMAGE_DETAIL:
-      return { ...state, imgDetail: { isOpen: true, imgUrl: action.imgUrl } };
+      return {
+        ...state,
+        imgDetail: { isOpen: true, imgUrl: action.payload.imgUrl },
+      };
 
     case ActionTypes.CLOSE_IMAGE_DETAIL:
       return { ...state, imgDetail: { isOpen: false, imgUrl: '' } };

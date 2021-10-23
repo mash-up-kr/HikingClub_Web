@@ -19,9 +19,12 @@ export interface ContentPOJO {
   hashtags: string[];
 }
 
-export interface ContentAttr extends Omit<ContentPOJO, 'routes' | 'spots'> {
+export interface ContentAttr
+  extends Omit<ContentPOJO, 'routes' | 'spots' | 'images' | 'hashtags'> {
   routes: List<Route>;
   spots: List<Spot>;
+  images: List<string>;
+  hashtags: List<string>;
 }
 
 const ContentRecord = Record<ContentAttr>({
@@ -33,8 +36,8 @@ const ContentRecord = Record<ContentAttr>({
   category: '',
   routes: List(),
   spots: List(),
-  images: [],
-  hashtags: [],
+  images: List(),
+  hashtags: List(),
 });
 
 class Content extends ContentRecord {
@@ -47,6 +50,8 @@ class Content extends ContentRecord {
       spots: List<Spot>().withMutations((spots) => {
         args.spots.forEach((spot) => spots.push(new Spot(spot)));
       }),
+      images: List(args.images),
+      hashtags: List(args.hashtags),
     });
   }
 }

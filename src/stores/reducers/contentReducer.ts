@@ -1,6 +1,9 @@
+/* External dependencies */
 import { HYDRATE } from 'next-redux-wrapper';
 import { AnyAction } from 'redux';
-import { ActionTypes } from '../actions';
+
+/* Internal dependencies */
+import ActionTypes from 'stores/ActionTypes';
 
 export interface State {
   test: string;
@@ -18,7 +21,10 @@ export const initialState: State = {
   },
 };
 
-export const reducer = (state: State = initialState, action: AnyAction) => {
+export default function contentReducer(
+  state: State = initialState,
+  action: AnyAction
+): State {
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload };
@@ -31,8 +37,4 @@ export const reducer = (state: State = initialState, action: AnyAction) => {
     default:
       return state;
   }
-};
-
-// export const rootReducer = combineReducers({ reducer });
-
-// export type RootState = ReturnType<typeof rootReducer>;
+}

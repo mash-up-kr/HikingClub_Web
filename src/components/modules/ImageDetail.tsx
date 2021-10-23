@@ -1,20 +1,22 @@
+/* External Dependencies */
 import React from 'react';
-
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { closeImageDetail } from 'stores/actions';
+
+/* Internal dependencies */
+import { closeImageDetail } from 'stores/actions/contentActions';
 
 interface ImageDetailProps {
-  imageUrl: string;
+  imgUrl: string;
 }
 
-function ImageDetail({ imageUrl }: ImageDetailProps) {
+function ImageDetail({ imgUrl }: ImageDetailProps) {
   const dispatch = useDispatch();
 
   return (
     <Container>
       <ImageWrapper>
-        <StyledImage src={imageUrl} />
+        <StyledImage src={imgUrl} />
       </ImageWrapper>
 
       <CloseIconWrapper onClick={() => dispatch(closeImageDetail())}>

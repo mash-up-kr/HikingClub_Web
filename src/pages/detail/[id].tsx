@@ -1,14 +1,16 @@
+/* External dependencies */
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+/* Internal dependencies */
+import * as contentSelectors from 'stores/selectors/contentSelectors';
 import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
-import { State } from 'stores/reducer';
-import { useSelector } from 'react-redux';
 
 function Detail() {
-  const { imgDetail } = useSelector<State, State>((state) => state);
+  const imgDetail = useSelector(contentSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
 
   return (
@@ -24,7 +26,7 @@ function Detail() {
 
         {isOpen && (
           <ImageDetailWrapper>
-            <ImageDetail imageUrl={imgUrl} />
+            <ImageDetail imgUrl={imgUrl} />
           </ImageDetailWrapper>
         )}
       </Wrapper>

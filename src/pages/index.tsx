@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 
 import Layout from 'components/Layout';
 import { wrapper } from 'stores';
-import * as contentSelectors from 'stores/selectors/contentSelectors';
+import * as roadSelectors from 'stores/selectors/roadSelectors';
 
 const Home: NextPage = () => {
-  const test = useSelector(contentSelectors.getTest);
+  const test = useSelector(roadSelectors.getTest);
 
   return <Layout>{test}</Layout>;
 };

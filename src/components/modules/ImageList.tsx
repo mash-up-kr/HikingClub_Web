@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
 /* Internal dependencies */
-import { openImageDetail } from 'stores/actions/contentActions';
+import { openImageDetail } from 'stores/actions/roadActions';
 
 interface ImageListProps {
   imgUrls: string[];

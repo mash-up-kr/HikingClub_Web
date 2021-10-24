@@ -3,23 +3,23 @@ import { noop } from 'lodash';
 
 import Input from 'components/atoms/Input';
 
-interface LoadTagProps {
-  loadTag?: string;
-  loadTagList?: string[];
-  onChangeLoadTag?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+interface RoadTagProps {
+  roadTag?: string;
+  roadTagList?: string[];
+  onChangeRoadTag?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function LoadTitle({
-  loadTag = '',
-  loadTagList = [],
-  onChangeLoadTag = noop,
-}: LoadTagProps) {
+  roadTag = '',
+  roadTagList = [],
+  onChangeRoadTag = noop,
+}: RoadTagProps) {
   return (
     <Wrapper>
       <Title>태그</Title>
-      <Input value={loadTag} leftContent="#" onChange={onChangeLoadTag} />
+      <Input value={roadTag} leftContent="#" onChange={onChangeRoadTag} />
       <TagListWrapper>
-        {loadTagList.map((tag) => (
+        {roadTagList.map((tag) => (
           <Tag key={tag}>{tag}</Tag>
         ))}
       </TagListWrapper>

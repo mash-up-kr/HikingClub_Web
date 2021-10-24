@@ -1,10 +1,10 @@
 import Layout from 'components/Layout';
-import MakeLoad from 'components/templates/MakeLoad';
+import MakeRoad from 'components/templates/MakeRoad';
 
 function Edit() {
   return (
     <Layout>
-      <MakeLoad />
+      <MakeRoad />
     </Layout>
   );
 }

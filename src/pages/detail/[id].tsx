@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 /* Internal dependencies */
-import * as contentSelectors from 'stores/selectors/contentSelectors';
+import * as roadSelectors from 'stores/selectors/roadSelectors';
 import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
 
 function Detail() {
-  const imgDetail = useSelector(contentSelectors.getImgDetail);
+  const imgDetail = useSelector(roadSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
 
   return (

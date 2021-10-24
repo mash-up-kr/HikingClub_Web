@@ -5,7 +5,7 @@ import { Record, List } from 'immutable';
 import Route, { RoutePOJO } from 'models/Route';
 import Spot, { SpotPOJO } from 'models/Spot';
 
-export interface ContentPOJO {
+export interface RoadPOJO {
   id: string;
   title: string;
   content: string;
@@ -19,15 +19,15 @@ export interface ContentPOJO {
   hashtags: string[];
 }
 
-export interface ContentAttr
-  extends Omit<ContentPOJO, 'routes' | 'spots' | 'images' | 'hashtags'> {
+export interface RoadAttr
+  extends Omit<RoadPOJO, 'routes' | 'spots' | 'images' | 'hashtags'> {
   routes: List<Route>;
   spots: List<Spot>;
   images: List<string>;
   hashtags: List<string>;
 }
 
-const ContentRecord = Record<ContentAttr>({
+const RoadRecord = Record<RoadAttr>({
   id: '',
   title: '',
   content: '',
@@ -40,8 +40,8 @@ const ContentRecord = Record<ContentAttr>({
   hashtags: List(),
 });
 
-class Content extends ContentRecord {
-  constructor(args: ContentPOJO) {
+class Road extends RoadRecord {
+  constructor(args: RoadPOJO) {
     super({
       ...args,
       routes: List<Route>().withMutations((routes) => {
@@ -56,4 +56,4 @@ class Content extends ContentRecord {
   }
 }
 
-export default Content;
+export default Road;

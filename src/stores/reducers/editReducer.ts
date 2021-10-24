@@ -5,9 +5,9 @@ import { unset } from 'lodash';
 /* Internal dependencies */
 import ActionTypes from 'stores/ActionTypes';
 import { EditActions } from 'stores/actions/editActions';
-import { ContentAttr } from 'models/Content';
+import { RoadAttr } from 'models/Road';
 
-interface State extends Omit<ContentAttr, 'id'> {}
+interface State extends Omit<RoadAttr, 'id'> {}
 
 const initialState: State = {
   title: '',
@@ -23,12 +23,12 @@ const initialState: State = {
 
 function editReducer(state: State = initialState, action: EditActions): State {
   switch (action.type) {
-    case ActionTypes.SET_CONTENT: {
-      const { content } = action.payload;
-      const objectContent = content.toObject();
-      unset(objectContent, 'id');
+    case ActionTypes.SET_ROAD: {
+      const { road } = action.payload;
+      const objectRoad = road.toObject();
+      unset(objectRoad, 'id');
 
-      return objectContent;
+      return objectRoad;
     }
     default:
       return state;

@@ -1,10 +1,10 @@
 enum ActionTypes {
-  /* contentActionTypes */
+  /* roadActionTypes */
   OPEN_IMAGE_DETAIL = 'OPEN_IMAGE_DETAIL',
   CLOSE_IMAGE_DETAIL = 'CLOSE_IMAGE_DETAIL',
 
   /* editActionTypes */
-  SET_CONTENT = 'SET_CONTENT',
+  SET_ROAD = 'SET_ROAD',
 }
 
 export default ActionTypes;

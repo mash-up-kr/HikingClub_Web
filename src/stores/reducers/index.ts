@@ -2,10 +2,10 @@
 import { combineReducers } from 'redux';
 
 /* Internal dependencies */
-import contentReducer from './contentReducer';
+import roadReducer from './roadReducer';
 
 const rootReducer = combineReducers({
-  contentReducer,
+  roadReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

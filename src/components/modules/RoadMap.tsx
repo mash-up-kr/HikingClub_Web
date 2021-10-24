@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Map from 'components/atoms/Map';
 
-function LoadMap() {
+function RoadMap() {
   return (
     <Wrapper>
       <Title>길 그리기</Title>
@@ -38,4 +38,4 @@ const Description = styled.p`
   color: #868686;
 `;
 
-export default LoadMap;
+export default RoadMap;

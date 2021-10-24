@@ -1,17 +1,26 @@
 /* External dependencies */
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 /* Internal dependencies */
 import * as roadSelectors from 'stores/selectors/roadSelectors';
+import { requestGetRoad } from 'stores/actions/roadActions';
 import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
 
 function Detail() {
+  const dispatch = useDispatch();
+
   const imgDetail = useSelector(roadSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
+
+  useEffect(() => {
+    /* FIXME: (@danivelop) 테스트로 임시로 1을 넣음. 나중에 수정필요 */
+    dispatch(requestGetRoad({ roadId: '1' }));
+  }, [dispatch]);
 
   return (
     <Layout>

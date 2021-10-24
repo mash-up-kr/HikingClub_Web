@@ -5,7 +5,7 @@ import { createWrapper, Context } from 'next-redux-wrapper';
 
 /* Internal dependencies */
 import rootReducer, { RootState } from './reducers';
-import { rootEpic } from './epics';
+import rootEpic from './epics';
 
 const epicMiddleware = createEpicMiddleware();
 

@@ -3,8 +3,8 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import Bookmark from 'assets/images/bookmark.svg';
-import Leaf from 'assets/images/leaf.svg';
+import Bookmark from '../../../public/images/bookmark.svg';
+import Leaf from '../../../public/images/leaf.svg';
 import CategoryText from 'components/atoms/CategoryText';
 import Chip from 'components/atoms/Chip';
 import LocationText from 'components/atoms/LocationText';

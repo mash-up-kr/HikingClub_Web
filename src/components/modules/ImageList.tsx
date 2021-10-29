@@ -1,7 +1,10 @@
+/* External Dependencies */
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { openImageDetail } from 'stores/actions';
+
+/* Internal dependencies */
+import { openImageDetail } from 'stores/actions/roadActions';
 
 interface ImageListProps {
   imgUrls: string[];
@@ -12,8 +15,8 @@ function ImageList({ imgUrls }: ImageListProps) {
 
   const dispatch = useDispatch();
 
-  const handleClick = (url: string) => {
-    dispatch(openImageDetail(url));
+  const handleClick = (imgUrl: string) => {
+    dispatch(openImageDetail({ imgUrl }));
   };
 
   return (

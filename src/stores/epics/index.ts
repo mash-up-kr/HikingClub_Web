@@ -1,4 +1,10 @@
-import { combineEpics } from "redux-observable";
-import { testEpic } from "./test.epic";
+/* External Dependencies */
+import { combineEpics, Epic } from 'redux-observable';
 
-export const rootEpic = combineEpics(testEpic);
+/* Internal dependencies */
+import roadEpic from './roadEpic';
+import { testEpic } from './test.epic';
+
+const rootEpic: Epic = combineEpics(testEpic, roadEpic);
+
+export default rootEpic;

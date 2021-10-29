@@ -3,19 +3,19 @@ import { noop } from 'lodash';
 
 import Input from 'components/atoms/Input';
 
-interface LoadTitleProps {
-  loadTitle?: string;
-  onChangeLoadTitle?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+interface RoadTitleProps {
+  roadTitle?: string;
+  onChangeRoadTitle?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function LoadTitle({
-  loadTitle = '',
-  onChangeLoadTitle = noop,
-}: LoadTitleProps) {
+function RoadTitle({
+  roadTitle = '',
+  onChangeRoadTitle = noop,
+}: RoadTitleProps) {
   return (
     <Wrapper>
       <Title>길 이름</Title>
-      <Input value={loadTitle} onChange={onChangeLoadTitle} />
+      <Input value={roadTitle} onChange={onChangeRoadTitle} />
     </Wrapper>
   );
 }
@@ -31,4 +31,4 @@ const Title = styled.p`
   line-height: 20px;
 `;
 
-export default LoadTitle;
+export default RoadTitle;

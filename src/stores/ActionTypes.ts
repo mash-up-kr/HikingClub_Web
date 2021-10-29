@@ -1,0 +1,14 @@
+enum ActionTypes {
+  /* roadActionTypes */
+  OPEN_IMAGE_DETAIL = 'OPEN_IMAGE_DETAIL',
+  CLOSE_IMAGE_DETAIL = 'CLOSE_IMAGE_DETAIL',
+
+  REQUEST_GET_ROAD = 'REQUEST_GET_ROAD',
+  REQUEST_GET_ROAD_SUCCESS = 'REQUEST_GET_ROAD_SUCCESS',
+  REQUEST_GET_ROAD_ERROR = 'REQUEST_GET_ROAD_ERROR',
+
+  /* editActionTypes */
+  SET_ROAD = 'SET_ROAD',
+}
+
+export default ActionTypes;

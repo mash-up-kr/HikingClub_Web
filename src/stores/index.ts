@@ -1,18 +1,23 @@
-import { createStore, applyMiddleware, Store } from "redux";
-import { createEpicMiddleware } from "redux-observable";
-import { reducer } from "./reducer";
-import { createWrapper, Context, HYDRATE } from "next-redux-wrapper";
-import { State, initialState } from "./reducer";
-import { rootEpic } from "./epics";
+/* External Dependencies */
+import { createStore, applyMiddleware, Store } from 'redux';
+import { createEpicMiddleware } from 'redux-observable';
+import { createWrapper, Context } from 'next-redux-wrapper';
+
+/* Internal dependencies */
+import rootReducer, { RootState } from './reducers';
+import rootEpic from './epics';
 
 const epicMiddleware = createEpicMiddleware();
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const makeStore = (context: Context) => {
-  const store = createStore(reducer, applyMiddleware(epicMiddleware));
+  const store = createStore(rootReducer, applyMiddleware(epicMiddleware));
 
   epicMiddleware.run(rootEpic);
 
   return store;
 };
 
-export const wrapper = createWrapper<Store<State>>(makeStore, { debug: true });
+export const wrapper = createWrapper<Store<RootState>>(makeStore, {
+  debug: true,
+});

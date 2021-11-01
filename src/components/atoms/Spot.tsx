@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import SpecialSpot from 'assets/images/specialSpot.svg';
+import SpecialSpot from '../../../public/images/specialSpot.svg';
 
 interface SpotProps {
   title?: string;

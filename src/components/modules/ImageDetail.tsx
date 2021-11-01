@@ -1,5 +1,5 @@
 /* External Dependencies */
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
@@ -13,13 +13,17 @@ interface ImageDetailProps {
 function ImageDetail({ imgUrl }: ImageDetailProps) {
   const dispatch = useDispatch();
 
+  const handleClick = useCallback(() => {
+    dispatch(closeImageDetail());
+  }, [dispatch]);
+
   return (
     <Container>
       <ImageWrapper>
         <StyledImage src={imgUrl} />
       </ImageWrapper>
 
-      <CloseIconWrapper onClick={() => dispatch(closeImageDetail())}>
+      <CloseIconWrapper onClick={handleClick}>
         <CloseIcon src="/images/close-icon.png" />
       </CloseIconWrapper>
     </Container>

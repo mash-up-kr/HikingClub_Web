@@ -1,5 +1,4 @@
-/* External Dependencies */
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 
@@ -11,18 +10,26 @@ interface ImageListProps {
 }
 
 function ImageList({ imgUrls }: ImageListProps) {
-  // TODO 스와이프로 넘기는 애니메이션 추가
-
   const dispatch = useDispatch();
 
-  const handleClick = (imgUrl: string) => {
-    dispatch(openImageDetail({ imgUrl }));
-  };
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLImageElement>) => {
+      const { url } = event.currentTarget.dataset;
+
+      dispatch(openImageDetail({ imgUrl: url || '' }));
+    },
+    [dispatch]
+  );
 
   return (
     <Container>
       {imgUrls.map((url, idx) => (
-        <ImageItem onClick={() => handleClick(url)} key={url + idx} src={url} />
+        <ImageItem
+          data-url={url}
+          onClick={handleClick}
+          key={url + idx}
+          src={url}
+        />
       ))}
     </Container>
   );

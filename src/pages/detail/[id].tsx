@@ -16,7 +16,7 @@ function Detail() {
 
   const imgDetail = useSelector(roadSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
-  console.log(imgDetail);
+
   useEffect(() => {
     /* FIXME: (@danivelop) 테스트로 임시로 1을 넣음. 나중에 수정필요 */
     dispatch(requestGetRoad({ roadId: '1' }));

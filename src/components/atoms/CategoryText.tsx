@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import Leaf from 'assets/images/Leaf.svg';
+import Leaf from '../../../public/images/leaf.png';
 import Image from 'next/image';
 import styled from 'styled-components';
 

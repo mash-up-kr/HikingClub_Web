@@ -10,8 +10,7 @@ export interface RoadPOJO {
   title: string;
   content: string;
   distance: number;
-  /* TODO: (@danivelop) place가 어떤필드인지 정확히 모르겠음. 백앤드팀에 확인필요 */
-  place: null;
+  place: string | null;
   category: string;
   routes: RoutePOJO[];
   spots: SpotPOJO[];
@@ -41,14 +40,14 @@ const RoadRecord = Record<RoadAttr>({
 });
 
 class Road extends RoadRecord {
-  constructor(args: RoadPOJO) {
+  constructor(args: Partial<RoadPOJO> = {}) {
     super({
       ...args,
       routes: List<Route>().withMutations((routes) => {
-        args.routes.forEach((route) => routes.push(new Route(route)));
+        args.routes?.forEach((route) => routes.push(new Route(route)));
       }),
       spots: List<Spot>().withMutations((spots) => {
-        args.spots.forEach((spot) => spots.push(new Spot(spot)));
+        args.spots?.forEach((spot) => spots.push(new Spot(spot)));
       }),
       images: List(args.images),
       hashtags: List(args.hashtags),

@@ -14,6 +14,7 @@ export const getRoadEpic: Epic = (action$) =>
       const { roadId } = action.payload;
 
       return from(roadAPI.getRoad({ roadId })).pipe(
+        map((result: any) => result.data?.data),
         map((payload) => ({
           type: ActionTypes.REQUEST_GET_ROAD_SUCCESS,
           payload,

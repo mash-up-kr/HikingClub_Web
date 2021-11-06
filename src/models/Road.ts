@@ -1,5 +1,5 @@
 /* External Dependencies */
-import { Record, List } from 'immutable';
+import { Record, List, Set } from 'immutable';
 
 /* Internal dependencies */
 import Route, { RoutePOJO } from 'models/Route';
@@ -23,7 +23,7 @@ export interface RoadAttr
   routes: List<Route>;
   spots: List<Spot>;
   images: List<string>;
-  hashtags: List<string>;
+  hashtags: Set<string>;
 }
 
 const RoadRecord = Record<RoadAttr>({
@@ -36,7 +36,7 @@ const RoadRecord = Record<RoadAttr>({
   routes: List(),
   spots: List(),
   images: List(),
-  hashtags: List(),
+  hashtags: Set(),
 });
 
 class Road extends RoadRecord {
@@ -50,7 +50,7 @@ class Road extends RoadRecord {
         args.spots?.forEach((spot) => spots.push(new Spot(spot)));
       }),
       images: List(args.images),
-      hashtags: List(args.hashtags),
+      hashtags: Set(args.hashtags),
     });
   }
 }

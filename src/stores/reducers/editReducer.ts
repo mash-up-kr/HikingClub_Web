@@ -1,5 +1,5 @@
 /* External Dependencies */
-import { List } from 'immutable';
+import { List, Set } from 'immutable';
 import { unset } from 'lodash';
 
 /* Internal dependencies */
@@ -18,7 +18,7 @@ const initialState: State = {
   routes: List(),
   spots: List(),
   images: List(),
-  hashtags: List(),
+  hashtags: Set(),
 };
 
 function editReducer(state: State = initialState, action: EditActions): State {
@@ -29,6 +29,30 @@ function editReducer(state: State = initialState, action: EditActions): State {
       unset(objectRoad, 'id');
 
       return objectRoad;
+    }
+    case ActionTypes.SET_TITLE: {
+      const { title } = action.payload;
+
+      return {
+        ...state,
+        title,
+      };
+    }
+    case ActionTypes.ADD_HASHTAG: {
+      const { hashTag } = action.payload;
+
+      return {
+        ...state,
+        hashtags: state.hashtags.add(hashTag),
+      };
+    }
+    case ActionTypes.REMOVE_HASHTAG: {
+      const { hashTag } = action.payload;
+
+      return {
+        ...state,
+        hashtags: state.hashtags.remove(hashTag),
+      };
     }
     default:
       return state;

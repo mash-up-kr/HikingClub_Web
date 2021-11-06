@@ -9,6 +9,9 @@ enum ActionTypes {
 
   /* editActionTypes */
   SET_ROAD = 'SET_ROAD',
+  SET_TITLE = 'SET_TITLE',
+  ADD_HASHTAG = 'ADD_HASHTAG',
+  REMOVE_HASHTAG = 'REMOVE_TAG',
 }
 
 export default ActionTypes;

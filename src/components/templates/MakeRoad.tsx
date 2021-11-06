@@ -1,50 +1,19 @@
-import React, { useState, useCallback } from 'react';
+/* External dependencies */
 import styled from 'styled-components';
 
+/* Internal dependencies */
 import Header from 'components/modules/Header';
 import RoadTitle from 'components/modules/RoadTitle';
 import RoadMap from 'components/modules/RoadMap';
-import RoadTag from 'components/modules/RoadTag';
+import RoadHashTag from 'components/modules/RoadHashTag';
 
 function MakeLoad() {
-  const [roadTitle, setRoadTitle] = useState('');
-  const [roadTag, setRoadTag] = useState('');
-  const [roadTagList, setRoadTagList] = useState<string[]>([]);
-
-  const handleChangeRoadTitle = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target;
-      setRoadTitle(value);
-    },
-    []
-  );
-
-  const handleChangeRoadTag = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target;
-      if (value.charAt(value.length - 1) === ' ') {
-        setRoadTagList((prev) => [...prev, value]);
-        setRoadTag('');
-      } else {
-        setRoadTag(value);
-      }
-    },
-    []
-  );
-
   return (
     <Wrapper>
       <Header title="길 등록하기" />
-      <RoadTitle
-        roadTitle={roadTitle}
-        onChangeRoadTitle={handleChangeRoadTitle}
-      />
+      <RoadTitle />
       <RoadMap />
-      <RoadTag
-        roadTag={roadTag}
-        roadTagList={roadTagList}
-        onChangeRoadTag={handleChangeRoadTag}
-      />
+      <RoadHashTag />
     </Wrapper>
   );
 }

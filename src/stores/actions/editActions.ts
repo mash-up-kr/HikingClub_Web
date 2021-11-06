@@ -19,6 +19,10 @@ interface RemoveHashTagPayload {
   hashTag: string;
 }
 
+interface SetContentPayload {
+  content: string;
+}
+
 export const setRoad = actionCreator<ActionTypes.SET_ROAD, SetRoadPayload>(
   ActionTypes.SET_ROAD
 );
@@ -37,8 +41,14 @@ export const removeHashTag = actionCreator<
   RemoveHashTagPayload
 >(ActionTypes.REMOVE_HASHTAG);
 
+export const setContent = actionCreator<
+  ActionTypes.SET_CONTENT,
+  SetContentPayload
+>(ActionTypes.SET_CONTENT);
+
 export type EditActions =
   | ReturnType<typeof setRoad>
   | ReturnType<typeof setTitle>
   | ReturnType<typeof addHashTag>
-  | ReturnType<typeof removeHashTag>;
+  | ReturnType<typeof removeHashTag>
+  | ReturnType<typeof setContent>;

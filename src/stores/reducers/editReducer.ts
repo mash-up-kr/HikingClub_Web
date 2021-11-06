@@ -54,6 +54,14 @@ function editReducer(state: State = initialState, action: EditActions): State {
         hashtags: state.hashtags.remove(hashTag),
       };
     }
+    case ActionTypes.SET_CONTENT: {
+      const { content } = action.payload;
+
+      return {
+        ...state,
+        content,
+      };
+    }
     default:
       return state;
   }

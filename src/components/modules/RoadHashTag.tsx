@@ -40,25 +40,26 @@ function RoadHashTag() {
     <Wrapper>
       <Title>태그</Title>
       <Input value={hashTag} leftContent="#" onChange={handleChangeHashTag} />
-      {hashTags.size === 0 && (
-        <EmptyDescription>
-          길을 설명할 수 있는 태그를 붙여주세요.
-        </EmptyDescription>
-      )}
       <HashTagListWrapper>
-        {hashTags.map((tag) => (
-          <HashTagWrapper key={tag}>
-            <HashTag>{tag}</HashTag>
-            <RemoveHashTag data-hashtag={tag} onClick={handleRemovehashTag}>
-              <img
-                width="16"
-                height="16"
-                src="/images/remove-hashtag.png"
-                alt=""
-              />
-            </RemoveHashTag>
-          </HashTagWrapper>
-        ))}
+        {hashTags.size === 0 ? (
+          <EmptyDescription>
+            길을 설명할 수 있는 태그를 붙여주세요.
+          </EmptyDescription>
+        ) : (
+          hashTags.map((tag) => (
+            <HashTagWrapper key={tag}>
+              <HashTag>{tag}</HashTag>
+              <RemoveHashTag data-hashtag={tag} onClick={handleRemovehashTag}>
+                <img
+                  width="16"
+                  height="16"
+                  src="/images/remove-hashtag.png"
+                  alt=""
+                />
+              </RemoveHashTag>
+            </HashTagWrapper>
+          ))
+        )}
       </HashTagListWrapper>
     </Wrapper>
   );
@@ -76,28 +77,27 @@ const Title = styled.p`
 `;
 
 const EmptyDescription = styled.p`
-  margin-top: 12px;
   font-size: 12px;
+  line-height: 29px;
   color: #868686;
 `;
 
 const HashTagListWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   width: 100%;
-  min-height: 23px;
+  min-height: 29px;
   margin-top: 12px;
 `;
 
 const HashTagWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: 5px 7px;
+  height: 29px;
+  padding: 0 7px;
   background-color: #f3f3f3;
   border-radius: 4px;
-
-  &:not(:first-of-type) {
-    margin-left: 8px;
-  }
 `;
 
 const HashTag = styled.p`

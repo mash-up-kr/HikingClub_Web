@@ -1,5 +1,5 @@
 /* External Dependencies */
-import { List, Set } from 'immutable';
+import { List, OrderedSet } from 'immutable';
 import { unset } from 'lodash';
 
 /* Internal dependencies */
@@ -18,7 +18,7 @@ const initialState: State = {
   routes: List(),
   spots: List(),
   images: List(),
-  hashtags: Set(),
+  hashtags: OrderedSet(),
 };
 
 function editReducer(state: State = initialState, action: EditActions): State {

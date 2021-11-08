@@ -1,4 +1,5 @@
-import { isFunction } from 'lodash';
+/* External dependencies */
+import { isEmpty, isFunction } from 'lodash';
 
 interface KakaoMapServiceProps {
   map: any;
@@ -39,14 +40,26 @@ class KakaoMapService implements KakaoMapServiceProps {
     this.longitude = longitude;
   }
 
-  async loadMap() {
-    const script = document.createElement('script');
-    script.async = true;
-    script.src =
-      'https://dapi.kakao.com/v2/maps/sdk.js?appkey=785039beb98fa410f1c187bbb9cbe63b&autoload=false&libraries=drawing';
-    document.head.appendChild(script);
+  private async loadScript() {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src =
+        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=785039beb98fa410f1c187bbb9cbe63b&autoload=false&libraries=drawing';
+      document.head.appendChild(script);
 
-    script.onload = () => {
+      script.onload = () => {
+        resolve(undefined);
+      };
+    });
+  }
+
+  async loadMap() {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
+
       window.kakao.maps.load(() => {
         const options = {
           center: new window.kakao.maps.LatLng(this.latitude, this.longitude),
@@ -54,7 +67,9 @@ class KakaoMapService implements KakaoMapServiceProps {
         };
         this.map = new window.kakao.maps.Map(this.mapWrapper, options);
       });
-    };
+    } catch (error) {
+      /* empty handler */
+    }
   }
 
   getMap() {

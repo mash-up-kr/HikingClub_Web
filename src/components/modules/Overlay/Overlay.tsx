@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom';
 import { noop } from 'lodash';
 
 /* Internal dependencies */
+import { getRootElement } from 'utils/domUtils';
 import OverlayPosition from './OverlayPosition';
 import { Container, Wrapper, StyledOverlay } from './Overlay.styled';
 
@@ -78,10 +79,6 @@ type EventHandler<K extends keyof HTMLElementEventMap> = (
 ) => any;
 
 const ESCAPE_KEY = 'Escape';
-const rootElement =
-  document.getElementById('root') ||
-  document.getElementById('__next') ||
-  (document.getElementsByTagName('body')[0] as HTMLElement);
 
 function listen<K extends keyof HTMLElementEventMap>(
   element: any,
@@ -347,7 +344,7 @@ function Overlay({
       return null;
     }
 
-    const containerElement = container || (rootElement as HTMLElement);
+    const containerElement = container || (getRootElement() as HTMLElement);
     const {
       width: containerWidth,
       height: containerHeight,
@@ -452,7 +449,7 @@ function Overlay({
 
   return ReactDOM.createPortal(
     overlay,
-    container || (rootElement as HTMLElement)
+    container || (getRootElement() as HTMLElement)
   );
 }
 

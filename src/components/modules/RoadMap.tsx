@@ -1,16 +1,33 @@
+/* External dependencies */
+import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 
+/* Internal dependencies */
+import DrawRoad from 'components/templates/DrawRoad';
 import Map from 'components/atoms/Map';
 
 function RoadMap() {
+  const [enableDrawRoad, setEnableDrawRoad] = useState(false);
+
+  const handleClickMap = useCallback(() => {
+    setEnableDrawRoad(true);
+  }, []);
+
+  const habdleClickCloseMap = useCallback(() => {
+    setEnableDrawRoad(false);
+  }, []);
+
   return (
-    <Wrapper>
-      <Title>길 그리기</Title>
-      <MapWrapper>
-        <Map />
-      </MapWrapper>
-      <Description>지도를 눌러 길을 그려주세요.</Description>
-    </Wrapper>
+    <>
+      <Wrapper onClick={handleClickMap}>
+        <Title>길 그리기</Title>
+        <MapWrapper>
+          <Map />
+        </MapWrapper>
+        <Description>지도를 눌러 길을 그려주세요.</Description>
+      </Wrapper>
+      {enableDrawRoad && <DrawRoad onClickCloseMap={habdleClickCloseMap} />}
+    </>
   );
 }
 

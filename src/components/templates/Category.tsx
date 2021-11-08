@@ -3,7 +3,7 @@ import Header from 'components/modules/Header';
 import styled from 'styled-components';
 import PublicText from 'components/atoms/PublicText';
 import CategoryCard from 'components/atoms/CategoryCard';
-import BasicButton from 'components/atoms/BasicButton';
+import Button from 'components/atoms/Button';
 
 function Category() {
   const [cards, setCards] = useState([
@@ -56,12 +56,12 @@ function Category() {
       </CategoryWrapper>
 
       <ButtonWrapper>
-        <BasicButton bgColor="#F9F9F9" color="">
+        <Button bgColor="#F9F9F9" color="">
           취소
-        </BasicButton>
-        <BasicButton bgColor="#2C7A50" color="#fff">
+        </Button>
+        <Button bgColor="#2C7A50" color="#fff">
           완료
-        </BasicButton>
+        </Button>
       </ButtonWrapper>
     </Wrapper>
   );

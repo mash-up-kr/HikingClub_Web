@@ -7,6 +7,7 @@ import RoadTitle from 'components/modules/RoadTitle';
 import RoadMap from 'components/modules/RoadMap';
 import RoadHashTag from 'components/modules/RoadHashTag';
 import RoadContent from 'components/modules/RoadContent';
+import RoadSubmit from 'components/modules/RoadSubmit';
 import React from 'react';
 
 function MakeLoad() {
@@ -17,6 +18,7 @@ function MakeLoad() {
       <RoadMap />
       <RoadHashTag />
       <RoadContent />
+      <RoadSubmit />
     </Wrapper>
   );
 }

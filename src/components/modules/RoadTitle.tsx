@@ -1,21 +1,30 @@
+/* External dependencies */
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { noop } from 'lodash';
 
+/* Internal dependencies */
+import { setTitle } from 'stores/actions/editActions';
+import { getTitle } from 'stores/selectors/editSelectors';
 import Input from 'components/atoms/Input';
 
-interface RoadTitleProps {
-  roadTitle?: string;
-  onChangeRoadTitle?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+function RoadTitle() {
+  const dispatch = useDispatch();
 
-function RoadTitle({
-  roadTitle = '',
-  onChangeRoadTitle = noop,
-}: RoadTitleProps) {
+  const title = useSelector(getTitle);
+
+  const handleChangeRoadTitle = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      dispatch(setTitle({ title: value }));
+    },
+    [dispatch]
+  );
+
   return (
     <Wrapper>
       <Title>길 이름</Title>
-      <Input value={roadTitle} onChange={onChangeRoadTitle} />
+      <Input value={title} onChange={handleChangeRoadTitle} />
     </Wrapper>
   );
 }

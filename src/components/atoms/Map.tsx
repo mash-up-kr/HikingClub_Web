@@ -1,10 +1,22 @@
-import { useRef, useEffect } from 'react';
+/* External dependencies */
+import {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  MutableRefObject,
+  Ref,
+} from 'react';
 
 import styled from 'styled-components';
 
 import KakaoMapService from 'services/KakaoMapService';
 
-function Map() {
+export interface MapRef {
+  mapServiceRef: MutableRefObject<KakaoMapService | undefined>;
+}
+
+function Map(_: any, forwardedRef: Ref<MapRef>) {
   const mapWrapperRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<KakaoMapService>();
 
@@ -19,6 +31,10 @@ function Map() {
     }
   }, []);
 
+  useImperativeHandle(forwardedRef, () => ({
+    mapServiceRef,
+  }));
+
   return <MapWrapper ref={mapWrapperRef} />;
 }
 
@@ -27,4 +43,4 @@ export const MapWrapper = styled.div`
   height: 100%;
 `;
 
-export default Map;
+export default forwardRef(Map);

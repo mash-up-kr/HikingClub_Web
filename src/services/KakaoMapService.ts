@@ -26,6 +26,8 @@ interface MouseEvent {
 class KakaoMapService implements KakaoMapServiceProps {
   map: any;
 
+  ps: any = null;
+
   linePath: any[] = [];
 
   readonly mapWrapper: HTMLDivElement;
@@ -45,7 +47,7 @@ class KakaoMapService implements KakaoMapServiceProps {
       const script = document.createElement('script');
       script.async = true;
       script.src =
-        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=785039beb98fa410f1c187bbb9cbe63b&autoload=false&libraries=drawing';
+        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=785039beb98fa410f1c187bbb9cbe63b&autoload=false&libraries=drawing,services';
       document.head.appendChild(script);
 
       script.onload = () => {
@@ -72,8 +74,36 @@ class KakaoMapService implements KakaoMapServiceProps {
     }
   }
 
+  async searchPlace(keyword: string) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
+
+      if (isEmpty(this.ps)) {
+        this.ps = new window.kakao.maps.services.Places();
+      }
+
+      return await new Promise((resolve) => {
+        this.ps.keywordSearch(keyword, (data: any, status: any) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            resolve(data);
+          }
+        });
+      });
+    } catch (error) {
+      /* empty handler */
+      return Promise.reject(error);
+    }
+  }
+
   getMap() {
     return this.map;
+  }
+
+  moveTo(latitude: number, longitude: number) {
+    const moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
+    this.map.panTo(moveLatLon);
   }
 
   addClickEventListener(onClick: MouseEvent) {

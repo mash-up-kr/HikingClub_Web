@@ -7,7 +7,7 @@ import DrawRoad from 'components/templates/DrawRoad';
 import Map from 'components/atoms/Map';
 
 function RoadMap() {
-  const [enableDrawRoad, setEnableDrawRoad] = useState(false);
+  const [enableDrawRoad, setEnableDrawRoad] = useState(true);
 
   const handleClickMap = useCallback(() => {
     setEnableDrawRoad(true);

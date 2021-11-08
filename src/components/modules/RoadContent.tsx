@@ -51,6 +51,10 @@ const Content = styled.textarea`
   background-color: #f9f9f9;
   border: 0;
   border-radius: 8px;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default RoadContent;

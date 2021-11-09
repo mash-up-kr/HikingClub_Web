@@ -84,10 +84,11 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
   }, []);
 
   const handleClickPlace = useCallback(
-    (latitude: number, longitude: number) => {
+    (latitude: number, longitude: number, placeName) => {
       mapRef.current?.mapServiceRef.current?.moveTo(latitude, longitude);
       searchInputRef.current?.blur();
       setFocus(false);
+      setSearchQuery(placeName);
     },
     []
   );
@@ -126,7 +127,9 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
             {places.map((place: any) => (
               <PlaceItem
                 key={place.id}
-                onClick={() => handleClickPlace(place.y, place.x)}
+                onClick={() =>
+                  handleClickPlace(place.y, place.x, place.place_name)
+                }
               >
                 <PlaceName>{place.place_name}</PlaceName>
                 <PlaceAddress>{place.road_address_name}</PlaceAddress>

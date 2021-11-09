@@ -8,6 +8,8 @@ import RoadMap from 'components/modules/RoadMap';
 import RoadHashTag from 'components/modules/RoadHashTag';
 import RoadContent from 'components/modules/RoadContent';
 import RoadSubmit from 'components/modules/RoadSubmit';
+
+import RoadCategory from 'components/modules/RoadCategory';
 import RoadImageUploader from 'components/modules/RoadImageUploader';
 import React, { useState, useCallback } from 'react';
 
@@ -25,12 +27,13 @@ function MakeRoad() {
       <RoadMap />
       <RoadHashTag />
       <RoadContent />
-      <RoadSubmit />
 
+      <RoadCategory />
       <RoadImageUploader
         roadImages={roadImages}
         onChangeRoadImages={handleChangeRoadImages}
       />
+      <RoadSubmit />
     </Wrapper>
   );
 }

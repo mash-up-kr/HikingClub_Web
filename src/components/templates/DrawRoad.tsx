@@ -7,10 +7,13 @@ import React, {
   useEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
 import styled, { css, keyframes } from 'styled-components';
 import { isEmpty } from 'lodash';
 
 /* Internal dependencies */
+import { addRoute } from 'stores/actions/editActions';
+import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
 import { getRootElement } from 'utils/domUtils';
 import Header from 'components/modules/Header';
@@ -28,6 +31,7 @@ enum DrawMode {
 }
 
 function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
+  const dispatch = useDispatch();
   const isMounted = useMounted();
 
   const [mode, setMode] = useState(DrawMode.Road);
@@ -91,6 +95,15 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
       setSearchQuery(placeName);
     },
     []
+  );
+
+  const handkleClickMap = useCallback(
+    (mouseEvent: MouseEvent) => {
+      const { Ma: latitude, La: longitude } = mouseEvent.latLng;
+      dispatch(addRoute({ latitude, longitude }));
+      mapRef.current?.mapServiceRef.current?.drawLine(latitude, longitude);
+    },
+    [dispatch]
   );
 
   const DrawModeComponent = useMemo(
@@ -162,7 +175,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
           onClickClose={onClickCloseMap}
         />
         <MapWrapper>
-          <Map ref={mapRef} />
+          <Map ref={mapRef} onClickMap={handkleClickMap} />
         </MapWrapper>
         <ContentCardWrapper isFocus={isFocus}>
           <ContentCard>
@@ -195,6 +208,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
     [
       DrawModeComponent,
       SpotModeComponent,
+      handkleClickMap,
       handleClickMode,
       isFocus,
       mode,

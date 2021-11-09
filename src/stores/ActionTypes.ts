@@ -13,6 +13,9 @@ enum ActionTypes {
   ADD_HASHTAG = 'ADD_HASHTAG',
   REMOVE_HASHTAG = 'REMOVE_TAG',
   SET_CONTENT = 'SET_CONTENT',
+  ADD_ROUTE = 'ADD_ROUTE',
+  REMOVE_ROUTE = 'REMOVE_ROUTE',
+  CLEAR_ROUTE = 'CLEAR_ROUTE',
 }
 
 export default ActionTypes;

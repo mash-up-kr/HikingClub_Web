@@ -19,16 +19,20 @@ interface LatLng {
   La: number;
 }
 
-interface MouseEvent {
+export interface MouseEvent {
   latLng: LatLng;
 }
 
 class KakaoMapService implements KakaoMapServiceProps {
   map: any;
 
-  ps: any = null;
-
   linePath: any[] = [];
+
+  polyLines: any[] = [];
+
+  circles: any[] = [];
+
+  ps: any = null;
 
   readonly mapWrapper: HTMLDivElement;
 
@@ -92,7 +96,6 @@ class KakaoMapService implements KakaoMapServiceProps {
         });
       });
     } catch (error) {
-      /* empty handler */
       return Promise.reject(error);
     }
   }
@@ -106,22 +109,48 @@ class KakaoMapService implements KakaoMapServiceProps {
     this.map.panTo(moveLatLon);
   }
 
-  addClickEventListener(onClick: MouseEvent) {
-    window.kakao.maps.event.addListener(this.map, 'click', onClick);
+  async addClickEventListener(onClick: (mouseEvent: MouseEvent) => void) {
+    if (isEmpty(this.map)) {
+      setTimeout(() => {
+        this.addClickEventListener(onClick);
+      }, 300);
+    } else {
+      window.kakao.maps.event.addListener(this.map, 'click', onClick);
+    }
   }
 
-  drawLine(lat: number, lng: number) {
-    this.linePath.push(new window.kakao.maps.LatLng(lat, lng));
+  drawLine(latitude: number, longitude: number) {
+    const newRoute = new window.kakao.maps.LatLng(latitude, longitude);
 
-    const polyline = new window.kakao.maps.Polyline({
-      path: this.linePath,
-      strokeWeight: 4,
-      strokeColor: '#3C524A',
-      strokeOpacity: 1,
+    const circle = new window.kakao.maps.Circle({
+      center: newRoute,
+      radius: 8,
+      strokeWeight: 5,
+      strokeColor: '#2C7A50',
+      strokeOpacity: 0.3,
       strokeStyle: 'solid',
+      fillColor: '#2C7A50',
+      fillOpacity: 1,
     });
 
-    polyline.setMap(this.map);
+    this.linePath.push(newRoute);
+    this.circles.push(circle);
+
+    circle.setMap(this.map);
+
+    if (this.linePath.length >= 2) {
+      const polyline = new window.kakao.maps.Polyline({
+        path: this.linePath.slice(this.linePath.length - 2),
+        strokeWeight: 4,
+        strokeColor: '#2C7A50',
+        strokeOpacity: 1,
+        strokeStyle: 'solid',
+      });
+
+      this.polyLines.push(polyline);
+
+      polyline.setMap(this.map);
+    }
   }
 
   resizeMap() {

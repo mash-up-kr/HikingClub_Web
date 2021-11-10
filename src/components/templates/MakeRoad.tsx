@@ -8,9 +8,18 @@ import RoadMap from 'components/modules/RoadMap';
 import RoadHashTag from 'components/modules/RoadHashTag';
 import RoadContent from 'components/modules/RoadContent';
 import RoadSubmit from 'components/modules/RoadSubmit';
-import React from 'react';
 
-function MakeLoad() {
+import RoadCategory from 'components/modules/RoadCategory';
+import RoadImageUploader from 'components/modules/RoadImageUploader';
+import React, { useState, useCallback } from 'react';
+
+function MakeRoad() {
+  const [roadImages, setRoadImages] = useState<FormData | string[]>([]);
+
+  const handleChangeRoadImages = useCallback((formData: FormData) => {
+    setRoadImages(formData);
+  }, []);
+
   return (
     <Wrapper>
       <Header title="길 등록하기" />
@@ -18,6 +27,12 @@ function MakeLoad() {
       <RoadMap />
       <RoadHashTag />
       <RoadContent />
+
+      <RoadCategory />
+      <RoadImageUploader
+        roadImages={roadImages}
+        onChangeRoadImages={handleChangeRoadImages}
+      />
       <RoadSubmit />
     </Wrapper>
   );
@@ -31,4 +46,4 @@ const Wrapper = styled.div`
   box-sizing: border-box;
 `;
 
-export default MakeLoad;
+export default MakeRoad;

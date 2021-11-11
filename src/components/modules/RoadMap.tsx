@@ -43,7 +43,7 @@ function RoadMap() {
 
 const Wrapper = styled.div`
   width: 100%;
-  margin-top: 32px;
+  margin-top: 36px;
 `;
 
 const Title = styled.p`

@@ -34,7 +34,7 @@ function RoadContent() {
 
 const Wrapper = styled.div`
   width: 100%;
-  margin-top: 24px;
+  margin-top: 36px;
 `;
 
 const Title = styled.p`

@@ -2,6 +2,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { isNil } from 'lodash';
 
 /* Internal dependencies */
 import { getRoutes } from 'stores/selectors/editSelectors';
@@ -26,6 +27,18 @@ function RoadMap() {
   useEffect(() => {
     mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
   }, [routes]);
+
+  useEffect(() => {
+    if (!enableDrawRoad) {
+      const firstRoutes = routes.get(0);
+      if (!isNil(firstRoutes)) {
+        mapRef.current?.mapServiceRef.current?.moveTo(
+          firstRoutes.latitude,
+          firstRoutes.longitude
+        );
+      }
+    }
+  }, [enableDrawRoad, routes]);
 
   return (
     <>

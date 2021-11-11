@@ -22,18 +22,19 @@ function MakeRoad() {
 
   return (
     <Wrapper>
-      <Header title="길 등록하기" />
-      <RoadTitle />
-      <RoadMap />
-      <RoadHashTag />
-      <RoadContent />
-
-      <RoadCategory />
-      <RoadImageUploader
-        roadImages={roadImages}
-        onChangeRoadImages={handleChangeRoadImages}
-      />
-      <RoadSubmit />
+      <Header title="길 등록하기" showCloseIcon />
+      <ItemWrapper>
+        <RoadTitle />
+        <RoadMap />
+        <RoadHashTag />
+        <RoadCategory />
+        <RoadImageUploader
+          roadImages={roadImages}
+          onChangeRoadImages={handleChangeRoadImages}
+        />
+        <RoadContent />
+        <RoadSubmit />
+      </ItemWrapper>
     </Wrapper>
   );
 }
@@ -41,8 +42,13 @@ function MakeRoad() {
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 0 16px 30px;
   overflow-y: auto;
+`;
+
+const ItemWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  padding: 0 16px 30px;
   box-sizing: border-box;
 `;
 

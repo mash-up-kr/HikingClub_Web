@@ -23,6 +23,11 @@ interface SetContentPayload {
   content: string;
 }
 
+interface AddRoutePayload {
+  latitude: number;
+  longitude: number;
+}
+
 export const setRoad = actionCreator<ActionTypes.SET_ROAD, SetRoadPayload>(
   ActionTypes.SET_ROAD
 );
@@ -46,9 +51,24 @@ export const setContent = actionCreator<
   SetContentPayload
 >(ActionTypes.SET_CONTENT);
 
+export const addRoute = actionCreator<ActionTypes.ADD_ROUTE, AddRoutePayload>(
+  ActionTypes.ADD_ROUTE
+);
+
+export const removeRoute = actionCreator<ActionTypes.REMOVE_ROUTE>(
+  ActionTypes.REMOVE_ROUTE
+);
+
+export const clearRoute = actionCreator<ActionTypes.CLEAR_ROUTE>(
+  ActionTypes.CLEAR_ROUTE
+);
+
 export type EditActions =
   | ReturnType<typeof setRoad>
   | ReturnType<typeof setTitle>
   | ReturnType<typeof addHashTag>
   | ReturnType<typeof removeHashTag>
-  | ReturnType<typeof setContent>;
+  | ReturnType<typeof setContent>
+  | ReturnType<typeof addRoute>
+  | ReturnType<typeof removeRoute>
+  | ReturnType<typeof clearRoute>;

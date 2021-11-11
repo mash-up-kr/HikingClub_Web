@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 
@@ -11,15 +11,11 @@ function RoadImageUploader({
   roadImages,
   onChangeRoadImages,
 }: RoadImageUploaderProps) {
-  const initialImages = useMemo(
-    () =>
-      roadImages.length
-        ? roadImages.map((imgUrl: string) => ({ data_url: imgUrl }))
-        : [],
-    []
+  const [images, setImages] = useState<ImageListType>(
+    roadImages.length
+      ? roadImages.map((imgUrl: string) => ({ data_url: imgUrl }))
+      : []
   );
-
-  const [images, setImages] = useState<ImageListType>(initialImages);
 
   const maxNumber = 5;
 
@@ -77,7 +73,7 @@ function RoadImageUploader({
 
 const Container = styled.div`
   width: 100%;
-  margin-top: 20px;
+  margin-top: 36px;
   overflow-x: auto;
 `;
 

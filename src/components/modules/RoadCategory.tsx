@@ -16,7 +16,7 @@ function RoadCategory() {
 }
 
 const Wrapper = styled.div`
-  margin-top: 20px;
+  margin-top: 36px;
 `;
 
 const Title = styled.p`

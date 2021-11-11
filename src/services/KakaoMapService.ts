@@ -1,5 +1,5 @@
 /* External dependencies */
-import { isEmpty, isFunction } from 'lodash';
+import { isEmpty, isFunction, isNil } from 'lodash';
 
 interface KakaoMapServiceProps {
   map: any;
@@ -19,6 +19,11 @@ interface LatLng {
   La: number;
 }
 
+interface Route {
+  latitude: number;
+  longitude: number;
+}
+
 export interface MouseEvent {
   latLng: LatLng;
 }
@@ -33,6 +38,8 @@ class KakaoMapService implements KakaoMapServiceProps {
   circles: any[] = [];
 
   ps: any = null;
+
+  geocoder: any = null;
 
   readonly mapWrapper: HTMLDivElement;
 
@@ -78,7 +85,7 @@ class KakaoMapService implements KakaoMapServiceProps {
     }
   }
 
-  async searchPlace(keyword: string) {
+  async searchPlaces(keyword: string) {
     try {
       if (isEmpty(window.kakao)) {
         await this.loadScript();
@@ -89,11 +96,37 @@ class KakaoMapService implements KakaoMapServiceProps {
       }
 
       return await new Promise((resolve) => {
-        this.ps.keywordSearch(keyword, (data: any, status: any) => {
+        this.ps.keywordSearch(keyword, (result: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            resolve(data);
+            resolve(result);
           }
         });
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  async searchAddress(latitude: number, longitude: number) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
+
+      if (isEmpty(this.geocoder)) {
+        this.geocoder = new window.kakao.maps.services.Geocoder();
+      }
+
+      return await new Promise((resolve) => {
+        this.geocoder.coord2Address(
+          longitude,
+          latitude,
+          (result: any, status: any) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              resolve(result);
+            }
+          }
+        );
       });
     } catch (error) {
       return Promise.reject(error);
@@ -150,6 +183,38 @@ class KakaoMapService implements KakaoMapServiceProps {
       this.polyLines.push(polyline);
 
       polyline.setMap(this.map);
+    }
+  }
+
+  drawlines(routes: Route[]) {
+    this.removeAllLines();
+
+    routes.forEach((route) => {
+      this.drawLine(route.latitude, route.longitude);
+    });
+  }
+
+  removeLastLine() {
+    const lastCircle = this.circles.pop();
+    const lastPolyline = this.polyLines.pop();
+
+    if (!isNil(lastCircle)) {
+      lastCircle.setMap(null);
+    }
+    if (!isNil(lastPolyline)) {
+      lastPolyline.setMap(null);
+    }
+
+    this.linePath.pop();
+  }
+
+  removeAllLines() {
+    while (
+      this.linePath.length ||
+      this.circles.length ||
+      this.polyLines.length
+    ) {
+      this.removeLastLine();
     }
   }
 

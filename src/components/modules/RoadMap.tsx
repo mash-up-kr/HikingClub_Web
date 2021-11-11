@@ -1,13 +1,19 @@
 /* External dependencies */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 /* Internal dependencies */
+import { getRoutes } from 'stores/selectors/editSelectors';
 import DrawRoad from 'components/templates/DrawRoad';
-import Map from 'components/atoms/Map';
+import Map, { MapRef } from 'components/atoms/Map';
 
 function RoadMap() {
+  const routes = useSelector(getRoutes);
+
   const [enableDrawRoad, setEnableDrawRoad] = useState(true);
+
+  const mapRef = useRef<MapRef>(null);
 
   const handleClickMap = useCallback(() => {
     setEnableDrawRoad(true);
@@ -17,16 +23,20 @@ function RoadMap() {
     setEnableDrawRoad(false);
   }, []);
 
+  useEffect(() => {
+    mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+  }, [routes]);
+
   return (
     <>
       <Wrapper onClick={handleClickMap}>
         <Title>길 그리기</Title>
         <MapWrapper>
-          <Map />
+          <Map ref={mapRef} />
         </MapWrapper>
         <Description>지도를 눌러 길을 그려주세요.</Description>
       </Wrapper>
-      {enableDrawRoad && <DrawRoad onClickCloseMap={habdleClickCloseMap} />}
+      <DrawRoad show={enableDrawRoad} onClickCloseMap={habdleClickCloseMap} />
     </>
   );
 }

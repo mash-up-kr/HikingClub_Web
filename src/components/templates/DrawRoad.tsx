@@ -7,12 +7,13 @@ import React, {
   useEffect,
 } from 'react';
 import ReactDOM from 'react-dom';
-import { useDispatch } from 'react-redux';
-import styled, { css, keyframes } from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import styled, { css } from 'styled-components';
 import { isEmpty } from 'lodash';
 
 /* Internal dependencies */
 import { addRoute } from 'stores/actions/editActions';
+import { getRoutes } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
 import { getRootElement } from 'utils/domUtils';
@@ -22,6 +23,7 @@ import Button from 'components/atoms/Button';
 import Input from 'components/atoms/Input';
 
 interface DrawRoadProps {
+  show?: boolean;
   onClickCloseMap: () => void;
 }
 
@@ -30,14 +32,17 @@ enum DrawMode {
   Spot = 'spot',
 }
 
-function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
+function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
   const dispatch = useDispatch();
   const isMounted = useMounted();
+
+  const routes = useSelector(getRoutes);
 
   const [mode, setMode] = useState(DrawMode.Road);
   const [searchQuery, setSearchQuery] = useState('');
   const [isFocus, setFocus] = useState(false);
   const [places, setPlaces] = useState<any>([]);
+  const [addresses, setAddresses] = useState<string[]>([]);
 
   const mapRef = useRef<MapRef>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -65,7 +70,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
         try {
           if (!isEmpty(value)) {
             const searchedPlaces =
-              await mapRef.current?.mapServiceRef.current?.searchPlace(value);
+              await mapRef.current?.mapServiceRef.current?.searchPlaces(value);
             setPlaces(searchedPlaces);
           }
         } catch (error) {
@@ -98,10 +103,31 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
   );
 
   const handkleClickMap = useCallback(
-    (mouseEvent: MouseEvent) => {
+    async (mouseEvent: MouseEvent) => {
       const { Ma: latitude, La: longitude } = mouseEvent.latLng;
       dispatch(addRoute({ latitude, longitude }));
       mapRef.current?.mapServiceRef.current?.drawLine(latitude, longitude);
+
+      try {
+        const result: any =
+          await mapRef.current?.mapServiceRef.current?.searchAddress(
+            latitude,
+            longitude
+          );
+
+        const address =
+          result[0]?.road_address?.address_name ??
+          result[0]?.address?.address_name ??
+          '';
+        const region = result[0]?.address?.region_3depth_name;
+
+        setAddresses((prev) => [
+          ...prev,
+          `${address}${region ? ` (${region})` : ''}`,
+        ]);
+      } catch (error) {
+        /* empty handler */
+      }
     },
     [dispatch]
   );
@@ -114,51 +140,78 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
             지도를 터치해 길을 그려주세요.
           </DrawModeDescription>
         )}
-        <SearchWrapper>
-          <SearchInput
-            ref={searchInputRef}
-            value={searchQuery}
-            placeholder="장소, 주소, 지하철 검색"
-            leftContent={<SearchIcon src="/images/search-icon.png" />}
-            onChange={handleChangeSearchQuery}
-            onFocus={handleFocus}
-          />
-          {isFocus && (
-            <SearchCloseButton onClick={handleClickSearchClose}>
-              취소
-            </SearchCloseButton>
-          )}
-        </SearchWrapper>
-        {!isFocus && (
-          <SearchDescription>
-            검색한 위치로 지도가 이동합니다.
-          </SearchDescription>
+        {routes.size === 0 && (
+          <>
+            <SearchWrapper>
+              <SearchInput
+                ref={searchInputRef}
+                value={searchQuery}
+                placeholder="장소, 주소, 지하철 검색"
+                leftContent={<SearchIcon src="/images/search-icon.png" />}
+                onChange={handleChangeSearchQuery}
+                onFocus={handleFocus}
+              />
+              {isFocus && (
+                <SearchCloseButton onClick={handleClickSearchClose}>
+                  취소
+                </SearchCloseButton>
+              )}
+            </SearchWrapper>
+            {!isFocus && (
+              <SearchDescription>
+                검색한 위치로 지도가 이동합니다.
+              </SearchDescription>
+            )}
+            {isFocus && (
+              <MovePositionButton>현재위치로 이동</MovePositionButton>
+            )}
+            {isFocus && (
+              <PlaceList>
+                {places.map((place: any) => (
+                  <PlaceItem
+                    key={place.id}
+                    onClick={() =>
+                      handleClickPlace(place.y, place.x, place.place_name)
+                    }
+                  >
+                    <PlaceName>{place.place_name}</PlaceName>
+                    <PlaceAddress>{place.road_address_name}</PlaceAddress>
+                  </PlaceItem>
+                ))}
+              </PlaceList>
+            )}
+          </>
         )}
-        {isFocus && <MovePositionButton>현재위치로 이동</MovePositionButton>}
-        {isFocus && (
-          <PlaceList>
-            {places.map((place: any) => (
-              <PlaceItem
-                key={place.id}
-                onClick={() =>
-                  handleClickPlace(place.y, place.x, place.place_name)
-                }
-              >
-                <PlaceName>{place.place_name}</PlaceName>
-                <PlaceAddress>{place.road_address_name}</PlaceAddress>
-              </PlaceItem>
+        {routes.size !== 0 && (
+          <RouteList>
+            {addresses.map((address, index) => (
+              <React.Fragment key={index}>
+                {index !== 0 && <EmptyRouteSpace />}
+                <RouteWrapper>
+                  <LeftRouteContent>
+                    {(() => {
+                      if (index === 0) return '출발';
+                      if (index === addresses.length - 1) return '도착';
+                      return '';
+                    })()}
+                  </LeftRouteContent>
+                  <Route>{address}</Route>
+                </RouteWrapper>
+              </React.Fragment>
             ))}
-          </PlaceList>
+          </RouteList>
         )}
       </>
     ),
     [
+      addresses,
       handleChangeSearchQuery,
       handleClickPlace,
       handleClickSearchClose,
       handleFocus,
       isFocus,
       places,
+      routes.size,
       searchQuery,
     ]
   );
@@ -167,7 +220,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
 
   const DrawRoadComponent = useMemo(
     () => (
-      <Container>
+      <Container show={show}>
         <Header
           title="길 그리기"
           showBackIcon
@@ -213,6 +266,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
       isFocus,
       mode,
       onClickCloseMap,
+      show,
     ]
   );
 
@@ -233,16 +287,7 @@ function DrawRoad({ onClickCloseMap }: DrawRoadProps) {
   return ReactDOM.createPortal(DrawRoadComponent, getRootElement());
 }
 
-const slide = keyframes`
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0%);
-  }
-`;
-
-const Container = styled.div`
+const Container = styled.div<{ show: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -250,8 +295,15 @@ const Container = styled.div`
   right: 0;
   display: flex;
   flex-direction: column;
-  animation: ${slide} 0.3s ease;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
   background-color: white;
+
+  ${({ show }) =>
+    show &&
+    css`
+      transform: translateY(0%);
+    `}
 `;
 
 const MapWrapper = styled.div`
@@ -410,6 +462,57 @@ const PlaceAddress = styled.p`
   font-size: 12px;
   font-weight: 500;
   color: #868686;
+`;
+
+const RouteList = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+  padding: 0 16px 20px;
+  box-sizing: border-box;
+`;
+
+const RouteWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px 0;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+  &:last-of-type {
+    padding-bottom: 0;
+  }
+`;
+
+const Route = styled.p`
+  flex: 1;
+  min-width: max-content;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 15px;
+  color: #5d5d5d;
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const LeftRouteContent = styled.p`
+  min-width: 42px;
+  padding: 0 15px 0 6px;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 500;
+  color: #868686;
+`;
+
+const EmptyRouteSpace = styled.div`
+  height: 36px;
+  margin: 0 16px;
+  border-left: 1px solid #868686;
 `;
 
 export default DrawRoad;

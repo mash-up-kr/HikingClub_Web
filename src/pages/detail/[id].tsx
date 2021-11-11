@@ -1,7 +1,7 @@
 /* External dependencies */
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 /* Internal dependencies */
 import * as roadSelectors from 'stores/selectors/roadSelectors';
@@ -11,26 +11,40 @@ import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
 
+interface BottomSheetWrapperProps {
+  status: number;
+}
+
 function Detail() {
   const dispatch = useDispatch();
 
   const imgDetail = useSelector(roadSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
 
+  // 0 축소 1 기본 2 확장
+  const [bottomSheetStatus, setBottomSheetStatus] = useState(1);
+
   useEffect(() => {
     /* FIXME: (@danivelop) 테스트로 임시로 1을 넣음. 나중에 수정필요 */
     dispatch(requestGetRoad({ roadId: '1' }));
   }, [dispatch]);
 
+  const handleClickMapWrapper = () => {
+    setBottomSheetStatus(0);
+  };
+
   return (
     <Layout>
       <Wrapper>
-        <MapWrapper>
+        <MapWrapper onClick={handleClickMapWrapper}>
           <Map />
         </MapWrapper>
 
-        <BottomSheetWrapper>
-          <BottomSheet />
+        <BottomSheetWrapper status={bottomSheetStatus}>
+          <BottomSheet
+            status={bottomSheetStatus}
+            setStatus={setBottomSheetStatus}
+          />
         </BottomSheetWrapper>
 
         {isOpen && (
@@ -55,11 +69,32 @@ export const MapWrapper = styled.div`
   flex: 1;
 `;
 
-export const BottomSheetWrapper = styled.div`
+export const BottomSheetWrapper = styled.div<BottomSheetWrapperProps>`
   width: 100%;
-  height: 300px;
+
   background-color: #f0eee5;
   z-index: 100;
+
+  ${(props) => {
+    switch (props.status) {
+      case 0:
+        return css`
+          height: 175px;
+        `;
+      case 1:
+        return css`
+          height: 300px;
+        `;
+      case 2:
+        return css`
+          height: 100%;
+        `;
+      default:
+        return css`
+          height: 300px;
+        `;
+    }
+  }}
 `;
 
 export const ImageDetailWrapper = styled.div`

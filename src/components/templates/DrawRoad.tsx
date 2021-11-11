@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components';
 import { isEmpty } from 'lodash';
 
 /* Internal dependencies */
-import { addRoute } from 'stores/actions/editActions';
+import { addRoute, removeRoute, clearRoute } from 'stores/actions/editActions';
 import { getRoutes } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
@@ -132,6 +132,18 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
     [dispatch]
   );
 
+  const handleClickClearRoad = useCallback(() => {
+    dispatch(clearRoute());
+    setAddresses([]);
+    mapRef.current?.mapServiceRef.current?.removeAllLines();
+  }, [dispatch]);
+
+  const handleClickRevertRoad = useCallback(() => {
+    dispatch(removeRoute());
+    setAddresses((prev) => prev.slice(0, prev.length - 1));
+    mapRef.current?.mapServiceRef.current?.removeLastLine();
+  }, [dispatch]);
+
   const DrawModeComponent = useMemo(
     () => (
       <>
@@ -229,6 +241,14 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
         />
         <MapWrapper>
           <Map ref={mapRef} onClickMap={handkleClickMap} />
+          <MapOptioWrapper>
+            <MapOption onClick={handleClickClearRoad}>
+              <img src="/images/trash.png" width="36" height="36" alt="" />
+            </MapOption>
+            <MapOption onClick={handleClickRevertRoad}>
+              <img src="/images/revert.png" width="36" height="36" alt="" />
+            </MapOption>
+          </MapOptioWrapper>
         </MapWrapper>
         <ContentCardWrapper isFocus={isFocus}>
           <ContentCard>
@@ -262,7 +282,9 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
       DrawModeComponent,
       SpotModeComponent,
       handkleClickMap,
+      handleClickClearRoad,
       handleClickMode,
+      handleClickRevertRoad,
       isFocus,
       mode,
       onClickCloseMap,
@@ -307,8 +329,38 @@ const Container = styled.div<{ show: boolean }>`
 `;
 
 const MapWrapper = styled.div`
+  position: relative;
   flex: 1;
   width: 100%;
+`;
+
+const MapOptioWrapper = styled.div`
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1000000;
+`;
+
+const MapOption = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.32);
+
+  img {
+    width: 60%;
+    height: 60%;
+  }
+
+  &:not(:first-of-type) {
+    margin-left: 10px;
+  }
 `;
 
 const ContentCardWrapper = styled.div<{ isFocus: boolean }>`

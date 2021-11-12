@@ -72,7 +72,7 @@ const Container = styled.div<ContainerProps>`
   width: 100%;
   height: 100%;
   overflow-y: auto;
-
+  position: relative;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   &&::-webkit-scrollbar {

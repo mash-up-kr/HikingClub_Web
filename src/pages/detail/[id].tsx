@@ -1,5 +1,5 @@
 /* External dependencies */
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -10,6 +10,7 @@ import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
+import ReactionBox from 'components/modules/ReactionBox';
 
 interface BottomSheetWrapperProps {
   status: number;
@@ -36,9 +37,14 @@ function Detail() {
   return (
     <Layout>
       <Wrapper>
-        <MapWrapper onClick={handleClickMapWrapper}>
-          <Map />
-        </MapWrapper>
+        <MapContainer>
+          <div className="mapWrapper" onClick={handleClickMapWrapper}>
+            <Map />
+          </div>
+          <ReactionBoxWrapper>
+            <ReactionBox />
+          </ReactionBoxWrapper>
+        </MapContainer>
 
         <BottomSheetWrapper status={bottomSheetStatus}>
           <BottomSheet
@@ -64,9 +70,21 @@ export const Wrapper = styled.div`
   height: 100%;
 `;
 
-export const MapWrapper = styled.div`
+export const MapContainer = styled.div`
   width: 100%;
   flex: 1;
+  position: relative;
+  .mapWrapper {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const ReactionBoxWrapper = styled.div`
+  position: absolute;
+  bottom: 8px;
+  right: 14px;
+  z-index: 1000;
 `;
 
 export const BottomSheetWrapper = styled.div<BottomSheetWrapperProps>`

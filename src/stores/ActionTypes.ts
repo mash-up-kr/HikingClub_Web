@@ -13,6 +13,13 @@ enum ActionTypes {
   ADD_HASHTAG = 'ADD_HASHTAG',
   REMOVE_HASHTAG = 'REMOVE_TAG',
   SET_CONTENT = 'SET_CONTENT',
+  ADD_ROUTE = 'ADD_ROUTE',
+  REMOVE_ROUTE = 'REMOVE_ROUTE',
+  CLEAR_ROUTE = 'CLEAR_ROUTE',
+
+  /* layoutActionTypes */
+  OPEN_SNACK_BAR = 'OPEN_SNACK_BAR',
+  CLOSE_SNACK_BAR = 'CLOSE_SNACK_BAR',
 }
 
 export default ActionTypes;

@@ -1,18 +1,52 @@
+/* External dependencies */
+import React, { forwardRef, Ref } from 'react';
 import styled from 'styled-components';
 import { isEmpty, noop } from 'lodash';
-import React from 'react';
 
 interface InputProps {
+  className?: string;
   value?: string;
-  leftContent?: string;
+  leftContent?: React.ReactNode;
+  rightContent?: React.ReactNode;
+  disabled?: boolean;
+  rightAngleBracket?: boolean;
+  placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
-function Input({ value = '', leftContent, onChange = noop }: InputProps) {
+function Input(
+  {
+    className,
+    value = '',
+    leftContent,
+    rightContent,
+    disabled = false,
+    rightAngleBracket = false,
+    placeholder = '',
+    onChange = noop,
+    onFocus = noop,
+    onBlur = noop,
+  }: InputProps,
+  forwardedRef: Ref<HTMLInputElement>
+) {
   return (
-    <InputWrapper>
+    <InputWrapper className={className}>
       {!isEmpty(leftContent) && <PreContent>{leftContent}</PreContent>}
-      <StyledInput value={value} onChange={onChange} />
+      <StyledInput
+        ref={forwardedRef}
+        value={value}
+        disabled={disabled}
+        placeholder={placeholder}
+        onChange={onChange}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />
+      {!isEmpty(rightContent) && <PreContent>{rightContent}</PreContent>}
+      {rightAngleBracket && (
+        <Icon src="/icons/icon_front.png" alt="right_angle_bracket" />
+      )}
     </InputWrapper>
   );
 }
@@ -23,9 +57,12 @@ const InputWrapper = styled.div`
   height: 68px;
   padding: 0 16px;
   box-sizing: border-box;
+  font-size: 18px;
   background-color: #f9f9f9;
   border: 1px solid #f3f3f3;
   border-radius: 16px;
+
+  align-items: center;
 `;
 
 const PreContent = styled.p`
@@ -37,7 +74,7 @@ const PreContent = styled.p`
 const StyledInput = styled.input`
   flex: 1;
   height: 100%;
-  font-size: 18px;
+  font-size: inherit;
   background-color: transparent;
   border: 0;
 
@@ -46,4 +83,9 @@ const StyledInput = styled.input`
   }
 `;
 
-export default Input;
+const Icon = styled.img`
+  width: 32px;
+  height: 32px;
+`;
+
+export default forwardRef(Input);

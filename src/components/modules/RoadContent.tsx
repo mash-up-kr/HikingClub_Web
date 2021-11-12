@@ -34,7 +34,7 @@ function RoadContent() {
 
 const Wrapper = styled.div`
   width: 100%;
-  margin-top: 24px;
+  margin-top: 36px;
 `;
 
 const Title = styled.p`
@@ -51,6 +51,10 @@ const Content = styled.textarea`
   background-color: #f9f9f9;
   border: 0;
   border-radius: 8px;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default RoadContent;

@@ -6,6 +6,7 @@ import { unset } from 'lodash';
 import ActionTypes from 'stores/ActionTypes';
 import { EditActions } from 'stores/actions/editActions';
 import { RoadAttr } from 'models/Road';
+import Route from 'models/Route';
 
 interface State extends Omit<RoadAttr, 'id'> {}
 
@@ -60,6 +61,26 @@ function editReducer(state: State = initialState, action: EditActions): State {
       return {
         ...state,
         content,
+      };
+    }
+    case ActionTypes.ADD_ROUTE: {
+      const { latitude, longitude } = action.payload;
+
+      return {
+        ...state,
+        routes: state.routes.push(new Route([latitude, longitude])),
+      };
+    }
+    case ActionTypes.REMOVE_ROUTE: {
+      return {
+        ...state,
+        routes: state.routes.pop(),
+      };
+    }
+    case ActionTypes.CLEAR_ROUTE: {
+      return {
+        ...state,
+        routes: state.routes.clear(),
       };
     }
     default:

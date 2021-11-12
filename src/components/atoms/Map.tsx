@@ -1,10 +1,32 @@
-import { useRef, useEffect } from 'react';
-
+/* External dependencies */
+import {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  MutableRefObject,
+  Ref,
+} from 'react';
 import styled from 'styled-components';
+import { noop } from 'lodash';
 
-import KakaoMapService from 'services/KakaoMapService';
+/* Internal dependencies */
+import KakaoMapService, { MouseEvent } from 'services/KakaoMapService';
 
-function Map() {
+export interface MapRef {
+  mapServiceRef: MutableRefObject<KakaoMapService | undefined>;
+}
+
+interface MapProps {
+  latitude?: number;
+  longitude?: number;
+  onClickMap?: (mouseEvent: MouseEvent) => void;
+}
+
+function Map(
+  { latitude = 37.49796, longitude = 127.027533, onClickMap = noop }: MapProps,
+  forwardedRef: Ref<MapRef>
+) {
   const mapWrapperRef = useRef<HTMLDivElement>(null);
   const mapServiceRef = useRef<KakaoMapService>();
 
@@ -12,12 +34,23 @@ function Map() {
     if (mapWrapperRef.current) {
       mapServiceRef.current = new KakaoMapService(
         mapWrapperRef.current,
-        37.49796,
-        127.027533
+        latitude,
+        longitude
       );
       mapServiceRef.current.loadMap();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (mapServiceRef.current) {
+      mapServiceRef.current.addClickEventListener(onClickMap);
+    }
+  }, [onClickMap]);
+
+  useImperativeHandle(forwardedRef, () => ({
+    mapServiceRef,
+  }));
 
   return <MapWrapper ref={mapWrapperRef} />;
 }
@@ -27,4 +60,4 @@ export const MapWrapper = styled.div`
   height: 100%;
 `;
 
-export default Map;
+export default forwardRef(Map);

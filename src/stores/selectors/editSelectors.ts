@@ -7,3 +7,5 @@ export const getHashTags = (state: RootState) =>
   state.editReducer.hashtags.toList();
 
 export const getContent = (state: RootState) => state.editReducer.content;
+
+export const getRoutes = (state: RootState) => state.editReducer.routes;

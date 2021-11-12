@@ -28,7 +28,7 @@ const BottomSheet: FC<BottomSheetProps> = (props) => {
   };
 
   const handleClickTopBar = () => {
-    props.setStatus(props.status + 1);
+    props.setStatus(2);
   };
 
   return (

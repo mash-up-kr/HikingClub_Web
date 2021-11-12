@@ -1,7 +1,7 @@
 /* External dependencies */
 import React, { useEffect, useState, useCallback } from 'react';
 import { NextPage } from 'next';
-import Link from 'next/Link';
+import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { isNil } from 'lodash';

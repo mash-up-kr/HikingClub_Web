@@ -1,39 +1,65 @@
 /* External dependencies */
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { NextPage } from 'next';
-import { useSelector } from 'react-redux';
+import Link from 'next/link';
+import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { isNil } from 'lodash';
 
 /* Internal dependencies */
-import * as roadSelectors from 'stores/selectors/roadSelectors';
+import { wrapper } from 'stores';
+import { getRoad, getImgDetail } from 'stores/selectors/roadSelectors';
 import { requestGetRoad } from 'stores/actions/roadActions';
+import { setRoad } from 'stores/actions/editActions';
+import { getQueryParam } from 'utils/urlUtils';
 import Map from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
-import { wrapper } from 'stores';
 import ReactionBox from 'components/modules/ReactionBox';
+import { Overlay, OverlayPosition } from 'components/modules/Overlay';
 
 interface BottomSheetWrapperProps {
   status: number;
 }
 
 const Detail: NextPage = () => {
-  const imgDetail = useSelector(roadSelectors.getImgDetail);
+  const dispatch = useDispatch();
+
+  const imgDetail = useSelector(getImgDetail);
+  const road = useSelector(getRoad);
+
   const { isOpen, imgUrl } = imgDetail;
 
   // 0 축소 1 기본 2 확장
   const [bottomSheetStatus, setBottomSheetStatus] = useState(1);
+  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+  const [showMenum, setShowMenu] = useState(false);
+  const [roadId, setRoadId] = useState('');
 
-  /*  MEMO: (@Young-mason) 주석 부분은 server에서 처리 */
-  // useEffect(() => {
-  //   /* FIXME: (@danivelop) 테스트로 임시로 1을 넣음. 나중에 수정필요 */
-  //   dispatch(requestGetRoad({ roadId: '1' }));
-  // }, [dispatch])
+  useEffect(() => {
+    const roadIdFromQueryParam = getQueryParam('roadId');
+    if (!isNil(roadIdFromQueryParam)) {
+      dispatch(requestGetRoad({ roadId: roadIdFromQueryParam }));
+      setRoadId(roadIdFromQueryParam);
+    }
+  }, [dispatch]);
 
   const handleClickMapWrapper = () => {
     setBottomSheetStatus(0);
   };
+
+  const handleClickMenu = useCallback(() => {
+    setShowMenu(true);
+  }, []);
+
+  const handleHideMenu = useCallback(() => {
+    setShowMenu(false);
+  }, []);
+
+  const handleClickEdit = useCallback(() => {
+    dispatch(setRoad({ road }));
+  }, [dispatch, road]);
 
   return (
     <Layout>
@@ -45,6 +71,23 @@ const Detail: NextPage = () => {
           <ReactionBoxWrapper>
             <ReactionBox />
           </ReactionBoxWrapper>
+          <MenuWrapper ref={setTarget} onClick={handleClickMenu}>
+            <img src="/images/menu.png" alt="" />
+          </MenuWrapper>
+          <Overlay
+            show={showMenum}
+            target={target}
+            onHide={handleHideMenu}
+            placement={OverlayPosition.BottomRight}
+          >
+            <MenuList>
+              <MenuItem onClick={handleClickEdit}>
+                <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
+              </MenuItem>
+              <MenuItem>삭제하기</MenuItem>
+              <MenuItem>신고하기</MenuItem>
+            </MenuList>
+          </Overlay>
         </MapContainer>
 
         <BottomSheetWrapper status={bottomSheetStatus}>
@@ -94,6 +137,51 @@ const ReactionBoxWrapper = styled.div`
   bottom: 8px;
   right: 14px;
   z-index: 1000;
+`;
+
+const MenuWrapper = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  z-index: 10000;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const MenuList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  width: 110px;
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+`;
+
+const MenuItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 38px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 500;
+  color: #464646;
+
+  &:not(:first-of-type) {
+    border-top: 1px solid #e4e4e4;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 `;
 
 export const BottomSheetWrapper = styled.div<BottomSheetWrapperProps>`

@@ -1,15 +1,15 @@
 /* External dependencies */
+import { useEffect } from 'react';
 import { NextPage } from 'next';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* Internal dependencies */
+import { wrapper } from 'stores';
 import { getRoad } from 'stores/selectors/roadSelectors';
+import { requestGetRoad } from 'stores/actions/roadActions';
+import { setRoad } from 'stores/actions/editActions';
 import Layout from 'components/Layout';
 import MakeRoad from 'components/templates/MakeRoad';
-import { wrapper } from 'stores';
-import { requestGetRoad } from 'stores/actions/roadActions';
-import { useEffect } from 'react';
-import { setRoad } from 'stores/actions/editActions';
 
 const Edit: NextPage = () => {
   const dispatch = useDispatch();

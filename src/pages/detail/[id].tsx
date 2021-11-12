@@ -1,7 +1,8 @@
 /* External dependencies */
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 /* Internal dependencies */
 import * as roadSelectors from 'stores/selectors/roadSelectors';
@@ -11,10 +12,18 @@ import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
 import { wrapper } from 'stores';
+import ReactionBox from 'components/modules/ReactionBox';
+
+interface BottomSheetWrapperProps {
+  status: number;
+}
 
 const Detail: NextPage = () => {
   const imgDetail = useSelector(roadSelectors.getImgDetail);
   const { isOpen, imgUrl } = imgDetail;
+
+  // 0 축소 1 기본 2 확장
+  const [bottomSheetStatus, setBottomSheetStatus] = useState(1);
 
   /*  MEMO: (@Young-mason) 주석 부분은 server에서 처리 */
   // useEffect(() => {
@@ -22,15 +31,27 @@ const Detail: NextPage = () => {
   //   dispatch(requestGetRoad({ roadId: '1' }));
   // }, [dispatch])
 
+  const handleClickMapWrapper = () => {
+    setBottomSheetStatus(0);
+  };
+
   return (
     <Layout>
       <Wrapper>
-        <MapWrapper>
-          <Map />
-        </MapWrapper>
+        <MapContainer>
+          <div className="mapWrapper" onClick={handleClickMapWrapper}>
+            <Map />
+          </div>
+          <ReactionBoxWrapper>
+            <ReactionBox />
+          </ReactionBoxWrapper>
+        </MapContainer>
 
-        <BottomSheetWrapper>
-          <BottomSheet />
+        <BottomSheetWrapper status={bottomSheetStatus}>
+          <BottomSheet
+            status={bottomSheetStatus}
+            setStatus={setBottomSheetStatus}
+          />
         </BottomSheetWrapper>
 
         {isOpen && (
@@ -58,16 +79,49 @@ export const Wrapper = styled.div`
   height: 100%;
 `;
 
-export const MapWrapper = styled.div`
+export const MapContainer = styled.div`
   width: 100%;
   flex: 1;
+  position: relative;
+  .mapWrapper {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
-export const BottomSheetWrapper = styled.div`
+const ReactionBoxWrapper = styled.div`
+  position: absolute;
+  bottom: 8px;
+  right: 14px;
+  z-index: 1000;
+`;
+
+export const BottomSheetWrapper = styled.div<BottomSheetWrapperProps>`
   width: 100%;
-  height: 300px;
+
   background-color: #f0eee5;
   z-index: 100;
+
+  ${(props) => {
+    switch (props.status) {
+      case 0:
+        return css`
+          height: 175px;
+        `;
+      case 1:
+        return css`
+          height: 300px;
+        `;
+      case 2:
+        return css`
+          height: 100%;
+        `;
+      default:
+        return css`
+          height: 300px;
+        `;
+    }
+  }}
 `;
 
 export const ImageDetailWrapper = styled.div`

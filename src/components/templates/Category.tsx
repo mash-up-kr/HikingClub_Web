@@ -1,11 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import Header from 'components/modules/Header';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import PublicText from 'components/atoms/PublicText';
 import CategoryCard from 'components/atoms/CategoryCard';
 import Button from 'components/atoms/Button';
 
-function Category() {
+interface CategoryProps {
+  show: boolean;
+  onClickCloseCategory: () => void;
+}
+
+function Category({ show = false, onClickCloseCategory }: CategoryProps) {
+  console.log(show);
   const [cards, setCards] = useState([
     // 카테고리 아이콘을 png로 구현할지, svg로 구현할지 판단이 어려워서 우선 png로 붙여놨음.
     //  -> selected 값에 따라 색깔 안바뀜
@@ -36,9 +42,14 @@ function Category() {
   );
 
   return (
-    <Wrapper>
-      <Header title="카테고리 선택" />
-
+    <Container show={show}>
+      {' '}
+      <Header
+        title="카테고리 선택"
+        showBackIcon
+        showCloseIcon
+        onClickClose={onClickCloseCategory}
+      />
       <CategoryWrapper>
         <PublicText>카테고리를 선택해 주세요.</PublicText>
         <CategoryCardList>
@@ -54,25 +65,38 @@ function Category() {
           ))}
         </CategoryCardList>
       </CategoryWrapper>
-
       <ButtonWrapper>
-        <Button bgColor="#F9F9F9" color="">
+        <Button bgColor="#F9F9F9" color="" onClick={onClickCloseCategory}>
           취소
         </Button>
         <Button bgColor="#2C7A50" color="#fff">
           완료
         </Button>
-      </ButtonWrapper>
-    </Wrapper>
+      </ButtonWrapper>{' '}
+    </Container>
   );
 }
 
-const Wrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+const Container = styled.div<{ show: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  background-color: white;
+
   padding: 0 16px;
   box-sizing: border-box;
+
+  ${({ show }) =>
+    show &&
+    css`
+      transform: translateY(0%);
+    `}
+
+  z-index: 100;
 `;
 
 const CategoryWrapper = styled.div`

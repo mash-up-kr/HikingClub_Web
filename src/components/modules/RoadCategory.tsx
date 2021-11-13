@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+import Category from 'components/templates/Category';
 import Input from 'components/atoms/Input';
 
 function RoadCategory() {
-  return (
-    <Wrapper>
-      <Title>카테고리</Title>
+  const [enableCategory, setEnableCategory] = useState(false);
 
-      <InputWrapper onClick={() => null}>
-        <Input disabled rightAngleBracket value="카테고리를 선택해주세요" />
-      </InputWrapper>
-    </Wrapper>
+  const handleClickCategory = useCallback(() => {
+    setEnableCategory(true);
+  }, []);
+
+  const handleClickCloseCategory = useCallback(() => {
+    setEnableCategory(false);
+  }, []);
+
+  return (
+    <>
+      <Wrapper onClick={handleClickCategory}>
+        <Title>카테고리</Title>
+
+        <InputWrapper onClick={() => null}>
+          <Input disabled rightAngleBracket value="카테고리를 선택해주세요" />
+        </InputWrapper>
+      </Wrapper>
+      <Category
+        show={enableCategory}
+        onClickCloseCategory={handleClickCloseCategory}
+      />
+    </>
   );
 }
 

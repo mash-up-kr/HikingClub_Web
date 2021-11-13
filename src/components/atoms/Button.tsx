@@ -9,6 +9,7 @@ interface ButtonProps {
   bgColor?: string;
   className?: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 function Button({
@@ -18,6 +19,7 @@ function Button({
   bgColor = '#2C7A50',
   className,
   children,
+  onClick,
 }: ButtonProps) {
   return (
     <StyledButton
@@ -25,6 +27,7 @@ function Button({
       disabled={disabled || loading}
       color={color}
       bgColor={bgColor}
+      onClick={onClick}
     >
       {loading ? <Rotate /> : children}
     </StyledButton>

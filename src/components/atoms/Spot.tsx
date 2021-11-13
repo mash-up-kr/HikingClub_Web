@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
 
-import Image from 'next/image';
 import styled from 'styled-components';
-
-import SpecialSpot from '../../../public/images/specialSpot.svg';
 
 interface SpotProps {
   title?: string;
@@ -41,6 +38,11 @@ const SpotText = styled.div`
   }
 `;
 
+const StyledImage = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
 const Spot: FC<SpotProps> = (props) => {
   const {
     title = '예시타이틀',
@@ -50,7 +52,7 @@ const Spot: FC<SpotProps> = (props) => {
 
   return (
     <SpotWrapper isFocus={isFocus}>
-      <Image src={SpecialSpot} alt="스팟" width={20} height={20} />
+      <StyledImage src="/icons/icon_star_circle.png" alt="스팟" />
       <SpotText>
         <div className="title">{title}</div>
         <div className="description">{description}</div>

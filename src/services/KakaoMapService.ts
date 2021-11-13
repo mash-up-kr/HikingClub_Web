@@ -24,6 +24,11 @@ interface Route {
   longitude: number;
 }
 
+interface Spot {
+  latitude: number;
+  longitude: number;
+}
+
 export interface MouseEvent {
   latLng: LatLng;
 }
@@ -244,6 +249,14 @@ class KakaoMapService implements KakaoMapServiceProps {
     this.spots.push(marker);
   }
 
+  addMarkers(spots: Spot[]) {
+    this.removeAllMarkers();
+
+    spots.forEach((spot) => {
+      this.addMarker(spot.latitude, spot.longitude);
+    });
+  }
+
   removeLastLine() {
     const lastCircle = this.circles.pop();
     const lastPolyline = this.polyLines.pop();
@@ -273,6 +286,12 @@ class KakaoMapService implements KakaoMapServiceProps {
 
     if (!isNil(marker)) {
       marker.setMap(null);
+    }
+  }
+
+  removeAllMarkers() {
+    while (this.spots.length) {
+      this.removeMarker(this.spots.length - 1);
     }
   }
 

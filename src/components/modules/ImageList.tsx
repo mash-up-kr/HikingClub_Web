@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { List } from 'immutable';
 
 /* Internal dependencies */
 import { openImageDetail } from 'stores/actions/roadActions';
 
 interface ImageListProps {
-  imgUrls: List<string>;
+  imgUrls: string[]; // List<string>;
 }
 
 function ImageList({ imgUrls }: ImageListProps) {

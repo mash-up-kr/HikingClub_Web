@@ -364,7 +364,9 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
             <ContentWrapper>
               {mode === DrawMode.Road ? DrawModeComponent : SpotModeComponent}
             </ContentWrapper>
-            {!isFocus && <SubmitButton>완료</SubmitButton>}
+            {!isFocus && (
+              <SubmitButton onClick={onClickBack}>완료</SubmitButton>
+            )}
           </ContentCard>
         </ContentCardWrapper>
       </Container>

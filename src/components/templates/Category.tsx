@@ -11,7 +11,6 @@ interface CategoryProps {
 }
 
 function Category({ show = false, onClickCloseCategory }: CategoryProps) {
-  console.log(show);
   const [cards, setCards] = useState([
     // 카테고리 아이콘을 png로 구현할지, svg로 구현할지 판단이 어려워서 우선 png로 붙여놨음.
     //  -> selected 값에 따라 색깔 안바뀜
@@ -66,18 +65,20 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
         </CategoryCardList>
       </CategoryWrapper>
       <ButtonWrapper>
-        <Button bgColor="#F9F9F9" color="" onClick={onClickCloseCategory}>
+        <OptionButton bgColor="#F9F9F9" color="" onClick={onClickCloseCategory}>
           취소
-        </Button>
-        <Button bgColor="#2C7A50" color="#fff">
+        </OptionButton>
+        <OptionButton bgColor="#2C7A50" color="#fff">
           완료
-        </Button>
+        </OptionButton>
       </ButtonWrapper>{' '}
     </Container>
   );
 }
 
 const Container = styled.div<{ show: boolean }>`
+  display: flex;
+  flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
@@ -111,12 +112,14 @@ const CategoryCardList = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  position: absolute;
   width: 100%;
-  bottom: 16px;
   display: flex;
+  margin: auto 0 16px;
   gap: 10px;
-
-  // Wrapper 의 box-sizing: border-box 여부에 따라 가운데 정렬이 안되고 짤리는 문제가 있음.
 `;
+
+const OptionButton = styled(Button)`
+  width: calc(50% - 5px);
+`;
+
 export default Category;

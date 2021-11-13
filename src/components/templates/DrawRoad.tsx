@@ -10,13 +10,20 @@ import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 
 /* Internal dependencies */
-import { addRoute, removeRoute, clearRoute } from 'stores/actions/editActions';
-import { getRoutes } from 'stores/selectors/editSelectors';
+import {
+  addRoute,
+  removeRoute,
+  clearRoute,
+  addSpot,
+  removeSpot,
+} from 'stores/actions/editActions';
+import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
+import SpotModel from 'models/Spot';
 import { getRootElement } from 'utils/domUtils';
 import Header from 'components/modules/Header';
 import Map, { MapRef } from 'components/atoms/Map';
@@ -45,12 +52,14 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const isMounted = useMounted();
 
   const routes = useSelector(getRoutes);
+  const spots = useSelector(getSpots);
 
   const [mode, setMode] = useState(DrawMode.Road);
   const [searchQuery, setSearchQuery] = useState('');
   const [isFocus, setFocus] = useState(false);
   const [places, setPlaces] = useState<any>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
+  const [selectedSpot, setSelectedSpot] = useState<number>();
 
   const mapRef = useRef<MapRef>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -113,31 +122,37 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const handkleClickMap = useCallback(
     async (mouseEvent: MouseEvent) => {
       const { Ma: latitude, La: longitude } = mouseEvent.latLng;
-      dispatch(addRoute({ latitude, longitude }));
-      mapRef.current?.mapServiceRef.current?.drawLine(latitude, longitude);
 
-      try {
-        const result: any =
-          await mapRef.current?.mapServiceRef.current?.searchAddress(
-            latitude,
-            longitude
-          );
+      if (mode === DrawMode.Road) {
+        dispatch(addRoute({ latitude, longitude }));
+        mapRef.current?.mapServiceRef.current?.drawLine(latitude, longitude);
 
-        const address =
-          result[0]?.road_address?.address_name ??
-          result[0]?.address?.address_name ??
-          '';
-        const region = result[0]?.address?.region_3depth_name;
+        try {
+          const result: any =
+            await mapRef.current?.mapServiceRef.current?.searchAddress(
+              latitude,
+              longitude
+            );
 
-        setAddresses((prev) => [
-          ...prev,
-          `${address}${region ? ` (${region})` : ''}`,
-        ]);
-      } catch (error) {
-        /* empty handler */
+          const address =
+            result[0]?.road_address?.address_name ??
+            result[0]?.address?.address_name ??
+            '';
+          const region = result[0]?.address?.region_3depth_name;
+
+          setAddresses((prev) => [
+            ...prev,
+            `${address}${region ? ` (${region})` : ''}`,
+          ]);
+        } catch (error) {
+          /* empty handler */
+        }
+      } else {
+        dispatch(addSpot({ latitude, longitude }));
+        mapRef.current?.mapServiceRef.current?.addMarker(latitude, longitude);
       }
     },
-    [dispatch]
+    [dispatch, mode]
   );
 
   const handleClickClearRoad = useCallback(() => {
@@ -160,6 +175,32 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     }
     router.back();
   }, [router]);
+
+  const handleClickSpot = useCallback((spot: SpotModel, index: number) => {
+    mapRef.current?.mapServiceRef.current?.moveTo(
+      spot.point.latitude,
+      spot.point.longitude
+    );
+    setSelectedSpot(index);
+  }, []);
+
+  const handleRemoveSpot = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>, index: number) => {
+      event.stopPropagation();
+      if (!isNil(selectedSpot)) {
+        if (index === selectedSpot) {
+          setSelectedSpot(undefined);
+        }
+        if (index < selectedSpot) {
+          setSelectedSpot((prev) => prev! - 1);
+        }
+      }
+
+      dispatch(removeSpot({ index }));
+      mapRef.current?.mapServiceRef.current?.removeMarker(index);
+    },
+    [dispatch, selectedSpot]
+  );
 
   const DrawModeComponent = useMemo(
     () => (
@@ -245,7 +286,39 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     ]
   );
 
-  const SpotModeComponent = useMemo(() => null, []);
+  const SpotModeComponent = useMemo(
+    () => (
+      <>
+        <DescriptionWrapper>
+          <SpotTitle>길 위에 특별한 장소를 추가해 보세요.</SpotTitle>
+          <SpotDescription>
+            지도를 터치한 위치에 장소가 표시됩니다.
+          </SpotDescription>
+        </DescriptionWrapper>
+        <SpotList>
+          {spots.map((spot, index) => (
+            <Spot
+              key={index}
+              onClick={() => handleClickSpot(spot, index)}
+              active={selectedSpot === index}
+            >
+              <SoptIcon>
+                <img src="/images/spot.png" alt="" />
+              </SoptIcon>
+              <SpotContentWrapper>
+                <SpotContentTitle>{spot.title}</SpotContentTitle>
+                <SpotContentDescription>{spot.content}</SpotContentDescription>
+              </SpotContentWrapper>
+              <SpotRemove onClick={(event) => handleRemoveSpot(event, index)}>
+                <img src="/images/spot-remove.png" alt="" />
+              </SpotRemove>
+            </Spot>
+          ))}
+        </SpotList>
+      </>
+    ),
+    [handleClickSpot, handleRemoveSpot, selectedSpot, spots]
+  );
 
   const DrawRoadComponent = useMemo(
     () => (
@@ -291,7 +364,9 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
             <ContentWrapper>
               {mode === DrawMode.Road ? DrawModeComponent : SpotModeComponent}
             </ContentWrapper>
-            {!isFocus && <SubmitButton>완료</SubmitButton>}
+            {!isFocus && (
+              <SubmitButton onClick={onClickBack}>완료</SubmitButton>
+            )}
           </ContentCard>
         </ContentCardWrapper>
       </Container>
@@ -320,6 +395,38 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
       mapRef.current?.mapServiceRef.current?.resizeMap();
     }, 500);
   }, [isFocus]);
+
+  useEffect(() => {
+    if (isMounted) {
+      mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (isMounted) {
+      mapRef.current?.mapServiceRef.current?.addMarkers(
+        spots.toArray().map((spot) => ({
+          latitude: spot.point.latitude,
+          longitude: spot.point.longitude,
+        }))
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (isMounted) {
+      const firstRoutes = routes.get(0);
+      if (!isNil(firstRoutes)) {
+        mapRef.current?.mapServiceRef.current?.moveTo(
+          firstRoutes.latitude,
+          firstRoutes.longitude
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   if (!isMounted) {
     return null;
@@ -597,6 +704,89 @@ const EmptyRouteSpace = styled.div`
   height: 36px;
   margin: 0 16px;
   border-left: 1px solid #2c7a50;
+`;
+
+/* 스페셜 스팟 */
+const DescriptionWrapper = styled.div`
+  width: 100%;
+  padding: 0 16px;
+  margin-top: 20px;
+  box-sizing: border-box;
+`;
+
+const SpotTitle = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  color: #171717;
+`;
+
+const SpotDescription = styled.p`
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #464646;
+`;
+
+const SpotList = styled.ul`
+  width: 100%;
+  margin: 22px 0 20px;
+`;
+
+const Spot = styled.li<{ active: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 14px 16px 18px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e4e4e4;
+
+  &:first-of-type {
+    border-top: 1px solid #e4e4e4;
+  }
+
+  ${({ active }) =>
+    active &&
+    css`
+      background-color: #eff6f2;
+    `}
+`;
+
+const SoptIcon = styled.div`
+  align-self: flex-start;
+  width: 24px;
+  height: 24px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const SpotContentWrapper = styled.div`
+  flex: 1;
+  padding-left: 10px;
+`;
+
+const SpotContentTitle = styled.p`
+  font-size: 13px;
+  font-weight: 600px;
+  color: #464646;
+`;
+
+const SpotContentDescription = styled.p`
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #464646;
+`;
+
+const SpotRemove = styled.div`
+  width: 24px;
+  height: 24px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export default DrawRoad;

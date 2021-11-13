@@ -15,7 +15,7 @@ const RouteRecord = Record<RouteAttr>({
 
 class Route extends RouteRecord {
   constructor(args: RoutePOJO) {
-    const [latitude, longitude] = args;
+    const [longitude, latitude] = args;
 
     super({
       latitude,

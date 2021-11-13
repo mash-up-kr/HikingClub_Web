@@ -1,18 +1,36 @@
 /* External dependencies */
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { isNil } from 'lodash';
 
 /* Internal dependencies */
+import {
+  getTitle,
+  getContent,
+  getDistance,
+  getHashTags,
+  getRoutes,
+  getSpots,
+  getImages,
+  getRoadId,
+  getSuccess,
+} from 'stores/selectors/editSelectors';
+import {
+  initialize,
+  requestCreateRoad,
+  requestUpdateRoad,
+} from 'stores/actions/editActions';
+import { getQueryParam } from 'utils/urlUtils';
 import Header from 'components/modules/Header';
 import RoadTitle from 'components/modules/RoadTitle';
 import RoadMap from 'components/modules/RoadMap';
 import RoadHashTag from 'components/modules/RoadHashTag';
 import RoadContent from 'components/modules/RoadContent';
 import RoadSubmit from 'components/modules/RoadSubmit';
-
 import RoadCategory from 'components/modules/RoadCategory';
 import RoadImageUploader from 'components/modules/RoadImageUploader';
-import React, { useState, useCallback } from 'react';
 
 declare global {
   interface Window {
@@ -21,9 +39,22 @@ declare global {
 }
 
 function MakeRoad() {
+  const dispatch = useDispatch();
   const router = useRouter();
 
+  const title = useSelector(getTitle);
+  const content = useSelector(getContent);
+  const distance = useSelector(getDistance);
+  const hashtags = useSelector(getHashTags);
+  const routes = useSelector(getRoutes);
+  const spots = useSelector(getSpots);
+  const images = useSelector(getImages);
+
+  const hasSuccess = useSelector(getSuccess);
+  const successRoadId = useSelector(getRoadId);
+
   const [roadImages, setRoadImages] = useState<FormData | string[]>([]);
+  const [roadId, setRoadId] = useState('');
 
   const handleChangeRoadImages = useCallback((formData: FormData) => {
     setRoadImages(formData);
@@ -37,6 +68,78 @@ function MakeRoad() {
     }
     router.back();
   }, [router]);
+
+  const handleSubmit = useCallback(() => {
+    if (roadId !== 'new') {
+      const payload = {
+        roadId,
+        title,
+        content,
+        distance,
+        routes: routes
+          .toArray()
+          .map((route) => [route.longitude, route.latitude]),
+        placeCode: '1123052',
+        categoryId: 1,
+        spots: spots.toArray().map((spot) => ({
+          title: spot.title,
+          content: spot.content,
+          point: [spot.point.longitude, spot.point.latitude],
+        })),
+        hashtags: hashtags.toArray(),
+        images: images.toArray(),
+      };
+
+      dispatch(requestUpdateRoad(payload));
+    } else {
+      const payload = {
+        title,
+        content,
+        distance: 3,
+        routes: routes
+          .toArray()
+          .map((route) => [route.longitude, route.latitude]),
+        placeCode: '1123052',
+        categoryId: 1,
+        spots: spots.toArray().map((spot) => ({
+          title: spot.title,
+          content: spot.content,
+          point: [spot.point.longitude, spot.point.latitude],
+        })),
+        hashtags: hashtags.toArray(),
+        images: images.toArray(),
+      };
+
+      dispatch(requestCreateRoad(payload));
+    }
+  }, [
+    content,
+    dispatch,
+    distance,
+    hashtags,
+    images,
+    roadId,
+    routes,
+    spots,
+    title,
+  ]);
+
+  useEffect(() => {
+    const roadIdFromQueryParam = getQueryParam('roadId');
+    if (!isNil(roadIdFromQueryParam)) {
+      setRoadId(roadIdFromQueryParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (hasSuccess) {
+      router.replace(`/detail?roadId=${successRoadId}`);
+    }
+  }, [hasSuccess, router, successRoadId]);
+
+  useEffect(() => {
+    dispatch(initialize());
+  }, [dispatch]);
 
   return (
     <Wrapper>
@@ -55,7 +158,7 @@ function MakeRoad() {
           onChangeRoadImages={handleChangeRoadImages}
         />
         <RoadContent />
-        <RoadSubmit />
+        <RoadSubmit onSubmit={handleSubmit} />
       </ItemWrapper>
     </Wrapper>
   );

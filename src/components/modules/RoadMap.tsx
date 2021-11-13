@@ -5,14 +5,15 @@ import styled from 'styled-components';
 import { isNil } from 'lodash';
 
 /* Internal dependencies */
-import { getRoutes } from 'stores/selectors/editSelectors';
+import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import DrawRoad from 'components/templates/DrawRoad';
 import Map, { MapRef } from 'components/atoms/Map';
 
 function RoadMap() {
   const routes = useSelector(getRoutes);
+  const spots = useSelector(getSpots);
 
-  const [enableDrawRoad, setEnableDrawRoad] = useState(true);
+  const [enableDrawRoad, setEnableDrawRoad] = useState(false);
 
   const mapRef = useRef<MapRef>(null);
 
@@ -27,6 +28,15 @@ function RoadMap() {
   useEffect(() => {
     mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
   }, [routes]);
+
+  useEffect(() => {
+    mapRef.current?.mapServiceRef.current?.addMarkers(
+      spots.toArray().map((spot) => ({
+        latitude: spot.point.latitude,
+        longitude: spot.point.longitude,
+      }))
+    );
+  }, [spots]);
 
   useEffect(() => {
     if (!enableDrawRoad) {

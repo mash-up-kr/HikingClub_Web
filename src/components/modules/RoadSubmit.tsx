@@ -4,8 +4,12 @@ import styled from 'styled-components';
 /* Internal dependencies */
 import Button from 'components/atoms/Button';
 
-function RoadSubmit() {
-  return <SubmitButton>완료</SubmitButton>;
+interface RoadSubmitProps {
+  onSubmit: () => void;
+}
+
+function RoadSubmit({ onSubmit }: RoadSubmitProps) {
+  return <SubmitButton onClick={onSubmit}>완료</SubmitButton>;
 }
 
 const SubmitButton = styled(Button)`

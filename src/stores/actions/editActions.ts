@@ -1,6 +1,8 @@
 /* Internal dependencies */
 import ActionTypes from 'stores/ActionTypes';
-import Road from 'models/Road';
+import Road, { RoadPOJO } from 'models/Road';
+import { RoutePOJO } from 'models/Route';
+import { SpotPOJO } from 'models/Spot';
 import { actionCreator } from 'utils/reduxUtils';
 
 interface SetRoadPayload {
@@ -26,6 +28,40 @@ interface SetContentPayload {
 interface AddRoutePayload {
   latitude: number;
   longitude: number;
+}
+
+interface AddSpotPayload {
+  latitude: number;
+  longitude: number;
+}
+
+interface RemoveSpotPayload {
+  index: number;
+}
+
+export interface RequestCreateRoadPayload {
+  title: string;
+  content: string;
+  routes: RoutePOJO[];
+  distance: number;
+  placeCode: string;
+  categoryId: number;
+  spots: SpotPOJO[];
+  images: string[];
+  hashtags: string[];
+}
+
+export interface RequestUpdateRoadPayload {
+  roadId: string;
+  title: string;
+  content: string;
+  routes: RoutePOJO[];
+  distance: number;
+  placeCode: string;
+  categoryId: number;
+  spots: SpotPOJO[];
+  images: string[];
+  hashtags: string[];
 }
 
 export const setRoad = actionCreator<ActionTypes.SET_ROAD, SetRoadPayload>(
@@ -63,6 +99,65 @@ export const clearRoute = actionCreator<ActionTypes.CLEAR_ROUTE>(
   ActionTypes.CLEAR_ROUTE
 );
 
+export const addSpot = actionCreator<ActionTypes.ADD_SPOT, AddSpotPayload>(
+  ActionTypes.ADD_SPOT
+);
+
+export const removeSpot = actionCreator<
+  ActionTypes.REMOVE_SPOT,
+  RemoveSpotPayload
+>(ActionTypes.REMOVE_SPOT);
+
+export const initialize = actionCreator<ActionTypes.INITIALIZE>(
+  ActionTypes.INITIALIZE
+);
+
+export const requestCreateRoad = actionCreator<
+  ActionTypes.REQUEST_CREATE_ROAD,
+  RequestCreateRoadPayload
+>(ActionTypes.REQUEST_CREATE_ROAD);
+
+export const requeastCreateRoadSuccess = actionCreator<
+  ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
+  RoadPOJO
+>(ActionTypes.REQUEST_CREATE_ROAD_SUCCESS);
+
+export const requeastCreateRoadError =
+  actionCreator<ActionTypes.REQUEST_CREATE_ROAD_ERROR>(
+    ActionTypes.REQUEST_CREATE_ROAD_ERROR
+  );
+
+export const requestUpdateRoad = actionCreator<
+  ActionTypes.REQUEST_UPDATE_ROAD,
+  RequestUpdateRoadPayload
+>(ActionTypes.REQUEST_UPDATE_ROAD);
+
+export const requestUpdateRoadSuccess = actionCreator<
+  ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS,
+  RoadPOJO
+>(ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS);
+
+export const requestUpdateRoadError =
+  actionCreator<ActionTypes.REQUEST_UPDATE_ROAD_ERROR>(
+    ActionTypes.REQUEST_UPDATE_ROAD_ERROR
+  );
+
+export type RequestCreateRoadAction = ReturnType<typeof requestCreateRoad>;
+export type RequestCreateRoadSuccessAction = ReturnType<
+  typeof requeastCreateRoadSuccess
+>;
+export type RequestCreateRoadErrorAction = ReturnType<
+  typeof requeastCreateRoadError
+>;
+
+export type RequestUpdateRoadAction = ReturnType<typeof requestUpdateRoad>;
+export type RequestUpdateRoadSuccessAction = ReturnType<
+  typeof requestUpdateRoadSuccess
+>;
+export type RequestUpdateRoadErrorAction = ReturnType<
+  typeof requestUpdateRoadError
+>;
+
 export type EditActions =
   | ReturnType<typeof setRoad>
   | ReturnType<typeof setTitle>
@@ -71,4 +166,13 @@ export type EditActions =
   | ReturnType<typeof setContent>
   | ReturnType<typeof addRoute>
   | ReturnType<typeof removeRoute>
-  | ReturnType<typeof clearRoute>;
+  | ReturnType<typeof clearRoute>
+  | ReturnType<typeof addSpot>
+  | ReturnType<typeof removeSpot>
+  | ReturnType<typeof initialize>
+  | RequestCreateRoadAction
+  | RequestCreateRoadSuccessAction
+  | RequestCreateRoadErrorAction
+  | RequestUpdateRoadAction
+  | RequestUpdateRoadSuccessAction
+  | RequestUpdateRoadErrorAction;

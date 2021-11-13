@@ -1,9 +1,22 @@
 import React, { FC } from 'react';
 
-import Image from 'next/image';
 import styled, { css } from 'styled-components';
 
-import LocationIcon from '../../../public/images/location.svg';
+const LocationText: FC<LocationTextProps> = (props) => {
+  const { styleType = 'location', text = '예시 텍스트' } = props;
+
+  const iconUrl =
+    styleType === 'location'
+      ? '/icons/icon_location.png'
+      : '/icons/icon_footprint.png';
+
+  return (
+    <StyleView>
+      <StyledImage src={iconUrl} alt="위치" className="locationIcon" />
+      <StyleText styleType={styleType}>{text}</StyleText>
+    </StyleView>
+  );
+};
 
 const LocationStyle = css`
   font-size: 14px;
@@ -28,6 +41,7 @@ interface LocationTextProps extends StyleProps {
 const StyleView = styled.div<StyleProps>`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 `;
 
 const StyleText = styled.div<StyleProps>`
@@ -35,15 +49,9 @@ const StyleText = styled.div<StyleProps>`
   ${(props) => (props.styleType === 'location' ? LocationStyle : DistanceStyle)}
 `;
 
-const LocationText: FC<LocationTextProps> = (props) => {
-  const { styleType = 'location', text = '예시 텍스트' } = props;
-
-  return (
-    <StyleView>
-      <Image src={LocationIcon} alt="위치" className="locationIcon" />
-      <StyleText styleType={styleType}>{text}</StyleText>
-    </StyleView>
-  );
-};
+const StyledImage = styled.img`
+  width: 16px;
+  height: 16px;
+`;
 
 export default LocationText;

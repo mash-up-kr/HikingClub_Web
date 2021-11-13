@@ -29,4 +29,24 @@ export const getRoadEpic: Epic = (action$) =>
     })
   );
 
+export const removeRoadEpic: Epic = (action$) =>
+  action$.pipe(
+    ofType(ActionTypes.REQUEST_REMOVE_ROAD),
+    mergeMap((action) => {
+      const { roadId } = action.payload;
+      return from(roadAPI.removeRoad({ roadId })).pipe(
+        map((payload) => ({
+          type: ActionTypes.REQUEST_GET_ROAD_SUCCESS,
+          payload,
+        })),
+        catchError((payload) =>
+          of({
+            type: ActionTypes.REQUEST_GET_ROAD_ERROR,
+            payload,
+          })
+        )
+      );
+    })
+  );
+
 export default combineEpics(getRoadEpic);

@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import { isEmpty } from 'lodash';
 
@@ -22,9 +23,15 @@ import Map, { MapRef } from 'components/atoms/Map';
 import Button from 'components/atoms/Button';
 import Input from 'components/atoms/Input';
 
+declare global {
+  interface Window {
+    webkit: any;
+  }
+}
+
 interface DrawRoadProps {
   show?: boolean;
-  onClickCloseMap: () => void;
+  onClickBack: () => void;
 }
 
 enum DrawMode {
@@ -32,8 +39,9 @@ enum DrawMode {
   Spot = 'spot',
 }
 
-function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
+function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const isMounted = useMounted();
 
   const routes = useSelector(getRoutes);
@@ -144,6 +152,15 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
     mapRef.current?.mapServiceRef.current?.removeLastLine();
   }, [dispatch]);
 
+  const handleClickClose = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'close',
+      });
+    }
+    router.back();
+  }, [router]);
+
   const DrawModeComponent = useMemo(
     () => (
       <>
@@ -237,7 +254,8 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
           title="길 그리기"
           showBackIcon
           showCloseIcon
-          onClickClose={onClickCloseMap}
+          onClickBack={onClickBack}
+          onClickClose={handleClickClose}
         />
         <MapWrapper>
           <Map ref={mapRef} onClickMap={handkleClickMap} />
@@ -283,11 +301,12 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
       SpotModeComponent,
       handkleClickMap,
       handleClickClearRoad,
+      handleClickClose,
       handleClickMode,
       handleClickRevertRoad,
       isFocus,
       mode,
-      onClickCloseMap,
+      onClickBack,
       show,
     ]
   );

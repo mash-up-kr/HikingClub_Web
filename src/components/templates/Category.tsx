@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import Header from 'components/modules/Header';
 import styled, { css } from 'styled-components';
+
+import Header from 'components/modules/Header';
 import PublicText from 'components/atoms/PublicText';
 import CategoryCard from 'components/atoms/CategoryCard';
 import Button from 'components/atoms/Button';
+
+import { categoryData } from 'constants/category';
 
 interface CategoryProps {
   show: boolean;
@@ -11,19 +14,8 @@ interface CategoryProps {
 }
 
 function Category({ show = false, onClickCloseCategory }: CategoryProps) {
-  const [cards, setCards] = useState([
-    // 카테고리 아이콘을 png로 구현할지, svg로 구현할지 판단이 어려워서 우선 png로 붙여놨음.
-    //  -> selected 값에 따라 색깔 안바뀜
-    { id: 0, name: '자연', img: '/images/leaf.png', selected: false },
-    { id: 1, name: '야경', img: '/images/leaf.png', selected: false },
-    { id: 2, name: '호수', img: '/images/leaf.png', selected: false },
-    { id: 3, name: '벚꽃', img: '/images/leaf.png', selected: false },
-    { id: 4, name: '운동', img: '/images/leaf.png', selected: false },
-    { id: 5, name: '음식', img: '/images/leaf.png', selected: false },
-    { id: 6, name: '연인', img: '/images/leaf.png', selected: false },
-    { id: 7, name: '가족', img: '/images/leaf.png', selected: false },
-    { id: 8, name: '반려견', img: '/images/leaf.png', selected: false },
-  ]);
+  console.log(show);
+  const [cards, setCards] = useState(categoryData);
 
   const handleClick = useCallback(
     (id: number) => {
@@ -42,7 +34,6 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
 
   return (
     <Container show={show}>
-      {' '}
       <Header
         title="카테고리 선택"
         showBackIcon
@@ -59,7 +50,7 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
               id={item.id}
               selected={item.selected}
               name={item.name}
-              imgUrl={item.img}
+              imgUrl={item.imgUrl}
             />
           ))}
         </CategoryCardList>

@@ -2,21 +2,21 @@ import React, { FC } from 'react';
 
 import Image from 'next/image';
 import styled from 'styled-components';
+import Immutable from 'immutable';
 
 import Bookmark from '../../../public/images/bookmark.svg';
-import Leaf from '../../../public/images/leaf.svg';
 import CategoryText from 'components/atoms/CategoryText';
 import Chip from 'components/atoms/Chip';
 import LocationText from 'components/atoms/LocationText';
 import PublicText from 'components/atoms/PublicText';
+import { categoryData } from 'constants/category';
 
 interface StreetInfoProps {
   title?: string;
   category?: string;
-  categoryIcon?: string;
-  distance?: string;
+  distance?: number;
   location?: string;
-  tags?: string[];
+  tags?: Immutable.OrderedSet<string>;
 }
 
 const BottomCardWrapper = styled.div`
@@ -52,25 +52,34 @@ const BottomCardWrapper = styled.div`
 const BottomCard: FC<StreetInfoProps> = (props) => {
   const {
     title = '단풍나무 산책길',
-    categoryIcon = Leaf,
     category = '단풍',
-    distance = '0.8km (11분)',
+    distance = 10,
     location = '서울 송파구 위례성대로 134 (방이동)',
     tags = ['#산책', '#한적한', '#자연', '#깨끗한'],
   } = props;
+
+  const walkingTimePerKm = 16;
+  const walkingTime = distance * walkingTimePerKm;
+  const categoryIconUrl =
+    categoryData.find((el) => el.name === category)?.imgUrl ||
+    categoryData[0].imgUrl;
+
   return (
     <BottomCardWrapper>
       <div className="header">
         <div className="textArea">
           <PublicText>{title}</PublicText>
           <div className="space" />
-          <CategoryText icon={categoryIcon}>{category}</CategoryText>
+          <CategoryText icon={categoryIconUrl}>{category}</CategoryText>
         </div>
         <Image src={Bookmark} alt="북마크" />
       </div>
 
       <div className="info">
-        <LocationText styleType="distance" text={distance} />
+        <LocationText
+          styleType="distance"
+          text={`${distance}km (${walkingTime}분)`}
+        />
         <div className="infoSpace" />
         <LocationText styleType="location" text={location} />
       </div>

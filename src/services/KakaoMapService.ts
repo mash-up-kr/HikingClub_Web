@@ -242,14 +242,6 @@ class KakaoMapService implements KakaoMapServiceProps {
   }
 
   async addMarker(latitude: number, longitude: number) {
-    if (!this.markerInitialized) {
-      try {
-        await this.initializeMarker();
-      } catch (error) {
-        /* empty handler */
-      }
-    }
-
     const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
 
     const marker = new window.kakao.maps.Marker({
@@ -261,7 +253,15 @@ class KakaoMapService implements KakaoMapServiceProps {
     this.spots.push(marker);
   }
 
-  addMarkers(spots: Spot[]) {
+  async addMarkers(spots: Spot[]) {
+    if (!this.markerInitialized) {
+      try {
+        await this.initializeMarker();
+      } catch (error) {
+        /* empty handler */
+      }
+    }
+
     this.removeAllMarkers();
 
     spots.forEach((spot) => {

@@ -27,7 +27,7 @@ const SpotRecord = Record<SpotAttr>({
 
 class Spot extends SpotRecord {
   constructor(args: SpotPOJO) {
-    const [latitude, longitude] = args.point;
+    const [longitude, latitude] = args.point;
 
     super({
       ...args,

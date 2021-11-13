@@ -16,6 +16,8 @@ enum ActionTypes {
   ADD_ROUTE = 'ADD_ROUTE',
   REMOVE_ROUTE = 'REMOVE_ROUTE',
   CLEAR_ROUTE = 'CLEAR_ROUTE',
+  ADD_SPOT = 'ADD_SPOT',
+  REMOVE_SPOT = 'REMOVE_SPOT',
 
   /* layoutActionTypes */
   OPEN_SNACK_BAR = 'OPEN_SNACK_BAR',

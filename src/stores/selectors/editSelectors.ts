@@ -9,3 +9,5 @@ export const getHashTags = (state: RootState) =>
 export const getContent = (state: RootState) => state.editReducer.content;
 
 export const getRoutes = (state: RootState) => state.editReducer.routes;
+
+export const getSpots = (state: RootState) => state.editReducer.spots;

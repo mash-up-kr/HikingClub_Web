@@ -12,7 +12,7 @@ import Map, { MapRef } from 'components/atoms/Map';
 function RoadMap() {
   const routes = useSelector(getRoutes);
 
-  const [enableDrawRoad, setEnableDrawRoad] = useState(false);
+  const [enableDrawRoad, setEnableDrawRoad] = useState(true);
 
   const mapRef = useRef<MapRef>(null);
 

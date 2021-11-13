@@ -7,6 +7,7 @@ import ActionTypes from 'stores/ActionTypes';
 import { EditActions } from 'stores/actions/editActions';
 import { RoadAttr } from 'models/Road';
 import Route from 'models/Route';
+import Spot from 'models/Spot';
 
 interface State extends Omit<RoadAttr, 'id'> {}
 
@@ -81,6 +82,28 @@ function editReducer(state: State = initialState, action: EditActions): State {
       return {
         ...state,
         routes: state.routes.clear(),
+      };
+    }
+    case ActionTypes.ADD_SPOT: {
+      const { latitude, longitude } = action.payload;
+
+      return {
+        ...state,
+        spots: state.spots.push(
+          new Spot({
+            title: '공원입구',
+            content: '여기 공원 입구에서 사진 찍으면 이뻐요!',
+            point: [longitude, latitude],
+          })
+        ),
+      };
+    }
+    case ActionTypes.REMOVE_SPOT: {
+      const { index } = action.payload;
+
+      return {
+        ...state,
+        spots: state.spots.delete(index),
       };
     }
     default:

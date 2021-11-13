@@ -28,6 +28,15 @@ interface AddRoutePayload {
   longitude: number;
 }
 
+interface AddSpotPayload {
+  latitude: number;
+  longitude: number;
+}
+
+interface RemoveSpotPayload {
+  index: number;
+}
+
 export const setRoad = actionCreator<ActionTypes.SET_ROAD, SetRoadPayload>(
   ActionTypes.SET_ROAD
 );
@@ -63,6 +72,15 @@ export const clearRoute = actionCreator<ActionTypes.CLEAR_ROUTE>(
   ActionTypes.CLEAR_ROUTE
 );
 
+export const addSpot = actionCreator<ActionTypes.ADD_SPOT, AddSpotPayload>(
+  ActionTypes.ADD_SPOT
+);
+
+export const removeSpot = actionCreator<
+  ActionTypes.REMOVE_SPOT,
+  RemoveSpotPayload
+>(ActionTypes.REMOVE_SPOT);
+
 export type EditActions =
   | ReturnType<typeof setRoad>
   | ReturnType<typeof setTitle>
@@ -71,4 +89,6 @@ export type EditActions =
   | ReturnType<typeof setContent>
   | ReturnType<typeof addRoute>
   | ReturnType<typeof removeRoute>
-  | ReturnType<typeof clearRoute>;
+  | ReturnType<typeof clearRoute>
+  | ReturnType<typeof addSpot>
+  | ReturnType<typeof removeSpot>;

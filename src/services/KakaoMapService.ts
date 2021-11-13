@@ -31,15 +31,23 @@ export interface MouseEvent {
 class KakaoMapService implements KakaoMapServiceProps {
   map: any;
 
+  onClick: ((mouseEvent: MouseEvent) => void) | null = null;
+
   linePath: any[] = [];
 
   polyLines: any[] = [];
 
   circles: any[] = [];
 
+  spots: any[] = [];
+
   ps: any = null;
 
   geocoder: any = null;
+
+  markerImage: any = null;
+
+  markerInitialized: boolean = false;
 
   readonly mapWrapper: HTMLDivElement;
 
@@ -156,7 +164,10 @@ class KakaoMapService implements KakaoMapServiceProps {
         this.addClickEventListener(onClick);
       }, 300);
     } else {
+      window.kakao.maps.event.removeListener(this.map, 'click', this.onClick);
       window.kakao.maps.event.addListener(this.map, 'click', onClick);
+
+      this.onClick = onClick;
     }
   }
 
@@ -202,6 +213,37 @@ class KakaoMapService implements KakaoMapServiceProps {
     });
   }
 
+  initializeMarker() {
+    const imageSrc: string =
+      'https://user-images.githubusercontent.com/55433950/141651913-86a31db8-b6b4-4670-a045-967f92078def.png';
+    const imageSize = new window.kakao.maps.Size(24, 24);
+    const imageOption = { offset: new window.kakao.maps.Point(10.6, 12) };
+
+    this.markerImage = new window.kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imageOption
+    );
+
+    this.markerInitialized = true;
+  }
+
+  addMarker(latitude: number, longitude: number) {
+    if (!this.markerInitialized) {
+      this.initializeMarker();
+    }
+
+    const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
+
+    const marker = new window.kakao.maps.Marker({
+      position: markerPosition,
+      image: this.markerImage,
+    });
+
+    marker.setMap(this.map);
+    this.spots.push(marker);
+  }
+
   removeLastLine() {
     const lastCircle = this.circles.pop();
     const lastPolyline = this.polyLines.pop();
@@ -223,6 +265,14 @@ class KakaoMapService implements KakaoMapServiceProps {
       this.polyLines.length
     ) {
       this.removeLastLine();
+    }
+  }
+
+  removeMarker(index: number) {
+    const marker = this.spots.splice(index, 1)?.[0];
+
+    if (!isNil(marker)) {
+      marker.setMap(null);
     }
   }
 

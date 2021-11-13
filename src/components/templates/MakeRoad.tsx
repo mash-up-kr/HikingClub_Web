@@ -75,7 +75,7 @@ function MakeRoad() {
         roadId,
         title,
         content,
-        distance,
+        distance: 3,
         routes: routes
           .toArray()
           .map((route) => [route.longitude, route.latitude]),

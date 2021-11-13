@@ -1,5 +1,5 @@
 /* External dependencies */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,8 +11,9 @@ import { wrapper } from 'stores';
 import { getRoad, getImgDetail } from 'stores/selectors/roadSelectors';
 import { requestGetRoad } from 'stores/actions/roadActions';
 import { setRoad } from 'stores/actions/editActions';
+import useMounted from 'hooks/useMounted';
 import { getQueryParam } from 'utils/urlUtils';
-import Map from 'components/atoms/Map';
+import Map, { MapRef } from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
@@ -25,6 +26,7 @@ interface BottomSheetWrapperProps {
 
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
+  const isMounted = useMounted();
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
@@ -35,6 +37,8 @@ const Detail: NextPage = () => {
   const [target, setTarget] = useState<HTMLDivElement | null>(null);
   const [showMenum, setShowMenu] = useState(false);
   const [roadId, setRoadId] = useState('');
+
+  const mapRef = useRef<MapRef>(null);
 
   useEffect(() => {
     const roadIdFromQueryParam = getQueryParam('roadId');
@@ -60,12 +64,41 @@ const Detail: NextPage = () => {
     dispatch(setRoad({ road }));
   }, [dispatch, road]);
 
+  useEffect(() => {
+    if (isMounted) {
+      mapRef.current?.mapServiceRef.current?.drawlines(road.routes.toArray());
+    }
+  }, [isMounted, road.routes]);
+
+  useEffect(() => {
+    if (isMounted) {
+      mapRef.current?.mapServiceRef.current?.addMarkers(
+        road.spots.toArray().map((spot) => ({
+          latitude: spot.point.latitude,
+          longitude: spot.point.longitude,
+        }))
+      );
+    }
+  }, [isMounted, road.spots]);
+
+  useEffect(() => {
+    if (isMounted) {
+      const firstRoutes = road.routes.get(0);
+      if (!isNil(firstRoutes)) {
+        mapRef.current?.mapServiceRef.current?.moveTo(
+          firstRoutes.latitude,
+          firstRoutes.longitude
+        );
+      }
+    }
+  }, [isMounted, road.routes]);
+
   return (
     <Layout>
       <Wrapper>
         <MapContainer>
           <div className="mapWrapper" onClick={handleClickMapWrapper}>
-            <Map />
+            <Map ref={mapRef} />
           </div>
           <ReactionBoxWrapper>
             <ReactionBox />

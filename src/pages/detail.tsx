@@ -8,6 +8,7 @@ import { isNil } from 'lodash';
 
 /* Internal dependencies */
 import { wrapper } from 'stores';
+import { openSnackbar } from 'stores/actions/layoutActions';
 import { getRoad, getImgDetail } from 'stores/selectors/roadSelectors';
 import { requestGetRoad } from 'stores/actions/roadActions';
 import { setRoad } from 'stores/actions/editActions';
@@ -64,6 +65,12 @@ const Detail: NextPage = () => {
     dispatch(setRoad({ road }));
   }, [dispatch, road]);
 
+  const handleClickReport = useCallback(() => {
+    dispatch(
+      openSnackbar({ type: 'error', message: '신고가 접수완료 되었습니다.' })
+    );
+  }, [dispatch]);
+
   useEffect(() => {
     if (isMounted) {
       mapRef.current?.mapServiceRef.current?.drawlines(road.routes.toArray());
@@ -117,7 +124,7 @@ const Detail: NextPage = () => {
                 <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
               </MenuItem>
               <MenuItem>삭제하기</MenuItem>
-              <MenuItem>신고하기</MenuItem>
+              <MenuItem onClick={handleClickReport}>신고하기</MenuItem>
             </MenuList>
           </Overlay>
         </MapContainer>

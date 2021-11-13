@@ -204,11 +204,7 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
                     {(() => {
                       if (index === 0) return '출발';
                       if (index === addresses.length - 1) return '도착';
-                      return (
-                        <RouteCircle>
-                          <InnerRouteCircle />
-                        </RouteCircle>
-                      );
+                      return <RouteCircle />;
                     })()}
                   </LeftRouteContent>
                   <Route>{address}</Route>
@@ -564,31 +560,24 @@ const LeftRouteContent = styled.p`
   box-sizing: border-box;
   font-size: 12px;
   font-weight: 500;
-  color: #868686;
-`;
-
-const InnerRouteCircle = styled.div`
-  width: 9px;
-  height: 9px;
-  background-color: #2c7a50;
-  border-radius: 50%;
-  transform: translate(0.5px, 0.5px);
+  color: #2c7a50;
 `;
 
 const RouteCircle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 14px;
-  height: 14px;
-  background-color: rgba(77, 158, 114, 0.4);
+  width: 9px;
+  height: 9px;
+  background-color: #2c7a50;
+  border: 3px solid #b8d8c7;
   border-radius: 50%;
 `;
 
 const EmptyRouteSpace = styled.div`
   height: 36px;
   margin: 0 16px;
-  border-left: 1px solid #868686;
+  border-left: 1px solid #2c7a50;
 `;
 
 export default DrawRoad;

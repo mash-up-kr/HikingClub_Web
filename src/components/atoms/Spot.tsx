@@ -7,9 +7,7 @@ import SpecialSpot from '../../../public/images/specialSpot.svg';
 
 interface SpotProps {
   title?: string;
-  id: number;
   description?: string;
-  onClick: (id: number) => void;
   isFocus?: boolean;
 }
 
@@ -47,13 +45,11 @@ const Spot: FC<SpotProps> = (props) => {
   const {
     title = '예시타이틀',
     description = '예시 설명',
-    onClick,
     isFocus = false,
-    id,
   } = props;
 
   return (
-    <SpotWrapper onClick={() => onClick(id)} isFocus={isFocus}>
+    <SpotWrapper isFocus={isFocus}>
       <Image src={SpecialSpot} alt="스팟" width={20} height={20} />
       <SpotText>
         <div className="title">{title}</div>

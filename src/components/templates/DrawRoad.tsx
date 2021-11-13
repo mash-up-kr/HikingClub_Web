@@ -10,7 +10,7 @@ import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 
 /* Internal dependencies */
 import { addRoute, removeRoute, clearRoute } from 'stores/actions/editActions';
@@ -320,6 +320,26 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
       mapRef.current?.mapServiceRef.current?.resizeMap();
     }, 500);
   }, [isFocus]);
+
+  useEffect(() => {
+    if (isMounted) {
+      mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (isMounted) {
+      const firstRoutes = routes.get(0);
+      if (!isNil(firstRoutes)) {
+        mapRef.current?.mapServiceRef.current?.moveTo(
+          firstRoutes.latitude,
+          firstRoutes.longitude
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   if (!isMounted) {
     return null;

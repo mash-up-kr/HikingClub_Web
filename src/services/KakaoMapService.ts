@@ -137,9 +137,17 @@ class KakaoMapService implements KakaoMapServiceProps {
     return this.map;
   }
 
-  moveTo(latitude: number, longitude: number) {
-    const moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
-    this.map.panTo(moveLatLon);
+  async moveTo(latitude: number, longitude: number) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
+
+      const moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
+      this.map.panTo(moveLatLon);
+    } catch (error) {
+      /* empty handler */
+    }
   }
 
   async addClickEventListener(onClick: (mouseEvent: MouseEvent) => void) {

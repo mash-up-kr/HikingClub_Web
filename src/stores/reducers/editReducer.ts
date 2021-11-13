@@ -68,7 +68,7 @@ function editReducer(state: State = initialState, action: EditActions): State {
 
       return {
         ...state,
-        routes: state.routes.push(new Route([latitude, longitude])),
+        routes: state.routes.push(new Route([longitude, latitude])),
       };
     }
     case ActionTypes.REMOVE_ROUTE: {

@@ -60,9 +60,12 @@ const BottomCard: FC<StreetInfoProps> = (props) => {
 
   const walkingTimePerKm = 16;
   const walkingTime = distance * walkingTimePerKm;
+<<<<<<< HEAD
   const categoryIconUrl =
     categoryData.find((el) => el.name === category)?.imgUrl ||
     categoryData[0].imgUrl;
+=======
+>>>>>>> a2fbd4b (feat: 길 상세 데이터 렌더링 부분 구현)
 
   return (
     <BottomCardWrapper>

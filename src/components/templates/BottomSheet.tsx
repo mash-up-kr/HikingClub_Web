@@ -1,14 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
+
 import Spot from 'components/atoms/Spot';
 import StreetInfo from 'components/modules/StreetInfo';
 import ImageList from 'components/modules/ImageList';
 import TextArea from 'components/atoms/TextArea';
+import Road from 'models/Road';
 
 interface BottomSheetProps {
   // 0 축소 1 기본 2 확대
   status: number;
   setStatus: (input: number) => void;
+  roadData: Road;
 }
 
 interface ContainerProps {
@@ -16,12 +19,8 @@ interface ContainerProps {
 }
 
 const BottomSheet: FC<BottomSheetProps> = (props) => {
-  const imgUrls = [
-    '/images/image 3.png',
-    '/images/image 3.png',
-    '/images/image 3.png',
-    '/images/image 3.png',
-  ];
+  const { title, content, distance, place, category, spots, images, hashtags } =
+    props.roadData;
 
   const handleClickStroke = () => {
     props.setStatus(1);
@@ -30,6 +29,22 @@ const BottomSheet: FC<BottomSheetProps> = (props) => {
   const handleClickTopBar = () => {
     props.setStatus(2);
   };
+
+  const spotInits = spots.map((spot, i) => ({
+    ...spot,
+    id: i,
+    isFocus: false,
+  }));
+
+  // TODO: handleClickSpot -> setSpotData 이용해서 focus 처리 필요
+  const [spotData] = useState(spotInits);
+
+  const handleClickSpot = useCallback(
+    (uid: number) => {
+      console.log(uid);
+    },
+    [spotData]
+  );
 
   return (
     <Container status={props.status}>
@@ -45,22 +60,37 @@ const BottomSheet: FC<BottomSheetProps> = (props) => {
       )}
 
       <StreetInfoWrapper>
-        <StreetInfo />
+        <StreetInfo
+          title={title}
+          category={category}
+          distance={distance}
+          location={place || ''}
+          tags={hashtags}
+        />
       </StreetInfoWrapper>
       {(props.status === 1 || props.status === 2) && (
         <>
           <SpotWrapper>
-            <Spot />
-            <Spot />
-            <Spot isFocus={false} />
+            {spotData.map((spot) => {
+              return (
+                <Spot
+                  key={spot.id}
+                  id={spot.id}
+                  title={spot.title}
+                  description={spot.content}
+                  isFocus={spot.isFocus}
+                  onClick={handleClickSpot}
+                />
+              );
+            })}
           </SpotWrapper>
 
           <ImageListWrapper>
-            <ImageList imgUrls={imgUrls} />
+            <ImageList imgUrls={images} />
           </ImageListWrapper>
 
           <TextAreaWrapper>
-            <TextArea />
+            <TextArea value={content} />
           </TextAreaWrapper>
         </>
       )}

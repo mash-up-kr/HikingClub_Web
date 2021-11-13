@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function TextArea() {
-  const defaultValue =
-    '이길은 어저구 어저구 저저주가ㅓ아어뫄ㅘ하ㅓ다하ㅓㅣㅁ;ㅏㅇ안영하네셔아ㅓ 이길은 어저구 어저구 저저주가ㅓ아어뫄ㅘ하ㅓ다하ㅓㅣㅁ;ㅏㅇ안영하네셔아ㅓ';
+interface TextAreaProps {
+  value: string;
+}
 
+function TextArea({ value }: TextAreaProps) {
   // TODO handleChange붙이기
 
-  return <StyledTextArea value={defaultValue} />;
+  return <StyledTextArea value={value} disabled />;
 }
 
 const StyledTextArea = styled.textarea`

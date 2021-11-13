@@ -28,7 +28,7 @@ const Detail: NextPage = () => {
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
-
+  console.log(road.title);
   const { isOpen, imgUrl } = imgDetail;
 
   // 0 축소 1 기본 2 확장
@@ -94,6 +94,7 @@ const Detail: NextPage = () => {
           <BottomSheet
             status={bottomSheetStatus}
             setStatus={setBottomSheetStatus}
+            roadData={road}
           />
         </BottomSheetWrapper>
 

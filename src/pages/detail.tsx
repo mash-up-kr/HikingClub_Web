@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { isNil } from 'lodash';
@@ -28,6 +29,7 @@ interface BottomSheetWrapperProps {
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
   const isMounted = useMounted();
+  const router = useRouter();
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
@@ -70,6 +72,18 @@ const Detail: NextPage = () => {
       openSnackbar({ type: 'error', message: '신고가 접수완료 되었습니다.' })
     );
   }, [dispatch]);
+
+  const handleClickShare = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'share',
+        data: {
+          url: 'https://naver.com',
+        },
+      });
+    }
+    router.back();
+  }, [router]);
 
   useEffect(() => {
     if (isMounted) {
@@ -124,6 +138,7 @@ const Detail: NextPage = () => {
                 <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
               </MenuItem>
               <MenuItem>삭제하기</MenuItem>
+              <MenuItem onClick={handleClickShare}>공유하기</MenuItem>
               <MenuItem onClick={handleClickReport}>신고하기</MenuItem>
             </MenuList>
           </Overlay>
@@ -221,6 +236,10 @@ const MenuItem = styled.li`
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 

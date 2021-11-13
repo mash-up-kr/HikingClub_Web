@@ -9,7 +9,12 @@ import { RoadAttr } from 'models/Road';
 import Route from 'models/Route';
 import Spot from 'models/Spot';
 
-interface State extends Omit<RoadAttr, 'id'> {}
+interface State extends Omit<RoadAttr, 'id'> {
+  isFetching: boolean;
+  hasSuccess: boolean;
+  hasError: boolean;
+  roadId: string;
+}
 
 const initialState: State = {
   title: '',
@@ -21,6 +26,11 @@ const initialState: State = {
   spots: List(),
   images: List(),
   hashtags: OrderedSet(),
+
+  isFetching: false,
+  hasSuccess: false,
+  hasError: false,
+  roadId: '',
 };
 
 function editReducer(state: State = initialState, action: EditActions): State {
@@ -30,7 +40,10 @@ function editReducer(state: State = initialState, action: EditActions): State {
       const objectRoad = road.toObject();
       unset(objectRoad, 'id');
 
-      return objectRoad;
+      return {
+        ...state,
+        ...objectRoad,
+      };
     }
     case ActionTypes.SET_TITLE: {
       const { title } = action.payload;
@@ -104,6 +117,63 @@ function editReducer(state: State = initialState, action: EditActions): State {
       return {
         ...state,
         spots: state.spots.delete(index),
+      };
+    }
+    case ActionTypes.INITIALIZE: {
+      return {
+        ...state,
+        isFetching: false,
+        hasSuccess: false,
+        hasError: false,
+        roadId: '',
+      };
+    }
+    case ActionTypes.REQUEST_CREATE_ROAD: {
+      return {
+        ...state,
+        isFetching: true,
+        hasSuccess: false,
+        hasError: false,
+        roadId: '',
+      };
+    }
+    case ActionTypes.REQUEST_CREATE_ROAD_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        hasSuccess: true,
+        roadId: action.payload.id,
+      };
+    }
+    case ActionTypes.REQUEST_CREATE_ROAD_ERROR: {
+      return {
+        ...state,
+        isFetching: false,
+        hasError: true,
+      };
+    }
+    case ActionTypes.REQUEST_UPDATE_ROAD: {
+      return {
+        ...state,
+        isFetching: true,
+        hasSuccess: false,
+        hasError: false,
+        roadId: '',
+      };
+    }
+    case ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        hasSuccess: true,
+        roadId: action.payload.id,
+      };
+    }
+    case ActionTypes.REQUEST_UPDATE_ROAD_ERROR: {
+      return {
+        ...state,
+        isFetching: false,
+        hasError: true,
       };
     }
     default:

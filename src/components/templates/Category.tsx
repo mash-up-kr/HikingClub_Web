@@ -14,7 +14,6 @@ interface CategoryProps {
 }
 
 function Category({ show = false, onClickCloseCategory }: CategoryProps) {
-  console.log(show);
   const [cards, setCards] = useState(categoryData);
 
   const handleClick = useCallback(

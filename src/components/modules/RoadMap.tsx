@@ -13,7 +13,7 @@ function RoadMap() {
   const routes = useSelector(getRoutes);
   const spots = useSelector(getSpots);
 
-  const [enableDrawRoad, setEnableDrawRoad] = useState(true);
+  const [enableDrawRoad, setEnableDrawRoad] = useState(false);
 
   const mapRef = useRef<MapRef>(null);
 

@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import Spot from 'components/atoms/Spot';
@@ -30,22 +30,6 @@ const BottomSheet: FC<BottomSheetProps> = (props) => {
     props.setStatus(2);
   };
 
-  const spotInits = spots.map((spot, i) => ({
-    ...spot,
-    id: i,
-    isFocus: false,
-  }));
-
-  // TODO: handleClickSpot -> setSpotData 이용해서 focus 처리 필요
-  const [spotData] = useState(spotInits);
-
-  const handleClickSpot = useCallback(
-    (uid: number) => {
-      console.log(uid);
-    },
-    [spotData]
-  );
-
   return (
     <Container status={props.status}>
       {(props.status === 0 || props.status === 1) && (
@@ -71,16 +55,10 @@ const BottomSheet: FC<BottomSheetProps> = (props) => {
       {(props.status === 1 || props.status === 2) && (
         <>
           <SpotWrapper>
-            {spotData.map((spot) => {
+            {spots.map((spot, i) => {
+              const key = `${i}-${spot.title}`;
               return (
-                <Spot
-                  key={spot.id}
-                  id={spot.id}
-                  title={spot.title}
-                  description={spot.content}
-                  isFocus={spot.isFocus}
-                  onClick={handleClickSpot}
-                />
+                <Spot key={key} title={spot.title} description={spot.content} />
               );
             })}
           </SpotWrapper>

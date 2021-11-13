@@ -1,5 +1,6 @@
 /* External dependencies */
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 /* Internal dependencies */
 import Header from 'components/modules/Header';
@@ -13,16 +14,37 @@ import RoadCategory from 'components/modules/RoadCategory';
 import RoadImageUploader from 'components/modules/RoadImageUploader';
 import React, { useState, useCallback } from 'react';
 
+declare global {
+  interface Window {
+    webkit: any;
+  }
+}
+
 function MakeRoad() {
+  const router = useRouter();
+
   const [roadImages, setRoadImages] = useState<FormData | string[]>([]);
 
   const handleChangeRoadImages = useCallback((formData: FormData) => {
     setRoadImages(formData);
   }, []);
 
+  const handleClickClose = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'close',
+      });
+    }
+    router.back();
+  }, [router]);
+
   return (
     <Wrapper>
-      <Header title="길 등록하기" showCloseIcon />
+      <Header
+        title="길 등록하기"
+        showCloseIcon
+        onClickClose={handleClickClose}
+      />
       <ItemWrapper>
         <RoadTitle />
         <RoadMap />

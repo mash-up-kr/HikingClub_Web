@@ -20,7 +20,7 @@ function RoadMap() {
     setEnableDrawRoad(true);
   }, []);
 
-  const habdleClickCloseMap = useCallback(() => {
+  const handleClickBack = useCallback(() => {
     setEnableDrawRoad(false);
   }, []);
 
@@ -49,7 +49,7 @@ function RoadMap() {
         </MapWrapper>
         <Description>지도를 눌러 길을 그려주세요.</Description>
       </Wrapper>
-      <DrawRoad show={enableDrawRoad} onClickCloseMap={habdleClickCloseMap} />
+      <DrawRoad show={enableDrawRoad} onClickBack={handleClickBack} />
     </>
   );
 }

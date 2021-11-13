@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import { isEmpty } from 'lodash';
 
@@ -22,9 +23,15 @@ import Map, { MapRef } from 'components/atoms/Map';
 import Button from 'components/atoms/Button';
 import Input from 'components/atoms/Input';
 
+declare global {
+  interface Window {
+    webkit: any;
+  }
+}
+
 interface DrawRoadProps {
   show?: boolean;
-  onClickCloseMap: () => void;
+  onClickBack: () => void;
 }
 
 enum DrawMode {
@@ -32,8 +39,9 @@ enum DrawMode {
   Spot = 'spot',
 }
 
-function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
+function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
   const isMounted = useMounted();
 
   const routes = useSelector(getRoutes);
@@ -144,6 +152,15 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
     mapRef.current?.mapServiceRef.current?.removeLastLine();
   }, [dispatch]);
 
+  const handleClickClose = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'close',
+      });
+    }
+    router.back();
+  }, [router]);
+
   const DrawModeComponent = useMemo(
     () => (
       <>
@@ -204,11 +221,7 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
                     {(() => {
                       if (index === 0) return '출발';
                       if (index === addresses.length - 1) return '도착';
-                      return (
-                        <RouteCircle>
-                          <InnerRouteCircle />
-                        </RouteCircle>
-                      );
+                      return <RouteCircle />;
                     })()}
                   </LeftRouteContent>
                   <Route>{address}</Route>
@@ -241,7 +254,8 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
           title="길 그리기"
           showBackIcon
           showCloseIcon
-          onClickClose={onClickCloseMap}
+          onClickBack={onClickBack}
+          onClickClose={handleClickClose}
         />
         <MapWrapper>
           <Map ref={mapRef} onClickMap={handkleClickMap} />
@@ -287,11 +301,12 @@ function DrawRoad({ show = false, onClickCloseMap }: DrawRoadProps) {
       SpotModeComponent,
       handkleClickMap,
       handleClickClearRoad,
+      handleClickClose,
       handleClickMode,
       handleClickRevertRoad,
       isFocus,
       mode,
-      onClickCloseMap,
+      onClickBack,
       show,
     ]
   );
@@ -564,31 +579,24 @@ const LeftRouteContent = styled.p`
   box-sizing: border-box;
   font-size: 12px;
   font-weight: 500;
-  color: #868686;
-`;
-
-const InnerRouteCircle = styled.div`
-  width: 9px;
-  height: 9px;
-  background-color: #2c7a50;
-  border-radius: 50%;
-  transform: translate(0.5px, 0.5px);
+  color: #2c7a50;
 `;
 
 const RouteCircle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 14px;
-  height: 14px;
-  background-color: rgba(77, 158, 114, 0.4);
+  width: 9px;
+  height: 9px;
+  background-color: #2c7a50;
+  border: 3px solid #b8d8c7;
   border-radius: 50%;
 `;
 
 const EmptyRouteSpace = styled.div`
   height: 36px;
   margin: 0 16px;
-  border-left: 1px solid #868686;
+  border-left: 1px solid #2c7a50;
 `;
 
 export default DrawRoad;

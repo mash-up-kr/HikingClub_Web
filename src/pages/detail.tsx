@@ -218,6 +218,6 @@ export const ImageDetailWrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 200;
+  z-index: 1000000;
 `;
 export default Detail;

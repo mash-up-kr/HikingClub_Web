@@ -38,8 +38,10 @@ const Wrapper = styled.div<CardType>`
   gap: 10px;
   justify-content: center;
   align-items: center;
-  color: ${(props) => (props.selected ? '#fff' : '#2c7a50')};
-  background-color: ${(props) => (props.selected ? '#4D9E72' : '#f9f9f9')};
+  color: #2c7a50;
+
+  border: 1.2px solid ${(props) => (props.selected ? '#2C7A50' : 'none')};
+  background-color: ${(props) => (props.selected ? '#DBECE3' : '#f9f9f9')};
 `;
 
 const CategoryIcon = styled.img`

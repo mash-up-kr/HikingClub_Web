@@ -218,24 +218,36 @@ class KakaoMapService implements KakaoMapServiceProps {
     });
   }
 
-  initializeMarker() {
-    const imageSrc: string =
-      'https://user-images.githubusercontent.com/55433950/141651913-86a31db8-b6b4-4670-a045-967f92078def.png';
-    const imageSize = new window.kakao.maps.Size(24, 24);
-    const imageOption = { offset: new window.kakao.maps.Point(10.6, 12) };
+  async initializeMarker() {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
 
-    this.markerImage = new window.kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption
-    );
+      const imageSrc: string =
+        'https://user-images.githubusercontent.com/55433950/141651913-86a31db8-b6b4-4670-a045-967f92078def.png';
+      const imageSize = new window.kakao.maps.Size(24, 24);
+      const imageOption = { offset: new window.kakao.maps.Point(10.6, 12) };
 
-    this.markerInitialized = true;
+      this.markerImage = new window.kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+
+      this.markerInitialized = true;
+    } catch (error) {
+      /* empty handler */
+    }
   }
 
-  addMarker(latitude: number, longitude: number) {
+  async addMarker(latitude: number, longitude: number) {
     if (!this.markerInitialized) {
-      this.initializeMarker();
+      try {
+        await this.initializeMarker();
+      } catch (error) {
+        /* empty handler */
+      }
     }
 
     const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);

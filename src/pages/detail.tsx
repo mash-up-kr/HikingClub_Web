@@ -100,7 +100,7 @@ const Detail: NextPage = () => {
 
   useEffect(() => {
     if (isMounted) {
-      mapRef.current?.mapServiceRef.current?.drawlines(road.routes.toArray());
+      mapRef.current?.mapServiceRef.current?.drawLines(road.routes.toArray());
     }
   }, [isMounted, road.routes]);
 

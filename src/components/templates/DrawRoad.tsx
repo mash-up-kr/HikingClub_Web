@@ -431,7 +431,7 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
 
   useEffect(() => {
     if (isMounted) {
-      mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+      mapRef.current?.mapServiceRef.current?.drawLines(routes.toArray());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);

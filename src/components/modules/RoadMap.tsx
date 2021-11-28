@@ -26,7 +26,7 @@ function RoadMap() {
   }, []);
 
   useEffect(() => {
-    mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+    mapRef.current?.mapServiceRef.current?.drawLines(routes.toArray());
   }, [routes]);
 
   useEffect(() => {

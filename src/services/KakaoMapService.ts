@@ -210,12 +210,20 @@ class KakaoMapService implements KakaoMapServiceProps {
     }
   }
 
-  drawlines(routes: Route[]) {
-    this.removeAllLines();
+  async drawLines(routes: Route[]) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
 
-    routes.forEach((route) => {
-      this.drawLine(route.latitude, route.longitude);
-    });
+      this.removeAllLines();
+
+      routes.forEach((route) => {
+        this.drawLine(route.latitude, route.longitude);
+      });
+    } catch (error) {
+      /* empty handler */
+    }
   }
 
   async initializeMarker() {

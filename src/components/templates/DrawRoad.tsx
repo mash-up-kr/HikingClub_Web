@@ -19,6 +19,8 @@ import {
   clearRoute,
   addSpot,
   removeSpot,
+  changeSpotTitle,
+  changeSpotContent,
 } from 'stores/actions/editActions';
 import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
@@ -202,6 +204,22 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     [dispatch, selectedSpot]
   );
 
+  const handleChangeSpotTitle = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>, index) => {
+      const { value } = event.target;
+      dispatch(changeSpotTitle({ index, title: value }));
+    },
+    [dispatch]
+  );
+
+  const handleChangeSpotContent = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>, index) => {
+      const { value } = event.target;
+      dispatch(changeSpotContent({ index, content: value }));
+    },
+    [dispatch]
+  );
+
   const DrawModeComponent = useMemo(
     () => (
       <>
@@ -306,8 +324,16 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
                 <img src="/images/spot.png" alt="" />
               </SoptIcon>
               <SpotContentWrapper>
-                <SpotContentTitle>{spot.title}</SpotContentTitle>
-                <SpotContentDescription>{spot.content}</SpotContentDescription>
+                <SpotContentTitle
+                  value={spot.title}
+                  placeholder="장소를 입력해주세요."
+                  onChange={(event) => handleChangeSpotTitle(event, index)}
+                />
+                <SpotContentDescription
+                  value={spot.content}
+                  placeholder="설명을 입력해주세요."
+                  onChange={(event) => handleChangeSpotContent(event, index)}
+                />
               </SpotContentWrapper>
               <SpotRemove onClick={(event) => handleRemoveSpot(event, index)}>
                 <img src="/images/spot-remove.png" alt="" />
@@ -317,7 +343,14 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
         </SpotList>
       </>
     ),
-    [handleClickSpot, handleRemoveSpot, selectedSpot, spots]
+    [
+      handleChangeSpotContent,
+      handleChangeSpotTitle,
+      handleClickSpot,
+      handleRemoveSpot,
+      selectedSpot,
+      spots,
+    ]
   );
 
   const DrawRoadComponent = useMemo(
@@ -762,21 +795,25 @@ const SoptIcon = styled.div`
 `;
 
 const SpotContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   padding-left: 10px;
 `;
 
-const SpotContentTitle = styled.p`
+const SpotContentTitle = styled.input`
   font-size: 13px;
   font-weight: 600px;
   color: #464646;
+  background-color: transparent;
 `;
 
-const SpotContentDescription = styled.p`
+const SpotContentDescription = styled.input`
   margin-top: 4px;
   font-size: 12px;
   font-weight: 500;
   color: #464646;
+  background-color: transparent;
 `;
 
 const SpotRemove = styled.div`

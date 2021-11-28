@@ -26,6 +26,7 @@ import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
 import SpotModel from 'models/Spot';
+import { requestMapTimeout } from 'constants/requestTimeout';
 import { getRootElement } from 'utils/domUtils';
 import Header from 'components/modules/Header';
 import Map, { MapRef } from 'components/atoms/Map';
@@ -431,19 +432,23 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
 
   useEffect(() => {
     if (isMounted) {
-      mapRef.current?.mapServiceRef.current?.drawLines(routes.toArray());
+      setTimeout(() => {
+        mapRef.current?.mapServiceRef.current?.drawLines(routes.toArray());
+      }, requestMapTimeout);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
   useEffect(() => {
     if (isMounted) {
-      mapRef.current?.mapServiceRef.current?.addMarkers(
-        spots.toArray().map((spot) => ({
-          latitude: spot.point.latitude,
-          longitude: spot.point.longitude,
-        }))
-      );
+      setTimeout(() => {
+        mapRef.current?.mapServiceRef.current?.addMarkers(
+          spots.toArray().map((spot) => ({
+            latitude: spot.point.latitude,
+            longitude: spot.point.longitude,
+          }))
+        );
+      }, requestMapTimeout);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
@@ -452,10 +457,12 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     if (isMounted) {
       const firstRoutes = routes.get(0);
       if (!isNil(firstRoutes)) {
-        mapRef.current?.mapServiceRef.current?.moveTo(
-          firstRoutes.latitude,
-          firstRoutes.longitude
-        );
+        setTimeout(() => {
+          mapRef.current?.mapServiceRef.current?.moveTo(
+            firstRoutes.latitude,
+            firstRoutes.longitude
+          );
+        }, requestMapTimeout);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

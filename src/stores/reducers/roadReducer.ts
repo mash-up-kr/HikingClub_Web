@@ -15,6 +15,9 @@ export interface State {
   road: Road;
   isFetching: boolean;
   hasError: boolean;
+  isRemoveRoadFetching: boolean;
+  hasRemoveRoadSuccess: boolean;
+  hasRemoveRoadError: boolean;
 }
 
 export const initialState: State = {
@@ -26,6 +29,9 @@ export const initialState: State = {
   road: new Road(),
   isFetching: false,
   hasError: false,
+  isRemoveRoadFetching: false,
+  hasRemoveRoadSuccess: false,
+  hasRemoveRoadError: false,
 };
 
 export default function contentReducer(
@@ -70,6 +76,31 @@ export default function contentReducer(
         ...state,
         isFetching: false,
         hasError: true,
+      };
+    }
+
+    case ActionTypes.REQUEST_REMOVE_ROAD: {
+      return {
+        ...state,
+        isRemoveRoadFetching: true,
+        hasRemoveRoadSuccess: false,
+        hasRemoveRoadError: false,
+      };
+    }
+
+    case ActionTypes.REQUEST_REMOVE_ROAD_SUCCESS: {
+      return {
+        ...state,
+        isRemoveRoadFetching: false,
+        hasRemoveRoadSuccess: true,
+      };
+    }
+
+    case ActionTypes.REQUEST_REMOVE_ROAD_ERROR: {
+      return {
+        ...state,
+        isRemoveRoadFetching: false,
+        hasRemoveRoadError: true,
       };
     }
 

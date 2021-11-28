@@ -34,14 +34,16 @@ export const removeRoadEpic: Epic = (action$) =>
     ofType(ActionTypes.REQUEST_REMOVE_ROAD),
     mergeMap((action) => {
       const { roadId } = action.payload;
+
       return from(roadAPI.removeRoad({ roadId })).pipe(
+        map((result: any) => result.data?.data),
         map((payload) => ({
-          type: ActionTypes.REQUEST_GET_ROAD_SUCCESS,
+          type: ActionTypes.REQUEST_REMOVE_ROAD_SUCCESS,
           payload,
         })),
         catchError((payload) =>
           of({
-            type: ActionTypes.REQUEST_GET_ROAD_ERROR,
+            type: ActionTypes.REQUEST_REMOVE_ROAD_ERROR,
             payload,
           })
         )
@@ -49,4 +51,4 @@ export const removeRoadEpic: Epic = (action$) =>
     })
   );
 
-export default combineEpics(getRoadEpic);
+export default combineEpics(getRoadEpic, removeRoadEpic);

@@ -10,8 +10,12 @@ import { isNil } from 'lodash';
 /* Internal dependencies */
 import { wrapper } from 'stores';
 import { openSnackbar } from 'stores/actions/layoutActions';
-import { getRoad, getImgDetail } from 'stores/selectors/roadSelectors';
-import { requestGetRoad } from 'stores/actions/roadActions';
+import {
+  getRoad,
+  getImgDetail,
+  getRemoveRoadSuccess,
+} from 'stores/selectors/roadSelectors';
+import { requestGetRoad, requestRemoveRoad } from 'stores/actions/roadActions';
 import { setRoad } from 'stores/actions/editActions';
 import useMounted from 'hooks/useMounted';
 import { getQueryParam } from 'utils/urlUtils';
@@ -26,6 +30,8 @@ interface BottomSheetWrapperProps {
   status: number;
 }
 
+const roadIdFromQueryParam = getQueryParam('roadId');
+
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
   const isMounted = useMounted();
@@ -33,6 +39,8 @@ const Detail: NextPage = () => {
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
+  const hasRemoveRoadSuccess = useSelector(getRemoveRoadSuccess);
+
   const { isOpen, imgUrl } = imgDetail;
 
   // 0 축소 1 기본 2 확장
@@ -44,7 +52,6 @@ const Detail: NextPage = () => {
   const mapRef = useRef<MapRef>(null);
 
   useEffect(() => {
-    const roadIdFromQueryParam = getQueryParam('roadId');
     if (!isNil(roadIdFromQueryParam)) {
       dispatch(requestGetRoad({ roadId: roadIdFromQueryParam }));
       setRoadId(roadIdFromQueryParam);
@@ -67,10 +74,10 @@ const Detail: NextPage = () => {
     dispatch(setRoad({ road }));
   }, [dispatch, road]);
 
-  const handleClickReport = useCallback(() => {
-    dispatch(
-      openSnackbar({ type: 'error', message: '신고가 접수완료 되었습니다.' })
-    );
+  const handleRemoveRoad = useCallback(() => {
+    if (!isNil(roadIdFromQueryParam)) {
+      dispatch(requestRemoveRoad({ roadId: roadIdFromQueryParam }));
+    }
   }, [dispatch]);
 
   const handleClickShare = useCallback(() => {
@@ -84,6 +91,12 @@ const Detail: NextPage = () => {
     }
     router.back();
   }, [router]);
+
+  const handleClickReport = useCallback(() => {
+    dispatch(
+      openSnackbar({ type: 'error', message: '신고가 접수완료 되었습니다.' })
+    );
+  }, [dispatch]);
 
   useEffect(() => {
     if (isMounted) {
@@ -114,6 +127,16 @@ const Detail: NextPage = () => {
     }
   }, [isMounted, road.routes]);
 
+  useEffect(() => {
+    if (hasRemoveRoadSuccess) {
+      if (window.webkit) {
+        window.webkit.messageHandlers.handler.postMessage({
+          function: 'close',
+        });
+      }
+    }
+  }, [hasRemoveRoadSuccess]);
+
   return (
     <Layout>
       <Wrapper>
@@ -137,7 +160,7 @@ const Detail: NextPage = () => {
               <MenuItem onClick={handleClickEdit}>
                 <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
               </MenuItem>
-              <MenuItem>삭제하기</MenuItem>
+              <MenuItem onClick={handleRemoveRoad}>삭제하기</MenuItem>
               <MenuItem onClick={handleClickShare}>공유하기</MenuItem>
               <MenuItem onClick={handleClickReport}>신고하기</MenuItem>
             </MenuList>

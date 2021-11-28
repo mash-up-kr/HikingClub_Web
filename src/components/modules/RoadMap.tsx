@@ -6,6 +6,7 @@ import { isNil } from 'lodash';
 
 /* Internal dependencies */
 import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
+import { requestMapTimeout } from 'constants/requestTimeout';
 import DrawRoad from 'components/templates/DrawRoad';
 import Map, { MapRef } from 'components/atoms/Map';
 
@@ -26,26 +27,32 @@ function RoadMap() {
   }, []);
 
   useEffect(() => {
-    mapRef.current?.mapServiceRef.current?.drawlines(routes.toArray());
+    setTimeout(() => {
+      mapRef.current?.mapServiceRef.current?.drawLines(routes.toArray());
+    }, requestMapTimeout);
   }, [routes]);
 
   useEffect(() => {
-    mapRef.current?.mapServiceRef.current?.addMarkers(
-      spots.toArray().map((spot) => ({
-        latitude: spot.point.latitude,
-        longitude: spot.point.longitude,
-      }))
-    );
+    setTimeout(() => {
+      mapRef.current?.mapServiceRef.current?.addMarkers(
+        spots.toArray().map((spot) => ({
+          latitude: spot.point.latitude,
+          longitude: spot.point.longitude,
+        }))
+      );
+    }, requestMapTimeout);
   }, [spots]);
 
   useEffect(() => {
     if (!enableDrawRoad) {
       const firstRoutes = routes.get(0);
       if (!isNil(firstRoutes)) {
-        mapRef.current?.mapServiceRef.current?.moveTo(
-          firstRoutes.latitude,
-          firstRoutes.longitude
-        );
+        setTimeout(() => {
+          mapRef.current?.mapServiceRef.current?.moveTo(
+            firstRoutes.latitude,
+            firstRoutes.longitude
+          );
+        }, requestMapTimeout);
       }
     }
   }, [enableDrawRoad, routes]);

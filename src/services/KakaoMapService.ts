@@ -33,6 +33,9 @@ export interface MouseEvent {
   latLng: LatLng;
 }
 
+let isMapRequested = false;
+const loadMapAsyncQueue: any[] = [];
+
 class KakaoMapService implements KakaoMapServiceProps {
   map: any;
 
@@ -68,14 +71,23 @@ class KakaoMapService implements KakaoMapServiceProps {
 
   private async loadScript() {
     return new Promise((resolve) => {
+      loadMapAsyncQueue.push(resolve);
+
+      if (isMapRequested) {
+        return;
+      }
+
       const script = document.createElement('script');
       script.async = true;
       script.src =
         'https://dapi.kakao.com/v2/maps/sdk.js?appkey=785039beb98fa410f1c187bbb9cbe63b&autoload=false&libraries=drawing,services';
       document.head.appendChild(script);
+      isMapRequested = true;
 
       script.onload = () => {
-        resolve(undefined);
+        loadMapAsyncQueue.forEach((mapResolve) => {
+          mapResolve(undefined);
+        });
       };
     });
   }
@@ -210,12 +222,20 @@ class KakaoMapService implements KakaoMapServiceProps {
     }
   }
 
-  drawlines(routes: Route[]) {
-    this.removeAllLines();
+  async drawLines(routes: Route[]) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
 
-    routes.forEach((route) => {
-      this.drawLine(route.latitude, route.longitude);
-    });
+      this.removeAllLines();
+
+      routes.forEach((route) => {
+        this.drawLine(route.latitude, route.longitude);
+      });
+    } catch (error) {
+      /* empty handler */
+    }
   }
 
   async initializeMarker() {

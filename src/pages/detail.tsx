@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { isNil } from 'lodash';
@@ -9,8 +10,12 @@ import { isNil } from 'lodash';
 /* Internal dependencies */
 import { wrapper } from 'stores';
 import { openSnackbar } from 'stores/actions/layoutActions';
-import { getRoad, getImgDetail } from 'stores/selectors/roadSelectors';
-import { requestGetRoad } from 'stores/actions/roadActions';
+import {
+  getRoad,
+  getImgDetail,
+  getRemoveRoadSuccess,
+} from 'stores/selectors/roadSelectors';
+import { requestGetRoad, requestRemoveRoad } from 'stores/actions/roadActions';
 import { setRoad } from 'stores/actions/editActions';
 import useMounted from 'hooks/useMounted';
 import { getQueryParam } from 'utils/urlUtils';
@@ -28,9 +33,12 @@ interface BottomSheetWrapperProps {
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
   const isMounted = useMounted();
+  const router = useRouter();
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
+  const hasRemoveRoadSuccess = useSelector(getRemoveRoadSuccess);
+
   const { isOpen, imgUrl } = imgDetail;
 
   // 0 축소 1 기본 2 확장
@@ -64,6 +72,25 @@ const Detail: NextPage = () => {
   const handleClickEdit = useCallback(() => {
     dispatch(setRoad({ road }));
   }, [dispatch, road]);
+
+  const handleRemoveRoad = useCallback(() => {
+    const roadIdFromQueryParam = getQueryParam('roadId');
+    if (!isNil(roadIdFromQueryParam)) {
+      dispatch(requestRemoveRoad({ roadId: roadIdFromQueryParam }));
+    }
+  }, [dispatch]);
+
+  const handleClickShare = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'share',
+        data: {
+          url: 'https://naver.com',
+        },
+      });
+    }
+    router.back();
+  }, [router]);
 
   const handleClickReport = useCallback(() => {
     dispatch(
@@ -100,6 +127,16 @@ const Detail: NextPage = () => {
     }
   }, [isMounted, road.routes]);
 
+  useEffect(() => {
+    if (hasRemoveRoadSuccess) {
+      if (window.webkit) {
+        window.webkit.messageHandlers.handler.postMessage({
+          function: 'close',
+        });
+      }
+    }
+  }, [hasRemoveRoadSuccess]);
+
   return (
     <Layout>
       <Wrapper>
@@ -123,7 +160,8 @@ const Detail: NextPage = () => {
               <MenuItem onClick={handleClickEdit}>
                 <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
               </MenuItem>
-              <MenuItem>삭제하기</MenuItem>
+              <MenuItem onClick={handleRemoveRoad}>삭제하기</MenuItem>
+              <MenuItem onClick={handleClickShare}>공유하기</MenuItem>
               <MenuItem onClick={handleClickReport}>신고하기</MenuItem>
             </MenuList>
           </Overlay>
@@ -221,6 +259,10 @@ const MenuItem = styled.li`
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 

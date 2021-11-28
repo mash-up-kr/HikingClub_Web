@@ -39,6 +39,16 @@ interface RemoveSpotPayload {
   index: number;
 }
 
+interface ChangeSpotTitlePayload {
+  index: number;
+  title: string;
+}
+
+interface ChangeSpotContentPayload {
+  index: number;
+  content: string;
+}
+
 export interface RequestCreateRoadPayload {
   title: string;
   content: string;
@@ -108,6 +118,16 @@ export const removeSpot = actionCreator<
   RemoveSpotPayload
 >(ActionTypes.REMOVE_SPOT);
 
+export const changeSpotTitle = actionCreator<
+  ActionTypes.CHANGE_SPOT_TITLE,
+  ChangeSpotTitlePayload
+>(ActionTypes.CHANGE_SPOT_TITLE);
+
+export const changeSpotContent = actionCreator<
+  ActionTypes.CHANGE_SPOT_CONTENT,
+  ChangeSpotContentPayload
+>(ActionTypes.CHANGE_SPOT_CONTENT);
+
 export const initialize = actionCreator<ActionTypes.INITIALIZE>(
   ActionTypes.INITIALIZE
 );
@@ -169,6 +189,8 @@ export type EditActions =
   | ReturnType<typeof clearRoute>
   | ReturnType<typeof addSpot>
   | ReturnType<typeof removeSpot>
+  | ReturnType<typeof changeSpotTitle>
+  | ReturnType<typeof changeSpotContent>
   | ReturnType<typeof initialize>
   | RequestCreateRoadAction
   | RequestCreateRoadSuccessAction

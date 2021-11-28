@@ -33,27 +33,6 @@ const initialState: State = {
   roadId: '',
 };
 
-const mock = [
-  {
-    title: '공원입구',
-    content: '여기 공원 입구에서 사진 찍으면 이뻐요!',
-  },
-  {
-    title: '한강공원',
-    content: '야경이 너무 이뻐요~!',
-  },
-  {
-    title: '경리단길',
-    content: '연인끼리 가서 사진찍기 진짜 좋아요!',
-  },
-  {
-    title: '석촌호수공원',
-    content: '벚꽃필땐 여기가 최고죠!! 근데 사람이 너무 많아요ㅠㅠ',
-  },
-];
-
-let mockIndex = 0;
-
 function editReducer(state: State = initialState, action: EditActions): State {
   switch (action.type) {
     case ActionTypes.SET_ROAD: {
@@ -120,14 +99,13 @@ function editReducer(state: State = initialState, action: EditActions): State {
     }
     case ActionTypes.ADD_SPOT: {
       const { latitude, longitude } = action.payload;
-      mockIndex += 1;
 
       return {
         ...state,
         spots: state.spots.push(
           new Spot({
-            title: mock[mockIndex % 4].title,
-            content: mock[mockIndex % 4].content,
+            title: '',
+            content: '',
             point: [longitude, latitude],
           })
         ),
@@ -139,6 +117,22 @@ function editReducer(state: State = initialState, action: EditActions): State {
       return {
         ...state,
         spots: state.spots.delete(index),
+      };
+    }
+    case ActionTypes.CHANGE_SPOT_TITLE: {
+      const { index, title } = action.payload;
+
+      return {
+        ...state,
+        spots: state.spots.setIn([index, 'title'], title),
+      };
+    }
+    case ActionTypes.CHANGE_SPOT_CONTENT: {
+      const { index, content } = action.payload;
+
+      return {
+        ...state,
+        spots: state.spots.setIn([index, 'content'], content),
       };
     }
     case ActionTypes.INITIALIZE: {

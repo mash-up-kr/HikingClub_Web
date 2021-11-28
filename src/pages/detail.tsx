@@ -30,8 +30,6 @@ interface BottomSheetWrapperProps {
   status: number;
 }
 
-const roadIdFromQueryParam = getQueryParam('roadId');
-
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
   const isMounted = useMounted();
@@ -52,6 +50,7 @@ const Detail: NextPage = () => {
   const mapRef = useRef<MapRef>(null);
 
   useEffect(() => {
+    const roadIdFromQueryParam = getQueryParam('roadId');
     if (!isNil(roadIdFromQueryParam)) {
       dispatch(requestGetRoad({ roadId: roadIdFromQueryParam }));
       setRoadId(roadIdFromQueryParam);
@@ -75,6 +74,7 @@ const Detail: NextPage = () => {
   }, [dispatch, road]);
 
   const handleRemoveRoad = useCallback(() => {
+    const roadIdFromQueryParam = getQueryParam('roadId');
     if (!isNil(roadIdFromQueryParam)) {
       dispatch(requestRemoveRoad({ roadId: roadIdFromQueryParam }));
     }

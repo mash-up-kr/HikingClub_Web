@@ -19,3 +19,5 @@ export const getImages = (state: RootState) => state.editReducer.images;
 export const getRoadId = (state: RootState) => state.editReducer.roadId;
 
 export const getSuccess = (state: RootState) => state.editReducer.hasSuccess;
+
+export const getCategoryId = (state: RootState) => state.editReducer.categoryId;

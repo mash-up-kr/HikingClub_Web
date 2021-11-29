@@ -14,6 +14,7 @@ interface State extends Omit<RoadAttr, 'id'> {
   hasSuccess: boolean;
   hasError: boolean;
   roadId: string;
+  categoryId: number;
 }
 
 const initialState: State = {
@@ -22,6 +23,7 @@ const initialState: State = {
   distance: 0,
   place: null,
   category: '',
+  categoryId: 0,
   routes: List(),
   spots: List(),
   images: List(),
@@ -119,6 +121,16 @@ function editReducer(state: State = initialState, action: EditActions): State {
         spots: state.spots.delete(index),
       };
     }
+
+    case ActionTypes.ADD_CATEGORY: {
+      const { categoryId } = action.payload;
+
+      return {
+        ...state,
+        categoryId,
+      };
+    }
+
     case ActionTypes.CHANGE_SPOT_TITLE: {
       const { index, title } = action.payload;
 
@@ -192,6 +204,7 @@ function editReducer(state: State = initialState, action: EditActions): State {
         hasError: true,
       };
     }
+
     default:
       return state;
   }

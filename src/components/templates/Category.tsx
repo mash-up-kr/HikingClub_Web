@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import styled, { css } from 'styled-components';
+import { useDispatch } from 'react-redux';
 
 import Header from 'components/modules/Header';
 import PublicText from 'components/atoms/PublicText';
 import CategoryCard from 'components/atoms/CategoryCard';
 import Button from 'components/atoms/Button';
+import { addCategory } from 'stores/actions/editActions';
 
 import { categoryData } from 'constants/category';
 
@@ -15,21 +17,30 @@ interface CategoryProps {
 
 function Category({ show = false, onClickCloseCategory }: CategoryProps) {
   const [cards, setCards] = useState(categoryData);
+  const dispatch = useDispatch();
 
-  const handleClick = useCallback(
+  const handleClickCard = useCallback(
     (id: number) => {
-      const newCards = [...cards];
-      const index = newCards.findIndex((card) => card.id === id);
+      const newCards = [...cards].map((card) => {
+        if (card.id === id) {
+          return { ...card, selected: true };
+        }
 
-      newCards[index] = {
-        ...newCards[index],
-        selected: !newCards[index].selected,
-      };
+        return { ...card, selected: false };
+      });
 
       setCards(newCards);
     },
     [cards]
   );
+
+  const handleClickCompleteButton = useCallback(() => {
+    const categoryId = cards.find((card) => card.selected)?.id || 0;
+
+    dispatch(addCategory({ categoryId }));
+
+    onClickCloseCategory();
+  }, [onClickCloseCategory, dispatch, cards]);
 
   return (
     <Container show={show}>
@@ -45,7 +56,7 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
           {cards.map((item) => (
             <CategoryCard
               key={item.id}
-              onClick={handleClick}
+              onClick={handleClickCard}
               id={item.id}
               selected={item.selected}
               name={item.name}
@@ -58,7 +69,11 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
         <OptionButton bgColor="#F9F9F9" color="" onClick={onClickCloseCategory}>
           취소
         </OptionButton>
-        <OptionButton bgColor="#2C7A50" color="#fff">
+        <OptionButton
+          bgColor="#2C7A50"
+          color="#fff"
+          onClick={handleClickCompleteButton}
+        >
           완료
         </OptionButton>
       </ButtonWrapper>{' '}

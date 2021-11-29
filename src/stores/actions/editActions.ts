@@ -39,6 +39,10 @@ interface RemoveSpotPayload {
   index: number;
 }
 
+interface AddCategoryPayload {
+  categoryId: number;
+}
+
 interface ChangeSpotTitlePayload {
   index: number;
   title: string;
@@ -118,6 +122,11 @@ export const removeSpot = actionCreator<
   RemoveSpotPayload
 >(ActionTypes.REMOVE_SPOT);
 
+export const addCategory = actionCreator<
+  ActionTypes.ADD_CATEGORY,
+  AddCategoryPayload
+>(ActionTypes.ADD_CATEGORY);
+
 export const changeSpotTitle = actionCreator<
   ActionTypes.CHANGE_SPOT_TITLE,
   ChangeSpotTitlePayload
@@ -192,6 +201,7 @@ export type EditActions =
   | ReturnType<typeof changeSpotTitle>
   | ReturnType<typeof changeSpotContent>
   | ReturnType<typeof initialize>
+  | ReturnType<typeof addCategory>
   | RequestCreateRoadAction
   | RequestCreateRoadSuccessAction
   | RequestCreateRoadErrorAction

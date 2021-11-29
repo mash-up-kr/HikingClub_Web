@@ -16,6 +16,7 @@ import {
   getImages,
   getRoadId,
   getSuccess,
+  getCategoryId,
 } from 'stores/selectors/editSelectors';
 import {
   initialize,
@@ -49,6 +50,7 @@ function MakeRoad() {
   const routes = useSelector(getRoutes);
   const spots = useSelector(getSpots);
   const images = useSelector(getImages);
+  const categoryId = useSelector(getCategoryId);
 
   const hasSuccess = useSelector(getSuccess);
   const successRoadId = useSelector(getRoadId);
@@ -76,11 +78,11 @@ function MakeRoad() {
         title,
         content,
         distance: 3,
+        categoryId,
         routes: routes
           .toArray()
           .map((route) => [route.longitude, route.latitude]),
         placeCode: '1123052',
-        categoryId: 1,
         spots: spots.toArray().map((spot) => ({
           title: spot.title,
           content: spot.content,
@@ -96,11 +98,11 @@ function MakeRoad() {
         title,
         content,
         distance: 3,
+        categoryId,
         routes: routes
           .toArray()
           .map((route) => [route.longitude, route.latitude]),
         placeCode: '1123052',
-        categoryId: 1,
         spots: spots.toArray().map((spot) => ({
           title: spot.title,
           content: spot.content,
@@ -122,6 +124,7 @@ function MakeRoad() {
     routes,
     spots,
     title,
+    categoryId,
   ]);
 
   useEffect(() => {

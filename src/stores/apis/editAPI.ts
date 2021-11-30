@@ -8,7 +8,7 @@ import {
 } from 'stores/actions/editActions';
 import { getEndpoint } from 'utils/requestUtils';
 
-export const crearteRoad = (payload: RequestCreateRoadPayload) => {
+export const createRoad = (payload: RequestCreateRoadPayload) => {
   return axios.post(`${getEndpoint()}/v1/apis/roads`, payload, {
     headers: {
       authorization:

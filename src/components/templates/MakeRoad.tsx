@@ -16,6 +16,8 @@ import {
   getImages,
   getRoadId,
   getSuccess,
+  getError,
+  getErrorMessage,
   getCategoryId,
 } from 'stores/selectors/editSelectors';
 import {
@@ -23,6 +25,7 @@ import {
   requestCreateRoad,
   requestUpdateRoad,
 } from 'stores/actions/editActions';
+import { openSnackbar } from 'stores/actions/layoutActions';
 import { getQueryParam } from 'utils/urlUtils';
 import Header from 'components/modules/Header';
 import RoadTitle from 'components/modules/RoadTitle';
@@ -53,6 +56,8 @@ function MakeRoad() {
   const categoryId = useSelector(getCategoryId);
 
   const hasSuccess = useSelector(getSuccess);
+  const hasError = useSelector(getError);
+  const errorMessage = useSelector(getErrorMessage);
   const successRoadId = useSelector(getRoadId);
 
   const [roadImages, setRoadImages] = useState<FormData | string[]>([]);
@@ -143,6 +148,12 @@ function MakeRoad() {
   useEffect(() => {
     dispatch(initialize());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (hasError) {
+      dispatch(openSnackbar({ type: 'error', message: errorMessage }));
+    }
+  }, [dispatch, errorMessage, hasError]);
 
   return (
     <Wrapper>

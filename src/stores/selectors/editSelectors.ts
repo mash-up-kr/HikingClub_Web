@@ -20,4 +20,9 @@ export const getRoadId = (state: RootState) => state.editReducer.roadId;
 
 export const getSuccess = (state: RootState) => state.editReducer.hasSuccess;
 
+export const getError = (state: RootState) => state.editReducer.hasError;
+
+export const getErrorMessage = (state: RootState) =>
+  state.editReducer.errorMessage;
+
 export const getCategoryId = (state: RootState) => state.editReducer.categoryId;

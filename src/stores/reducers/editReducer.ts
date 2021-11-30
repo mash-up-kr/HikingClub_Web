@@ -13,6 +13,7 @@ interface State extends Omit<RoadAttr, 'id'> {
   isFetching: boolean;
   hasSuccess: boolean;
   hasError: boolean;
+  errorMessage: string;
   roadId: string;
   categoryId: number;
 }
@@ -32,6 +33,7 @@ const initialState: State = {
   isFetching: false,
   hasSuccess: false,
   hasError: false,
+  errorMessage: '',
   roadId: '',
 };
 
@@ -178,6 +180,7 @@ function editReducer(state: State = initialState, action: EditActions): State {
         ...state,
         isFetching: false,
         hasError: true,
+        errorMessage: action.payload?.message?.[0],
       };
     }
     case ActionTypes.REQUEST_UPDATE_ROAD: {
@@ -202,6 +205,7 @@ function editReducer(state: State = initialState, action: EditActions): State {
         ...state,
         isFetching: false,
         hasError: true,
+        errorMessage: action.payload?.message?.[0],
       };
     }
 

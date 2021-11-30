@@ -11,7 +11,7 @@ export const createRoadEpic: Epic = (action$) =>
   action$.pipe(
     ofType(ActionTypes.REQUEST_CREATE_ROAD),
     mergeMap((action) => {
-      return from(editAPI.crearteRoad(action.payload)).pipe(
+      return from(editAPI.createRoad(action.payload)).pipe(
         map((result: any) => result.data?.data),
         map((payload) => ({
           type: ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
@@ -20,7 +20,7 @@ export const createRoadEpic: Epic = (action$) =>
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
-            payload,
+            payload: payload.response.data,
           })
         )
       );
@@ -40,7 +40,7 @@ export const updateRoadEpic: Epic = (action$) =>
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
-            payload,
+            payload: payload.response.data,
           })
         )
       );

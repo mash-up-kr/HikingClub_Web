@@ -22,7 +22,7 @@ export const getRoadEpic: Epic = (action$) =>
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_GET_ROAD_ERROR,
-            payload,
+            payload: payload.response.data,
           })
         )
       );
@@ -44,7 +44,7 @@ export const removeRoadEpic: Epic = (action$) =>
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_REMOVE_ROAD_ERROR,
-            payload,
+            payload: payload.response.data,
           })
         )
       );

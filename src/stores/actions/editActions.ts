@@ -151,10 +151,10 @@ export const requeastCreateRoadSuccess = actionCreator<
   RoadPOJO
 >(ActionTypes.REQUEST_CREATE_ROAD_SUCCESS);
 
-export const requeastCreateRoadError =
-  actionCreator<ActionTypes.REQUEST_CREATE_ROAD_ERROR>(
-    ActionTypes.REQUEST_CREATE_ROAD_ERROR
-  );
+export const requeastCreateRoadError = actionCreator<
+  ActionTypes.REQUEST_CREATE_ROAD_ERROR,
+  any
+>(ActionTypes.REQUEST_CREATE_ROAD_ERROR);
 
 export const requestUpdateRoad = actionCreator<
   ActionTypes.REQUEST_UPDATE_ROAD,
@@ -166,10 +166,10 @@ export const requestUpdateRoadSuccess = actionCreator<
   RoadPOJO
 >(ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS);
 
-export const requestUpdateRoadError =
-  actionCreator<ActionTypes.REQUEST_UPDATE_ROAD_ERROR>(
-    ActionTypes.REQUEST_UPDATE_ROAD_ERROR
-  );
+export const requestUpdateRoadError = actionCreator<
+  ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
+  any
+>(ActionTypes.REQUEST_UPDATE_ROAD_ERROR);
 
 export type RequestCreateRoadAction = ReturnType<typeof requestCreateRoad>;
 export type RequestCreateRoadSuccessAction = ReturnType<

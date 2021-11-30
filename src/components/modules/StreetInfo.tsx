@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-import Image from 'next/image';
+// import Image from 'next/image';
 import styled from 'styled-components';
 import Immutable from 'immutable';
 
-import Bookmark from '../../../public/images/bookmark.svg';
+// import Bookmark from '../../../public/images/bookmark.svg';
 import CategoryText from 'components/atoms/CategoryText';
 import Chip from 'components/atoms/Chip';
 import LocationText from 'components/atoms/LocationText';
@@ -72,7 +72,7 @@ const BottomCard: FC<StreetInfoProps> = (props) => {
           <div className="space" />
           <CategoryText icon={categoryIconUrl}>{category}</CategoryText>
         </div>
-        <Image src={Bookmark} alt="북마크" />
+        {/* <Image src={Bookmark} alt="북마크" /> */}
       </div>
 
       <div className="info">

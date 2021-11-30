@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { isNil } from 'lodash';
@@ -24,7 +23,6 @@ import Map, { MapRef } from 'components/atoms/Map';
 import Layout from 'components/Layout';
 import BottomSheet from 'components/templates/BottomSheet';
 import ImageDetail from 'components/modules/ImageDetail';
-import ReactionBox from 'components/modules/ReactionBox';
 import { Overlay, OverlayPosition } from 'components/modules/Overlay';
 
 interface BottomSheetWrapperProps {
@@ -34,7 +32,6 @@ interface BottomSheetWrapperProps {
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
   const isMounted = useMounted();
-  const router = useRouter();
 
   const imgDetail = useSelector(getImgDetail);
   const road = useSelector(getRoad);
@@ -90,14 +87,21 @@ const Detail: NextPage = () => {
         },
       });
     }
-    router.back();
-  }, [router]);
+  }, []);
 
   const handleClickReport = useCallback(() => {
     dispatch(
       openSnackbar({ type: 'error', message: '신고가 접수완료 되었습니다.' })
     );
   }, [dispatch]);
+
+  const handleClickClose = useCallback(() => {
+    if (window.webkit) {
+      window.webkit.messageHandlers.handler.postMessage({
+        function: 'close',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (isMounted) {
@@ -151,9 +155,12 @@ const Detail: NextPage = () => {
           <div className="mapWrapper" onClick={handleClickMapWrapper}>
             <Map ref={mapRef} />
           </div>
-          <ReactionBoxWrapper>
+          {/* <ReactionBoxWrapper>
             <ReactionBox />
-          </ReactionBoxWrapper>
+          </ReactionBoxWrapper> */}
+          <BackWrapper onClick={handleClickClose}>
+            <img src="/images/detail-back.png" alt="" />
+          </BackWrapper>
           <MenuWrapper ref={setTarget} onClick={handleClickMenu}>
             <img src="/images/menu.png" alt="" />
           </MenuWrapper>
@@ -217,11 +224,26 @@ export const MapContainer = styled.div`
   }
 `;
 
-const ReactionBoxWrapper = styled.div`
+// const ReactionBoxWrapper = styled.div`
+//   position: absolute;
+//   bottom: 8px;
+//   right: 14px;
+//   z-index: 1000;
+// `;
+
+const BackWrapper = styled.div`
   position: absolute;
-  bottom: 8px;
-  right: 14px;
-  z-index: 1000;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  z-index: 10000;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const MenuWrapper = styled.div`

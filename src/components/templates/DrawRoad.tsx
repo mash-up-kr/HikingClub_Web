@@ -27,6 +27,7 @@ import { MouseEvent } from 'services/KakaoMapService';
 import useMounted from 'hooks/useMounted';
 import SpotModel from 'models/Spot';
 import { requestMapTimeout } from 'constants/requestTimeout';
+import { getQueryParam } from 'utils/urlUtils';
 import { getRootElement } from 'utils/domUtils';
 import Header from 'components/modules/Header';
 import Map, { MapRef } from 'components/atoms/Map';
@@ -463,6 +464,18 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
             firstRoutes.longitude
           );
         }, requestMapTimeout);
+      } else {
+        const latitude = getQueryParam('lat');
+        const longitude = getQueryParam('long');
+
+        if (!isNil(latitude) && !isNil(longitude)) {
+          setTimeout(() => {
+            mapRef.current?.mapServiceRef.current?.moveTo(
+              Number(latitude),
+              Number(longitude)
+            );
+          }, requestMapTimeout);
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

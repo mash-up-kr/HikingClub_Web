@@ -7,6 +7,10 @@ class AuthStorageService {
   token: string | null = null;
 
   getCookie(key: string) {
+    if (typeof window === 'undefined' || !window || !window.document) {
+      return null;
+    }
+
     const cookieParts = `; ${document.cookie}`.split(`; ${key}=`);
     if (cookieParts.length >= 2) {
       return cookieParts.pop()!.split(';').shift() ?? null;

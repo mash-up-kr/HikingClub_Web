@@ -6,13 +6,13 @@ import {
   RequestCreateRoadPayload,
   RequestUpdateRoadPayload,
 } from 'stores/actions/editActions';
+import AuthStorageService from 'services/AuthStorageService';
 import { getEndpoint } from 'utils/requestUtils';
 
 export const createRoad = (payload: RequestCreateRoadPayload) => {
   return axios.post(`${getEndpoint()}/v1/apis/roads`, payload, {
     headers: {
-      authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG5hdmVyLmNvbSIsInN1YiI6IjgiLCJpYXQiOjE2MzY4MjEzNDcsImV4cCI6MTYzOTQxMzM0N30.jQPZ2hZ27ka3QSeM2BJVFFk80_f6WE1rjT0u69vd5hY',
+      authorization: `Bearer ${AuthStorageService.getToken()}`,
     },
   });
 };
@@ -26,8 +26,7 @@ export const updateRoad = (payload: RequestUpdateRoadPayload) => {
     },
     {
       headers: {
-        authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQG5hdmVyLmNvbSIsInN1YiI6IjgiLCJpYXQiOjE2MzY4MjEzNDcsImV4cCI6MTYzOTQxMzM0N30.jQPZ2hZ27ka3QSeM2BJVFFk80_f6WE1rjT0u69vd5hY',
+        authorization: `Bearer ${AuthStorageService.getToken()}`,
       },
     }
   );

@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash';
 const TOKEN = 'USER_TOKEN';
 
 class AuthStorageService {
-  token: string | null = '';
+  token: string | null = null;
 
   getCookie(key: string) {
     const cookieParts = `; ${document.cookie}`.split(`; ${key}=`);

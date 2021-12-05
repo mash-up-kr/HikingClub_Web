@@ -1,7 +1,7 @@
 /* External dependencies */
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { isNil } from 'lodash';
@@ -16,6 +16,7 @@ import {
 } from 'stores/selectors/roadSelectors';
 import { requestGetRoad, requestRemoveRoad } from 'stores/actions/roadActions';
 import { setRoad } from 'stores/actions/editActions';
+import AuthStorageService from 'services/AuthStorageService';
 import useMounted from 'hooks/useMounted';
 import { requestMapTimeout } from 'constants/requestTimeout';
 import { getQueryParam } from 'utils/urlUtils';
@@ -31,6 +32,7 @@ interface BottomSheetWrapperProps {
 
 const Detail: NextPage = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const isMounted = useMounted();
 
   const imgDetail = useSelector(getImgDetail);
@@ -68,11 +70,28 @@ const Detail: NextPage = () => {
   }, []);
 
   const handleClickEdit = useCallback(() => {
+    const token = AuthStorageService.getToken();
+    if (isNil(token)) {
+      dispatch(
+        openSnackbar({ type: 'error', message: '로그인이 필요한 서비스입니다' })
+      );
+      return;
+    }
     dispatch(setRoad({ road }));
-  }, [dispatch, road]);
+    router.push(`/edit?roadId=${roadId}`);
+  }, [dispatch, road, roadId, router]);
 
   const handleRemoveRoad = useCallback(() => {
     const roadIdFromQueryParam = getQueryParam('roadId');
+    const token = AuthStorageService.getToken();
+
+    if (isNil(token)) {
+      dispatch(
+        openSnackbar({ type: 'error', message: '로그인이 필요한 서비스입니다' })
+      );
+      return;
+    }
+
     if (!isNil(roadIdFromQueryParam)) {
       dispatch(requestRemoveRoad({ roadId: roadIdFromQueryParam }));
     }
@@ -171,9 +190,7 @@ const Detail: NextPage = () => {
             placement={OverlayPosition.BottomRight}
           >
             <MenuList>
-              <MenuItem onClick={handleClickEdit}>
-                <Link href={`/edit?roadId=${roadId}`}>수정하기</Link>
-              </MenuItem>
+              <MenuItem onClick={handleClickEdit}>수정하기</MenuItem>
               <MenuItem onClick={handleRemoveRoad}>삭제하기</MenuItem>
               <MenuItem onClick={handleClickShare}>공유하기</MenuItem>
               <MenuItem onClick={handleClickReport}>신고하기</MenuItem>

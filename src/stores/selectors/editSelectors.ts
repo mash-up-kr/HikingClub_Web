@@ -18,6 +18,8 @@ export const getImages = (state: RootState) => state.editReducer.images;
 
 export const getRoadId = (state: RootState) => state.editReducer.roadId;
 
+export const getFetching = (state: RootState) => state.editReducer.isFetching;
+
 export const getSuccess = (state: RootState) => state.editReducer.hasSuccess;
 
 export const getError = (state: RootState) => state.editReducer.hasError;

@@ -28,6 +28,16 @@ function RoadHashTag() {
     [dispatch, hashTag]
   );
 
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        dispatch(addHashTag({ hashTag }));
+        setHashTag('');
+      }
+    },
+    [dispatch, hashTag]
+  );
+
   const handleRemovehashTag = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       const { hashtag: currentHashTag } = event.currentTarget.dataset;
@@ -39,7 +49,12 @@ function RoadHashTag() {
   return (
     <Wrapper>
       <Title>태그</Title>
-      <Input value={hashTag} leftContent="#" onChange={handleChangeHashTag} />
+      <Input
+        value={hashTag}
+        leftContent="#"
+        onChange={handleChangeHashTag}
+        onKeyDown={handleKeyDown}
+      />
       <HashTagListWrapper>
         {hashTags.size === 0 ? (
           <EmptyDescription>

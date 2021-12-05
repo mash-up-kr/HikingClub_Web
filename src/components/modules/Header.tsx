@@ -6,6 +6,7 @@ interface HeaderProps {
   title: string;
   showBackIcon?: boolean;
   showCloseIcon?: boolean;
+  className?: string;
   onClickBack?: () => void;
   onClickClose?: () => void;
 }
@@ -14,11 +15,12 @@ function Header({
   title,
   showBackIcon = false,
   showCloseIcon = false,
+  className,
   onClickBack = noop,
   onClickClose = noop,
 }: HeaderProps) {
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       {showBackIcon && (
         <BackWrapper onClick={onClickBack}>
           <BackIcon src="/images/back-icon.png" />

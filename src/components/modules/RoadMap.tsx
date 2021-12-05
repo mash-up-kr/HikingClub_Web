@@ -7,6 +7,7 @@ import { isNil } from 'lodash';
 /* Internal dependencies */
 import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import { requestMapTimeout } from 'constants/requestTimeout';
+import { getQueryParam } from 'utils/urlUtils';
 import DrawRoad from 'components/templates/DrawRoad';
 import Map, { MapRef } from 'components/atoms/Map';
 
@@ -53,6 +54,18 @@ function RoadMap() {
             firstRoutes.longitude
           );
         }, requestMapTimeout);
+      } else {
+        const latitude = getQueryParam('lat');
+        const longitude = getQueryParam('long');
+
+        if (!isNil(latitude) && !isNil(longitude)) {
+          setTimeout(() => {
+            mapRef.current?.mapServiceRef.current?.moveTo(
+              Number(latitude),
+              Number(longitude)
+            );
+          }, requestMapTimeout);
+        }
       }
     }
   }, [enableDrawRoad, routes]);

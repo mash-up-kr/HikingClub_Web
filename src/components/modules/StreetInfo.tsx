@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 // import Image from 'next/image';
 import styled from 'styled-components';
@@ -60,9 +60,20 @@ const BottomCard: FC<StreetInfoProps> = (props) => {
 
   const walkingTimePerKm = 16;
   const walkingTime = distance * walkingTimePerKm;
-  const categoryIconUrl =
-    categoryData.find((el) => el.name === category)?.imgUrl ||
-    categoryData[0].imgUrl;
+
+  const categoryIconUrl = useMemo(
+    () =>
+      categoryData.find((el) => el.key === category)?.imgUrl ??
+      categoryData[0].imgUrl,
+    [category]
+  );
+
+  const categoryText = useMemo(
+    () =>
+      categoryData.find((el) => el.key === category)?.name ??
+      categoryData[0].name,
+    [category]
+  );
 
   return (
     <BottomCardWrapper>
@@ -70,7 +81,7 @@ const BottomCard: FC<StreetInfoProps> = (props) => {
         <div className="textArea">
           <PublicText>{title}</PublicText>
           <div className="space" />
-          <CategoryText icon={categoryIconUrl}>{category}</CategoryText>
+          <CategoryText icon={categoryIconUrl}>{categoryText}</CategoryText>
         </div>
         {/* <Image src={Bookmark} alt="북마크" /> */}
       </div>

@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import { isEmpty, isNil } from 'lodash';
 
@@ -52,7 +51,6 @@ enum DrawMode {
 
 function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const dispatch = useDispatch();
-  const router = useRouter();
   const isMounted = useMounted();
 
   const routes = useSelector(getRoutes);
@@ -170,15 +168,6 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     setAddresses((prev) => prev.slice(0, prev.length - 1));
     mapRef.current?.mapServiceRef.current?.removeLastLine();
   }, [dispatch]);
-
-  const handleClickClose = useCallback(() => {
-    if (window.webkit) {
-      window.webkit.messageHandlers.handler.postMessage({
-        function: 'close',
-      });
-    }
-    router.back();
-  }, [router]);
 
   const handleClickSpot = useCallback((spot: SpotModel, index: number) => {
     mapRef.current?.mapServiceRef.current?.moveTo(
@@ -358,13 +347,7 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
   const DrawRoadComponent = useMemo(
     () => (
       <Container show={show}>
-        <Header
-          title="길 그리기"
-          showBackIcon
-          showCloseIcon
-          onClickBack={onClickBack}
-          onClickClose={handleClickClose}
-        />
+        <Header title="길 그리기" showBackIcon onClickBack={onClickBack} />
         <MapWrapper>
           <Map ref={mapRef} onClickMap={handkleClickMap} />
           <MapOptioWrapper>
@@ -411,7 +394,6 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
       SpotModeComponent,
       handkleClickMap,
       handleClickClearRoad,
-      handleClickClose,
       handleClickMode,
       handleClickRevertRoad,
       isFocus,

@@ -157,7 +157,7 @@ function MakeRoad() {
 
   return (
     <Wrapper>
-      <Header
+      <RoadHeader
         title="길 등록하기"
         showCloseIcon
         onClickClose={handleClickClose}
@@ -182,6 +182,14 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+`;
+
+const RoadHeader = styled(Header)`
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100000;
 `;
 
 const ItemWrapper = styled.div`

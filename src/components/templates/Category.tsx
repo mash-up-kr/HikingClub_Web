@@ -47,8 +47,7 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
       <Header
         title="카테고리 선택"
         showBackIcon
-        showCloseIcon
-        onClickClose={onClickCloseCategory}
+        onClickBack={onClickCloseCategory}
       />
       <CategoryWrapper>
         <PublicText>카테고리를 선택해 주세요.</PublicText>
@@ -102,7 +101,7 @@ const Container = styled.div<{ show: boolean }>`
       transform: translateY(0%);
     `}
 
-  z-index: 100;
+  z-index: 1000000;
 `;
 
 const CategoryWrapper = styled.div`

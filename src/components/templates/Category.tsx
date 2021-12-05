@@ -56,7 +56,7 @@ function Category({ show = false, onClickCloseCategory }: CategoryProps) {
           {cards.map((item) => (
             <CategoryCard
               key={item.id}
-              onClick={handleClickCard}
+              onClick={() => handleClickCard(item.id)}
               id={item.id}
               selected={item.selected}
               name={item.name}

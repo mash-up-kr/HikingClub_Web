@@ -14,6 +14,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 function Input(
@@ -28,6 +29,7 @@ function Input(
     onChange = noop,
     onFocus = noop,
     onBlur = noop,
+    onKeyDown = noop,
   }: InputProps,
   forwardedRef: Ref<HTMLInputElement>
 ) {
@@ -42,6 +44,7 @@ function Input(
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
       />
       {!isEmpty(rightContent) && <PreContent>{rightContent}</PreContent>}
       {rightAngleBracket && (

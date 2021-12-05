@@ -88,7 +88,7 @@ const BottomCard: FC<StreetInfoProps> = (props) => {
         {tags.map((item, index) => {
           return (
             <div key={index} className="tagContainer">
-              <Chip text={item} />
+              <Chip text={`#${item}`} />
             </div>
           );
         })}

@@ -1,7 +1,9 @@
 /* External dependencies */
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 /* Internal dependencies */
+import { getFetching } from 'stores/selectors/editSelectors';
 import Button from 'components/atoms/Button';
 
 interface RoadSubmitProps {
@@ -9,7 +11,12 @@ interface RoadSubmitProps {
 }
 
 function RoadSubmit({ onSubmit }: RoadSubmitProps) {
-  return <SubmitButton onClick={onSubmit}>완료</SubmitButton>;
+  const isFetching = useSelector(getFetching);
+  return (
+    <SubmitButton onClick={onSubmit} loading={isFetching}>
+      완료
+    </SubmitButton>
+  );
 }
 
 const SubmitButton = styled(Button)`

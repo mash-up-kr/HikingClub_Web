@@ -102,7 +102,7 @@ const Detail: NextPage = () => {
       window.webkit.messageHandlers.handler.postMessage({
         function: 'share',
         data: {
-          url: 'https://naver.com',
+          url: window.location.href,
         },
       });
     }

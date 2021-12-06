@@ -14,8 +14,11 @@ export const createRoadEpic: Epic = (action$) =>
       return from(editAPI.createRoad(action.payload)).pipe(
         map((result: any) => result.data),
         map((data) => {
-          if (data?.resCode === 'FAILED_AUTHORIZATION') {
-            if (window.webkit) {
+          if (
+            data?.resCode === 'FAILED_AUTHORIZATION' ||
+            data?.resCode === 'NOT_AUTHORIZED_EDIT'
+          ) {
+            if (data?.resCode === 'FAILED_AUTHORIZATION' && window.webkit) {
               window.webkit.messageHandlers.handler.postMessage({
                 function: 'expire_token',
               });
@@ -50,8 +53,11 @@ export const updateRoadEpic: Epic = (action$) =>
       return from(editAPI.updateRoad(action.payload)).pipe(
         map((result: any) => result.data),
         map((data) => {
-          if (data?.resCode === 'FAILED_AUTHORIZATION') {
-            if (window.webkit) {
+          if (
+            data?.resCode === 'FAILED_AUTHORIZATION' ||
+            data?.resCode === 'NOT_AUTHORIZED_EDIT'
+          ) {
+            if (data?.resCode === 'FAILED_AUTHORIZATION' && window.webkit) {
               window.webkit.messageHandlers.handler.postMessage({
                 function: 'expire_token',
               });

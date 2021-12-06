@@ -36,11 +36,31 @@ export const removeRoadEpic: Epic = (action$) =>
       const { roadId } = action.payload;
 
       return from(roadAPI.removeRoad({ roadId })).pipe(
-        map((result: any) => result.data?.data),
-        map((payload) => ({
-          type: ActionTypes.REQUEST_REMOVE_ROAD_SUCCESS,
-          payload,
-        })),
+        map((result: any) => result.data),
+        map((data) => {
+          if (
+            data?.resCode === 'FAILED_AUTHORIZATION' ||
+            data?.resCode === 'NOT_AUTHORIZED_EDIT' ||
+            data?.resCode === 'NOT_AUTHORIZED_DELETE'
+          ) {
+            if (data?.resCode === 'FAILED_AUTHORIZATION' && window.webkit) {
+              window.webkit.messageHandlers.handler.postMessage({
+                function: 'expire_token',
+              });
+            }
+
+            return {
+              type: ActionTypes.REQUEST_REMOVE_ROAD_ERROR,
+              payload: {
+                message: [data?.message],
+              },
+            };
+          }
+          return {
+            type: ActionTypes.REQUEST_REMOVE_ROAD_SUCCESS,
+            payload: data?.data,
+          };
+        }),
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_REMOVE_ROAD_ERROR,

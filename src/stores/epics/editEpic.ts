@@ -12,11 +12,21 @@ export const createRoadEpic: Epic = (action$) =>
     ofType(ActionTypes.REQUEST_CREATE_ROAD),
     mergeMap((action) => {
       return from(editAPI.createRoad(action.payload)).pipe(
-        map((result: any) => result.data?.data),
-        map((payload) => ({
-          type: ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
-          payload,
-        })),
+        map((result: any) => result.data),
+        map((data) => {
+          if (data?.resCode === 'FAILED_AUTHORIZATION') {
+            return {
+              type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
+              payload: {
+                message: [data?.message],
+              },
+            };
+          }
+          return {
+            type: ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
+            payload: data?.data,
+          };
+        }),
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
@@ -32,11 +42,21 @@ export const updateRoadEpic: Epic = (action$) =>
     ofType(ActionTypes.REQUEST_UPDATE_ROAD),
     mergeMap((action) => {
       return from(editAPI.updateRoad(action.payload)).pipe(
-        map((result: any) => result.data?.data),
-        map((payload) => ({
-          type: ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS,
-          payload,
-        })),
+        map((result: any) => result.data),
+        map((data) => {
+          if (data?.resCode === 'FAILED_AUTHORIZATION') {
+            return {
+              type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
+              payload: {
+                message: [data?.message],
+              },
+            };
+          }
+          return {
+            type: ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS,
+            payload: data?.data,
+          };
+        }),
         catchError((payload) =>
           of({
             type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,

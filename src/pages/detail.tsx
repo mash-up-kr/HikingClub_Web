@@ -177,11 +177,21 @@ const Detail: NextPage = () => {
           {/* <ReactionBoxWrapper>
             <ReactionBox />
           </ReactionBoxWrapper> */}
-          <BackWrapper onClick={handleClickClose}>
-            <img src="/images/detail-back.png" alt="" />
-          </BackWrapper>
-          <MenuWrapper ref={setTarget} onClick={handleClickMenu}>
-            <img src="/images/menu.png" alt="" />
+          {bottomSheetStatus !== 2 && (
+            <BackWrapper onClick={handleClickClose}>
+              <img src="/images/detail-back.png" alt="" />
+            </BackWrapper>
+          )}
+          <MenuWrapper
+            ref={setTarget}
+            onClick={handleClickMenu}
+            isBottomSheetUp={bottomSheetStatus === 2}
+          >
+            {bottomSheetStatus !== 2 ? (
+              <img src="/images/menu.png" alt="" />
+            ) : (
+              <img src="/images/menu-noline.png" alt="" />
+            )}
           </MenuWrapper>
           <Overlay
             show={showMenum}
@@ -263,7 +273,7 @@ const BackWrapper = styled.div`
   }
 `;
 
-const MenuWrapper = styled.div`
+const MenuWrapper = styled.div<{ isBottomSheetUp: boolean }>`
   position: absolute;
   top: 10px;
   right: 10px;
@@ -276,6 +286,15 @@ const MenuWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+
+  ${({ isBottomSheetUp }) =>
+    isBottomSheetUp &&
+    css`
+      top: 14px;
+      right: 14px;
+      width: 20px;
+      height: 20px;
+    `}
 `;
 
 const MenuList = styled.ul`

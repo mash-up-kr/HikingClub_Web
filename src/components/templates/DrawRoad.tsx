@@ -713,7 +713,7 @@ const Route = styled.p`
   white-space: nowrap;
 `;
 
-const LeftRouteContent = styled.p`
+const LeftRouteContent = styled.div`
   display: flex;
   justify-content: center;
   min-width: 42px;

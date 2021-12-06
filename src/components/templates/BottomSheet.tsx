@@ -118,11 +118,13 @@ const TopStrokeWrapper = styled.div`
   position: sticky;
   top: 0;
   padding: 16px;
+  box-sizing: border-box;
+  background-color: white;
 `;
 
 const TopStroke = styled.img`
-  width: 18.5px;
-  height: 8.5px;
+  width: 15.87px;
+  height: 8.68px;
 `;
 
 const StreetInfoWrapper = styled.div`

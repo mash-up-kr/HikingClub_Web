@@ -15,6 +15,12 @@ export const createRoadEpic: Epic = (action$) =>
         map((result: any) => result.data),
         map((data) => {
           if (data?.resCode === 'FAILED_AUTHORIZATION') {
+            if (window.webkit) {
+              window.webkit.messageHandlers.handler.postMessage({
+                function: 'expire_token',
+              });
+            }
+
             return {
               type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
               payload: {
@@ -45,6 +51,12 @@ export const updateRoadEpic: Epic = (action$) =>
         map((result: any) => result.data),
         map((data) => {
           if (data?.resCode === 'FAILED_AUTHORIZATION') {
+            if (window.webkit) {
+              window.webkit.messageHandlers.handler.postMessage({
+                function: 'expire_token',
+              });
+            }
+
             return {
               type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
               payload: {

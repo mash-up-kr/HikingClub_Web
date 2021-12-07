@@ -16,6 +16,11 @@ interface State extends Omit<RoadAttr, 'id'> {
   errorMessage: string;
   roadId: string;
   categoryId: number;
+  placeCode: string;
+
+  isFetchingPlaces: boolean;
+  hasSuccessPlaces: boolean;
+  hasErrorPlaces: boolean;
 }
 
 const initialState: State = {
@@ -24,17 +29,23 @@ const initialState: State = {
   distance: 0,
   place: null,
   category: '',
-  categoryId: 0,
   routes: List(),
   spots: List(),
   images: List(),
   hashtags: OrderedSet(),
+  isMine: false,
 
   isFetching: false,
   hasSuccess: false,
   hasError: false,
   errorMessage: '',
   roadId: '',
+  categoryId: 0,
+  placeCode: '',
+
+  isFetchingPlaces: false,
+  hasSuccessPlaces: false,
+  hasErrorPlaces: false,
 };
 
 function editReducer(state: State = initialState, action: EditActions): State {
@@ -206,6 +217,28 @@ function editReducer(state: State = initialState, action: EditActions): State {
         isFetching: false,
         hasError: true,
         errorMessage: action.payload?.message?.[0],
+      };
+    }
+    case ActionTypes.REQUEST_GET_PLACES: {
+      return {
+        ...state,
+        isFetchingPlaces: true,
+        hasErrorPlaces: false,
+      };
+    }
+    case ActionTypes.REQUEST_GET_PLACES_SUCCESS: {
+      return {
+        ...state,
+        placeCode: action.payload[0].code,
+        isFetchingPlaces: false,
+        hasSuccessPlaces: true,
+      };
+    }
+    case ActionTypes.REQUEST_GET_PLACES_ERROR: {
+      return {
+        ...state,
+        isFetchingPlaces: false,
+        hasErrorPlaces: true,
       };
     }
 

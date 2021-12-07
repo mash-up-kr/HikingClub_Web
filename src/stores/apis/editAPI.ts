@@ -5,6 +5,7 @@ import axios from 'axios';
 import {
   RequestCreateRoadPayload,
   RequestUpdateRoadPayload,
+  RequestGetPlacesPayload,
 } from 'stores/actions/editActions';
 import AuthStorageService from 'services/AuthStorageService';
 import { getEndpoint } from 'utils/requestUtils';
@@ -29,5 +30,11 @@ export const updateRoad = (payload: RequestUpdateRoadPayload) => {
         authorization: `Bearer ${AuthStorageService.getToken()}`,
       },
     }
+  );
+};
+
+export const getPlaces = ({ latitude, longitude }: RequestGetPlacesPayload) => {
+  return axios.get(
+    `${getEndpoint()}/v1/apis/places?position_y=${latitude}&position_x=${longitude}`
   );
 };

@@ -19,6 +19,7 @@ import {
   getError,
   getErrorMessage,
   getCategoryId,
+  getPlaceCode,
 } from 'stores/selectors/editSelectors';
 import {
   initialize,
@@ -48,12 +49,14 @@ function MakeRoad() {
 
   const title = useSelector(getTitle);
   const content = useSelector(getContent);
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const distance = useSelector(getDistance);
   const hashtags = useSelector(getHashTags);
   const routes = useSelector(getRoutes);
   const spots = useSelector(getSpots);
   const images = useSelector(getImages);
   const categoryId = useSelector(getCategoryId);
+  const placeCode = useSelector(getPlaceCode);
 
   const hasSuccess = useSelector(getSuccess);
   const hasError = useSelector(getError);
@@ -87,7 +90,7 @@ function MakeRoad() {
         routes: routes
           .toArray()
           .map((route) => [route.longitude, route.latitude]),
-        placeCode: '1123052',
+        placeCode,
         spots: spots.toArray().map((spot) => ({
           title: spot.title,
           content: spot.content,
@@ -107,7 +110,7 @@ function MakeRoad() {
         routes: routes
           .toArray()
           .map((route) => [route.longitude, route.latitude]),
-        placeCode: '1123052',
+        placeCode,
         spots: spots.toArray().map((spot) => ({
           title: spot.title,
           content: spot.content,
@@ -120,16 +123,16 @@ function MakeRoad() {
       dispatch(requestCreateRoad(payload));
     }
   }, [
+    roadId,
+    title,
     content,
-    dispatch,
-    distance,
+    categoryId,
+    routes,
+    placeCode,
+    spots,
     hashtags,
     images,
-    roadId,
-    routes,
-    spots,
-    title,
-    categoryId,
+    dispatch,
   ]);
 
   useEffect(() => {
@@ -147,6 +150,10 @@ function MakeRoad() {
 
   useEffect(() => {
     dispatch(initialize());
+
+    return () => {
+      dispatch(initialize());
+    };
   }, [dispatch]);
 
   useEffect(() => {

@@ -78,6 +78,17 @@ export interface RequestUpdateRoadPayload {
   hashtags: string[];
 }
 
+export interface RequestGetPlacesPayload {
+  latitude: number;
+  longitude: number;
+}
+
+export interface RequestGetPlacesSuccessPayload {
+  [index: number]: {
+    code: string;
+  };
+}
+
 export const setRoad = actionCreator<ActionTypes.SET_ROAD, SetRoadPayload>(
   ActionTypes.SET_ROAD
 );
@@ -146,12 +157,12 @@ export const requestCreateRoad = actionCreator<
   RequestCreateRoadPayload
 >(ActionTypes.REQUEST_CREATE_ROAD);
 
-export const requeastCreateRoadSuccess = actionCreator<
+export const requestCreateRoadSuccess = actionCreator<
   ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
   RoadPOJO
 >(ActionTypes.REQUEST_CREATE_ROAD_SUCCESS);
 
-export const requeastCreateRoadError = actionCreator<
+export const requestCreateRoadError = actionCreator<
   ActionTypes.REQUEST_CREATE_ROAD_ERROR,
   any
 >(ActionTypes.REQUEST_CREATE_ROAD_ERROR);
@@ -171,12 +182,27 @@ export const requestUpdateRoadError = actionCreator<
   any
 >(ActionTypes.REQUEST_UPDATE_ROAD_ERROR);
 
+export const requestGetPlaces = actionCreator<
+  ActionTypes.REQUEST_GET_PLACES,
+  RequestGetPlacesPayload
+>(ActionTypes.REQUEST_GET_PLACES);
+
+export const requestGetPlacesSuccess = actionCreator<
+  ActionTypes.REQUEST_GET_PLACES_SUCCESS,
+  RequestGetPlacesSuccessPayload
+>(ActionTypes.REQUEST_GET_PLACES_SUCCESS);
+
+export const requestGetPlacesError =
+  actionCreator<ActionTypes.REQUEST_GET_PLACES_ERROR>(
+    ActionTypes.REQUEST_GET_PLACES_ERROR
+  );
+
 export type RequestCreateRoadAction = ReturnType<typeof requestCreateRoad>;
 export type RequestCreateRoadSuccessAction = ReturnType<
-  typeof requeastCreateRoadSuccess
+  typeof requestCreateRoadSuccess
 >;
 export type RequestCreateRoadErrorAction = ReturnType<
-  typeof requeastCreateRoadError
+  typeof requestCreateRoadError
 >;
 
 export type RequestUpdateRoadAction = ReturnType<typeof requestUpdateRoad>;
@@ -185,6 +211,14 @@ export type RequestUpdateRoadSuccessAction = ReturnType<
 >;
 export type RequestUpdateRoadErrorAction = ReturnType<
   typeof requestUpdateRoadError
+>;
+
+export type RequestGetPlacesAction = ReturnType<typeof requestGetPlaces>;
+export type RequestGetPlacesSuccessAction = ReturnType<
+  typeof requestGetPlacesSuccess
+>;
+export type RequestGetPlacesErrorAction = ReturnType<
+  typeof requestGetPlacesError
 >;
 
 export type EditActions =
@@ -207,4 +241,7 @@ export type EditActions =
   | RequestCreateRoadErrorAction
   | RequestUpdateRoadAction
   | RequestUpdateRoadSuccessAction
-  | RequestUpdateRoadErrorAction;
+  | RequestUpdateRoadErrorAction
+  | RequestGetPlacesAction
+  | RequestGetPlacesSuccessAction
+  | RequestGetPlacesErrorAction;

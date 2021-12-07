@@ -226,12 +226,9 @@ const Detail: NextPage = () => {
   );
 };
 
-Detail.getInitialProps = wrapper.getInitialPageProps((store) => (ctx) => {
+Detail.getInitialProps = wrapper.getInitialPageProps(() => () => {
   // SSR
   // 여기서 [id] 를 이용해 action dispatch 한 후 컴포넌트에서 Selector로 받아올 수 있음
-
-  const roadId: any = ctx.query.id;
-  store.dispatch(requestGetRoad({ roadId }));
 });
 
 export const Wrapper = styled.div`

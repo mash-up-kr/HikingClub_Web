@@ -28,3 +28,5 @@ export const getErrorMessage = (state: RootState) =>
   state.editReducer.errorMessage;
 
 export const getCategoryId = (state: RootState) => state.editReducer.categoryId;
+
+export const getPlaceCode = (state: RootState) => state.editReducer.placeCode;

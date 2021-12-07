@@ -5,6 +5,14 @@ import { mergeMap, map, catchError } from 'rxjs/operators';
 
 /* Internal dependencies */
 import ActionTypes from 'stores/ActionTypes';
+import {
+  requestCreateRoadSuccess,
+  requestCreateRoadError,
+  requestUpdateRoadSuccess,
+  requestUpdateRoadError,
+  requestGetPlacesSuccess,
+  requestGetPlacesError,
+} from 'stores/actions/editActions';
 import * as editAPI from 'stores/apis/editAPI';
 
 export const createRoadEpic: Epic = (action$) =>
@@ -24,23 +32,12 @@ export const createRoadEpic: Epic = (action$) =>
               });
             }
 
-            return {
-              type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
-              payload: {
-                message: [data?.message],
-              },
-            };
+            return requestCreateRoadError({ message: [data?.message] });
           }
-          return {
-            type: ActionTypes.REQUEST_CREATE_ROAD_SUCCESS,
-            payload: data?.data,
-          };
+          return requestCreateRoadSuccess(data?.data);
         }),
         catchError((payload) =>
-          of({
-            type: ActionTypes.REQUEST_CREATE_ROAD_ERROR,
-            payload: payload.response.data,
-          })
+          of(requestCreateRoadError(payload.response.data))
         )
       );
     })
@@ -63,26 +60,29 @@ export const updateRoadEpic: Epic = (action$) =>
               });
             }
 
-            return {
-              type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
-              payload: {
-                message: [data?.message],
-              },
-            };
+            return requestUpdateRoadError({ message: [data?.message] });
           }
-          return {
-            type: ActionTypes.REQUEST_UPDATE_ROAD_SUCCESS,
-            payload: data?.data,
-          };
+          return requestUpdateRoadSuccess(data?.data);
         }),
         catchError((payload) =>
-          of({
-            type: ActionTypes.REQUEST_UPDATE_ROAD_ERROR,
-            payload: payload.response.data,
-          })
+          of(requestUpdateRoadError(payload.response.data))
         )
       );
     })
   );
 
-export default combineEpics(createRoadEpic, updateRoadEpic);
+export const getPlacesEpic: Epic = (action$) =>
+  action$.pipe(
+    ofType(ActionTypes.REQUEST_GET_PLACES),
+    mergeMap((action) => {
+      return from(editAPI.getPlaces(action.payload)).pipe(
+        map((result: any) => result.data?.data),
+        map((payload) => requestGetPlacesSuccess(payload)),
+        catchError((payload) =>
+          of(requestGetPlacesError(payload.response.data))
+        )
+      );
+    })
+  );
+
+export default combineEpics(createRoadEpic, updateRoadEpic, getPlacesEpic);

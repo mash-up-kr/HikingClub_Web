@@ -20,6 +20,7 @@ import {
   removeSpot,
   changeSpotTitle,
   changeSpotContent,
+  requestGetPlaces,
 } from 'stores/actions/editActions';
 import { getRoutes, getSpots } from 'stores/selectors/editSelectors';
 import { MouseEvent } from 'services/KakaoMapService';
@@ -462,6 +463,23 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
+
+  useEffect(() => {
+    if (routes.size === 1) {
+      const firstRoutes = routes.get(0)!;
+
+      dispatch(requestGetPlaces(firstRoutes.toObject()));
+    }
+  }, [dispatch, routes]);
+
+  useEffect(() => {
+    const firstRoutes = routes.get(0);
+
+    if (!isNil(firstRoutes)) {
+      dispatch(requestGetPlaces(firstRoutes.toObject()));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!isMounted) {
     return null;

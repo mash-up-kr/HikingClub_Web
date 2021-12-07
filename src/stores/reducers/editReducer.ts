@@ -33,6 +33,7 @@ const initialState: State = {
   spots: List(),
   images: List(),
   hashtags: OrderedSet(),
+  isMine: false,
 
   isFetching: false,
   hasSuccess: false,

@@ -16,14 +16,19 @@ export interface RoadPOJO {
   spots: SpotPOJO[];
   images: string[];
   hashtags: string[];
+  is_mine: boolean;
 }
 
 export interface RoadAttr
-  extends Omit<RoadPOJO, 'routes' | 'spots' | 'images' | 'hashtags'> {
+  extends Omit<
+    RoadPOJO,
+    'routes' | 'spots' | 'images' | 'hashtags' | 'is_mine'
+  > {
   routes: List<Route>;
   spots: List<Spot>;
   images: List<string>;
   hashtags: OrderedSet<string>;
+  isMine: boolean;
 }
 
 const RoadRecord = Record<RoadAttr>({
@@ -37,6 +42,7 @@ const RoadRecord = Record<RoadAttr>({
   spots: List(),
   images: List(),
   hashtags: OrderedSet(),
+  isMine: false,
 });
 
 class Road extends RoadRecord {
@@ -51,6 +57,7 @@ class Road extends RoadRecord {
       }),
       images: List(args.images),
       hashtags: OrderedSet(args.hashtags),
+      isMine: args.is_mine,
     });
   }
 }

@@ -200,8 +200,12 @@ const Detail: NextPage = () => {
             placement={OverlayPosition.BottomRight}
           >
             <MenuList>
-              <MenuItem onClick={handleClickEdit}>수정하기</MenuItem>
-              <MenuItem onClick={handleRemoveRoad}>삭제하기</MenuItem>
+              {road.isMine && (
+                <>
+                  <MenuItem onClick={handleClickEdit}>수정하기</MenuItem>
+                  <MenuItem onClick={handleRemoveRoad}>삭제하기</MenuItem>
+                </>
+              )}
               <MenuItem onClick={handleClickShare}>공유하기</MenuItem>
               <MenuItem onClick={handleClickReport}>신고하기</MenuItem>
             </MenuList>

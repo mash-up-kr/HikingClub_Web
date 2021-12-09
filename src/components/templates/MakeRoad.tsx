@@ -63,12 +63,7 @@ function MakeRoad() {
   const errorMessage = useSelector(getErrorMessage);
   const successRoadId = useSelector(getRoadId);
 
-  const [roadImages, setRoadImages] = useState<FormData | string[]>([]);
   const [roadId, setRoadId] = useState('');
-
-  const handleChangeRoadImages = useCallback((formData: FormData) => {
-    setRoadImages(formData);
-  }, []);
 
   const handleClickClose = useCallback(() => {
     if (window.webkit) {
@@ -174,10 +169,7 @@ function MakeRoad() {
         <RoadMap />
         <RoadHashTag />
         <RoadCategory />
-        <RoadImageUploader
-          roadImages={roadImages}
-          onChangeRoadImages={handleChangeRoadImages}
-        />
+        <RoadImageUploader />
         <RoadContent />
         <RoadSubmit onSubmit={handleSubmit} />
       </ItemWrapper>

@@ -144,6 +144,24 @@ function editReducer(state: State = initialState, action: EditActions): State {
       };
     }
 
+    case ActionTypes.ADD_IMAGE: {
+      const { image } = action.payload;
+
+      return {
+        ...state,
+        images: state.images.push(image),
+      };
+    }
+
+    case ActionTypes.REMOVE_IMAGE: {
+      const { index } = action.payload;
+
+      return {
+        ...state,
+        images: state.images.delete(index),
+      };
+    }
+
     case ActionTypes.CHANGE_SPOT_TITLE: {
       const { index, title } = action.payload;
 

@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
+import { useDispatch, useSelector } from 'react-redux';
 
-interface RoadImageUploaderProps {
-  roadImages: any; // MEMO (@Young-mason) 최초 렌더링시 string배열(url)로 이미지를 그려주고, 이후 업데이트시 FormData로 변경해주고 있음. 타입지정은 어떻게?
-  onChangeRoadImages: (formData: FormData) => void;
-}
+import { uploadImage } from 'stores/apis/editAPI';
+import { addImage, removeImage } from 'stores/actions/editActions';
+import { getImages } from 'stores/selectors/editSelectors';
 
-function RoadImageUploader({
-  roadImages,
-  onChangeRoadImages,
-}: RoadImageUploaderProps) {
+function RoadImageUploader() {
+  const imgUrls = useSelector(getImages).toArray();
   const [images, setImages] = useState<ImageListType>(
-    roadImages.length
-      ? roadImages.map((imgUrl: string) => ({ data_url: imgUrl }))
-      : []
+    imgUrls.length ? imgUrls.map((item) => ({ data_url: item })) : []
   );
+
+  const dispatch = useDispatch();
 
   const maxNumber = 5;
 
-  const onChange = (imageList: ImageListType) => {
-    const formData = new FormData();
+  const handleChange = async (
+    imageList: ImageListType,
+    addUpdateIndex: number[] | undefined
+  ) => {
+    const i = (addUpdateIndex && addUpdateIndex[0]) || 0;
+    // Add Image
+    if (images.length < imageList.length) {
+      const image = imageList[i];
+      if (image.file) {
+        const formData = new FormData();
+        formData.append('files', image.file);
 
-    imageList.forEach((img) => {
-      if (img.file) {
-        const blob = new Blob([img.file], { type: 'image' });
-        formData.append('file', blob, img.name);
+        const res = await uploadImage(formData);
+
+        dispatch(
+          addImage({
+            image: res.data.data.images[0],
+          })
+        );
       }
-    });
+    }
 
     setImages(imageList);
-    onChangeRoadImages(formData);
   };
-
   return (
     <Container>
       <Title>사진 등록</Title>
       <ImageUploading
         multiple
         value={images}
-        onChange={onChange}
+        onChange={handleChange}
         maxNumber={maxNumber}
         dataURLKey="data_url"
       >
@@ -58,7 +66,12 @@ function RoadImageUploader({
                 <ImageItem key={index}>
                   <Image src={image.data_url} alt="" />
 
-                  <CloseIconWrapper onClick={() => onImageRemove(index)}>
+                  <CloseIconWrapper
+                    onClick={() => {
+                      onImageRemove(index);
+                      dispatch(removeImage({ index }));
+                    }}
+                  >
                     <CloseIcon src="/images/close-icon.png" />
                   </CloseIconWrapper>
                 </ImageItem>

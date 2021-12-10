@@ -38,3 +38,12 @@ export const getPlaces = ({ latitude, longitude }: RequestGetPlacesPayload) => {
     `${getEndpoint()}/v1/apis/places?position_y=${latitude}&position_x=${longitude}`
   );
 };
+
+export const uploadImage = (formData: FormData) => {
+  return axios.post<any>(`${getEndpoint()}/v1/apis/roads/upload`, formData, {
+    headers: {
+      authorization: `Bearer ${AuthStorageService.getToken()}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};

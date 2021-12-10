@@ -31,9 +31,11 @@ function RoadImageUploader() {
 
         const res = await uploadImage(formData);
 
-        console.log(res);
-
-        dispatch(addImage({ image: '1231231' }));
+        dispatch(
+          addImage({
+            image: res.data.data.images[0],
+          })
+        );
       }
     }
 

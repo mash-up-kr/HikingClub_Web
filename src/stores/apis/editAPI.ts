@@ -1,5 +1,6 @@
 /* External Dependencies */
 import axios from 'axios';
+import AuthStorageService from 'services/AuthStorageService';
 
 /* Internal dependencies */
 import {
@@ -12,7 +13,7 @@ import { getEndpoint } from 'utils/requestUtils';
 export const createRoad = (payload: RequestCreateRoadPayload) => {
   return axios.post(`${getEndpoint()}/v1/apis/roads`, payload, {
     headers: {
-      authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RuYWRldWwxQHRlc3QuY29tIiwic3ViIjoiNDQiLCJpYXQiOjE2MzkwNDIzNzksImV4cCI6MTY0MTYzNDM3OX0.V63tNTav52NyCqG-yeW305-sSzKKuUNTtuPLApkU9YE}`,
+      authorization: `Bearer ${AuthStorageService.getToken()}`,
     },
   });
 };
@@ -26,7 +27,7 @@ export const updateRoad = (payload: RequestUpdateRoadPayload) => {
     },
     {
       headers: {
-        authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RuYWRldWwxQHRlc3QuY29tIiwic3ViIjoiNDQiLCJpYXQiOjE2MzkwNDIzNzksImV4cCI6MTY0MTYzNDM3OX0.V63tNTav52NyCqG-yeW305-sSzKKuUNTtuPLApkU9YE`,
+        authorization: `Bearer ${AuthStorageService.getToken()}`,
       },
     }
   );
@@ -41,8 +42,7 @@ export const getPlaces = ({ latitude, longitude }: RequestGetPlacesPayload) => {
 export const uploadImage = (formData: FormData) => {
   return axios.post<any>(`${getEndpoint()}/v1/apis/roads/upload`, formData, {
     headers: {
-      authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RuYWRldWwxQHRlc3QuY29tIiwic3ViIjoiNDQiLCJpYXQiOjE2MzkwNDIzNzksImV4cCI6MTY0MTYzNDM3OX0.V63tNTav52NyCqG-yeW305-sSzKKuUNTtuPLApkU9YE`,
-      'Content-Type': 'multipart/form-data',
+      authorization: `Bearer ${AuthStorageService.getToken()}`,
     },
   });
 };

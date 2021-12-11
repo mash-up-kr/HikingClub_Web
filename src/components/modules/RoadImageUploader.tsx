@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import ImageUploading, { ImageListType } from 'react-images-uploading';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { uploadImage } from 'stores/apis/editAPI';
 import { addImage, removeImage } from 'stores/actions/editActions';
 import { getImages } from 'stores/selectors/editSelectors';
+import { uploadImage } from 'stores/apis/editAPI';
 
 function RoadImageUploader() {
   const imgUrls = useSelector(getImages).toArray();
@@ -24,23 +24,30 @@ function RoadImageUploader() {
     const i = (addUpdateIndex && addUpdateIndex[0]) || 0;
     // Add Image
     if (images.length < imageList.length) {
-      const image = imageList[i];
-      if (image.file) {
-        const formData = new FormData();
-        formData.append('files', image.file);
+      const newImages = imageList.slice(i);
 
-        const res = await uploadImage(formData);
+      const res = await Promise.all(
+        newImages.map((img) => {
+          if (img.file) {
+            const formData = new FormData();
+            formData.append('files', img.file);
+            return uploadImage(formData);
+          }
+          return null;
+        })
+      );
 
+      res.forEach((r) => {
         dispatch(
           addImage({
-            image: res.data.data.images[0],
+            image: r?.data.data.images[0],
           })
         );
-      }
+      });
     }
-
     setImages(imageList);
   };
+
   return (
     <Container>
       <Title>사진 등록</Title>

@@ -457,6 +457,10 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
               Number(latitude),
               Number(longitude)
             );
+            mapRef.current?.mapServiceRef.current?.addCurrentLocationMarker(
+              Number(latitude),
+              Number(longitude)
+            );
           }, requestMapTimeout);
         }
       }
@@ -469,6 +473,7 @@ function DrawRoad({ show = false, onClickBack }: DrawRoadProps) {
       const firstRoutes = routes.get(0)!;
 
       dispatch(requestGetPlaces(firstRoutes.toObject()));
+      mapRef.current?.mapServiceRef.current?.removeCurrentLocationMarker();
     }
   }, [dispatch, routes]);
 

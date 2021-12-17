@@ -46,6 +46,7 @@ const ImageItem = styled.img`
   height: 128px;
   border-radius: 8px;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 export default ImageList;

@@ -53,6 +53,7 @@ function RoadMap() {
             firstRoutes.latitude,
             firstRoutes.longitude
           );
+          mapRef.current?.mapServiceRef.current?.removeCurrentLocationMarker();
         }, requestMapTimeout);
       } else {
         const latitude = getQueryParam('lat');
@@ -61,6 +62,10 @@ function RoadMap() {
         if (!isNil(latitude) && !isNil(longitude)) {
           setTimeout(() => {
             mapRef.current?.mapServiceRef.current?.moveTo(
+              Number(latitude),
+              Number(longitude)
+            );
+            mapRef.current?.mapServiceRef.current?.addCurrentLocationMarker(
               Number(latitude),
               Number(longitude)
             );

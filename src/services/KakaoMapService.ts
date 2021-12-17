@@ -57,6 +57,8 @@ class KakaoMapService implements KakaoMapServiceProps {
 
   markerInitialized: boolean = false;
 
+  currentLocationMarker: any = null;
+
   readonly mapWrapper: HTMLDivElement;
 
   readonly latitude: number;
@@ -287,6 +289,30 @@ class KakaoMapService implements KakaoMapServiceProps {
     spots.forEach((spot) => {
       this.addMarker(spot.latitude, spot.longitude);
     });
+  }
+
+  async addCurrentLocationMarker(latitude: number, longitude: number) {
+    try {
+      if (isEmpty(window.kakao)) {
+        await this.loadScript();
+      }
+
+      const markerPosition = new window.kakao.maps.LatLng(latitude, longitude);
+
+      this.currentLocationMarker = new window.kakao.maps.Marker({
+        position: markerPosition,
+      });
+      this.currentLocationMarker.setMap(this.map);
+    } catch (error) {
+      /* empty handler */
+    }
+  }
+
+  removeCurrentLocationMarker() {
+    if (!isNil(this.currentLocationMarker)) {
+      this.currentLocationMarker.setMap(null);
+      this.currentLocationMarker = null;
+    }
   }
 
   removeLastLine() {
